@@ -224,7 +224,7 @@
     {
       "type": "image",
       "attrs": {
-        "src": "/images/placeholder-image.png",
+        "src": "/avatar.jpg",
         "alt": "placeholder-image",
         "title": "placeholder-image"
       }

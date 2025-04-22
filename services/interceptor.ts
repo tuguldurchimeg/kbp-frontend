@@ -1,5 +1,6 @@
 import api from "./api";
 import { URI, excludeURI } from "@/constants/uri.constants";
+import { CurrentUser } from "@/types/user";
 
 let isRefreshing = false;
 let subscribers: ((token: string) => void)[] = [];
@@ -18,7 +19,7 @@ function getUser() {
   return raw ? JSON.parse(raw) : null;
 }
 
-function saveUser(user: any) {
+function saveUser(user: CurrentUser) {
   localStorage.setItem("authUser", JSON.stringify(user));
 }
 

@@ -42,15 +42,15 @@ export const ROUTE = {
     },
 
     GLOSSARY: {
-      ROOT: (id: string) => `${workspaceBase(id)}/tools/glossary`,
+      ROOT: (id: string) => `${workspaceBase(id)}/tools/glossaries`,
       DETAIL: (id: string, glossaryId: string) =>
-        `${workspaceBase(id)}/tools/glossary/${glossaryId}`,
+        `${workspaceBase(id)}/tools/glossaries/${glossaryId}`,
     },
 
     SEO: {
-      ROOT: (id: string) => `${workspaceBase(id)}/tools/seo`,
+      ROOT: (id: string) => `${workspaceBase(id)}/tools/seos`,
       DETAIL: (id: string, seoId: string) =>
-        `${workspaceBase(id)}/tools/seo/${seoId}`,
+        `${workspaceBase(id)}/tools/seos/${seoId}`,
     },
   },
 };

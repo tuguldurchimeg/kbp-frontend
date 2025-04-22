@@ -1,20 +1,6 @@
 import { URI } from "@/constants/uri.constants";
 import api from "./api";
-
-export type UserLoginParams = {
-  email: string;
-  password: string;
-};
-
-export interface CurrentUser {
-  id: number;
-  email: string;
-  uid: string;
-  access_token: string;
-  refresh_token: string;
-  sign_in_count: number;
-  password_change_required: boolean;
-}
+import { CurrentUser, UserLoginParams } from "@/types/user";
 
 export const loginService = async (
   params: UserLoginParams

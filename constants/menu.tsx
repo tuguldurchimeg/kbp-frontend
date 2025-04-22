@@ -11,7 +11,7 @@ import {
   LucideIcon,
 } from "lucide-react";
 import { KB_CATEGORIES } from "./kb-placeholder-data";
-import { CategoryItem } from "@/types/workspace";
+import { CategoryItem } from "@/types/document";
 
 export type MenuItemChildren = {
   label: string;
@@ -38,7 +38,7 @@ const buildCategoryTree = (
 
     const documents =
       category.documents?.map((doc) => ({
-        label: doc.name,
+        label: doc.title,
         uri: ROUTE.BASE.DOCUMENT.DETAIL(workspaceId, doc.id),
         icon: Dot,
       })) || [];

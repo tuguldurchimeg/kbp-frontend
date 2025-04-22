@@ -1,12 +1,12 @@
-import { CategoryItem } from "@/types/workspace";
+import { CategoryItem } from "@/types/document";
 
 export const KB_CATEGORIES: CategoryItem[] = [
   {
     id: "1",
     name: "Getting Started",
     documents: [
-      { id: "1", name: "Welcome to the Platform" },
-      { id: "2", name: "User Roles Overview" },
+      { id: "1", title: "Welcome to the Platform", content: {} },
+      { id: "2", title: "User Roles Overview", content: {} },
     ],
     subcategories: [
       {
@@ -14,8 +14,8 @@ export const KB_CATEGORIES: CategoryItem[] = [
         name: "Account Setup",
         parentId: "1",
         documents: [
-          { id: "3", name: "Sign Up" },
-          { id: "4", name: "Verify Email" },
+          { id: "3", title: "Sign Up", content: {} },
+          { id: "4", title: "Verify Email", content: {} },
         ],
         subcategories: [
           {
@@ -23,8 +23,8 @@ export const KB_CATEGORIES: CategoryItem[] = [
             name: "Advanced Setup",
             parentId: "3",
             documents: [
-              { id: "5", name: "Connect External Services" },
-              { id: "6", name: "Two-Factor Authentication" },
+              { id: "5", title: "Connect External Services", content: {} },
+              { id: "6", title: "Two-Factor Authentication", content: {} },
             ],
           },
         ],
@@ -41,8 +41,8 @@ export const KB_CATEGORIES: CategoryItem[] = [
         name: "Writing Articles",
         parentId: "2",
         documents: [
-          { id: "7", name: "Markdown Support" },
-          { id: "8", name: "Embedding Media" },
+          { id: "7", title: "Markdown Support", content: {} },
+          { id: "8", title: "Embedding Media", content: {} },
         ],
       },
       {
@@ -55,7 +55,7 @@ export const KB_CATEGORIES: CategoryItem[] = [
             id: "7",
             name: "Tags and Labels",
             parentId: "6",
-            documents: [{ id: "9", name: "Managing Tags" }],
+            documents: [{ id: "9", title: "Managing Tags", content: {} }],
           },
         ],
       },
