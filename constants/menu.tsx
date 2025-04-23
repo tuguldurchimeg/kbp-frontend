@@ -29,12 +29,22 @@ export type MenuSection = {
 
 const buildCategoryTree = (
   categories: CategoryItem[],
-  workspaceId: string
+  workspaceId: string,
+  depth = 0,
+  maxDepth = 2
 ): MenuItemChildren[] => {
+  if (depth > maxDepth) return [];
+
   return categories.map((category) => {
-    const subcategories = category.subcategories
-      ? buildCategoryTree(category.subcategories, workspaceId)
-      : [];
+    const subcategories =
+      category.subcategories && depth < maxDepth
+        ? buildCategoryTree(
+            category.subcategories,
+            workspaceId,
+            depth + 1,
+            maxDepth
+          )
+        : [];
 
     const documents =
       category.documents?.map((doc) => ({

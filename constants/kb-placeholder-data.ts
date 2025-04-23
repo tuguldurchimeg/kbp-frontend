@@ -1,4 +1,5 @@
 import { CategoryItem } from "@/types/document";
+import { UserItem } from "@/types/user";
 
 export const KB_CATEGORIES: CategoryItem[] = [
   {
@@ -62,3 +63,12 @@ export const KB_CATEGORIES: CategoryItem[] = [
     ],
   },
 ];
+
+export const CURRENT_USER: UserItem = {
+  id: "1",
+  uid: "user123",
+  firstname: "Tuguldurchimeg",
+  lastname: "R",
+  email: "tgldrchmg@gmail.com",
+  avatar: "/avatar.jpg",
+};

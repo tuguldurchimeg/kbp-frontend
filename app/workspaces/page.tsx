@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { workspaces } from "@/lib/dummyData";
+import { workspaces } from "@/app/lib/dummyData";
 import WorkspaceCard from "@/components/WorkspaceCard";
 import { ROUTE } from "@/constants/route.constants";
 

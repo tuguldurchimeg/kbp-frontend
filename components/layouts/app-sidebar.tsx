@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import {
@@ -36,21 +37,16 @@ import CategoryDocuments from "./category-documents-tree";
 import { Separator } from "@/components/ui/separator";
 import { NavUser } from "./app-sidebar-user";
 import { NavHeader } from "./app-sidebar-header";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { generateMenus } from "@/constants/menu";
-
-const data = {
-  user: {
-    name: "Tuguldurchimeg",
-    email: "tgldrchmg@gmail.com",
-    avatar: "/avatar.jpg",
-  },
-};
+import clsx from "clsx";
+import { CURRENT_USER } from "@/constants/kb-placeholder-data";
 
 export function AppSidebar() {
   const params = useParams();
   const workspaceId = params.workspaceId as string;
   const menus = generateMenus(workspaceId);
+  const pathname = usePathname();
 
   return (
     <Sidebar
@@ -127,7 +123,15 @@ export function AppSidebar() {
                     </Collapsible>
                   ) : (
                     <SidebarMenuItem key={item.label}>
-                      <SidebarMenuButton asChild tooltip={item.label}>
+                      <SidebarMenuButton
+                        asChild
+                        tooltip={item.label}
+                        className={clsx({
+                          " bg-sky-100 text-blue-600": pathname.startsWith(
+                            item.uri || ""
+                          ),
+                        })}
+                      >
                         <Link href={item.uri || "#"}>
                           <item.icon />
                           <span>{item.label}</span>
@@ -143,7 +147,7 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="gap-0.5">
-        <NavUser user={data.user} />
+        <NavUser user={CURRENT_USER} />
       </SidebarFooter>
       {/* <SidebarRail /> */}
     </Sidebar>

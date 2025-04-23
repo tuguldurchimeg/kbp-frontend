@@ -17,12 +17,12 @@ import { ListItem } from "@tiptap/extension-list-item";
 import { CodeBlock } from "@tiptap/extension-code-block";
 import { HorizontalRule } from "@tiptap/extension-horizontal-rule";
 
-import { Link } from "@/components/tiptap-extension/link-extension";
+import { Link as EditorLink } from "@/components/tiptap-extension/link-extension";
 import { TrailingNode } from "@/components/tiptap-extension/trailing-node-extension";
 import { Selection } from "@/components/tiptap-extension/selection-extension";
 import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension";
 
-import { MAX_FILE_SIZE, handleImageUpload } from "@/lib/tiptap-utils";
+import { MAX_FILE_SIZE, handleImageUpload } from "@/app/lib/tiptap-utils";
 
 // ✨ Import styles
 import "@/components/tiptap-editor/simple/simple-editor.scss";
@@ -30,6 +30,8 @@ import "@/components/tiptap-node/code-block-node/code-block-node.scss";
 import "@/components/tiptap-node/list-node/list-node.scss";
 import "@/components/tiptap-node/image-node/image-node.scss";
 import "@/components/tiptap-node/paragraph-node/paragraph-node.scss";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 type Props = {
   content: JSONContent;
@@ -37,6 +39,7 @@ type Props = {
 
 export default function DocumentViewer({ content }: Props) {
   const editor = useEditor({
+    immediatelyRender: false,
     editable: false,
     content,
     extensions: [
@@ -61,7 +64,7 @@ export default function DocumentViewer({ content }: Props) {
       ListItem,
       CodeBlock,
       HorizontalRule,
-      Link,
+      EditorLink,
       Selection,
       TrailingNode,
       ImageUploadNode.configure({
@@ -73,9 +76,16 @@ export default function DocumentViewer({ content }: Props) {
       }),
     ],
   });
+  const pathname = usePathname();
 
   return (
     <div className="content-wrapper h-full overflow-y-auto px-4 pb-4">
+      <Link
+        href={`${pathname}/edit`}
+        className="mt-4 inline-block text-blue-600 underline"
+      >
+        Edit Document
+      </Link>
       <EditorContent
         editor={editor}
         role="presentation"

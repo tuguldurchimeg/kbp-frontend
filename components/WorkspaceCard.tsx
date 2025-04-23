@@ -22,8 +22,8 @@ export default function WorkspaceCard({ item }: WorkspaceCardProps) {
           <Image
             src={item.imageUrl}
             alt={item.name}
-            layout="fill"
-            objectFit="cover"
+            fill
+            style={{ objectFit: "cover" }}
             className="rounded-t-xl"
           />
         </div>

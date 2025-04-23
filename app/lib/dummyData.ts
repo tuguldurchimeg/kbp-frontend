@@ -1,4 +1,4 @@
-import { WorkspaceItem } from "../types/workspace";
+import { WorkspaceItem } from "../../types/workspace";
 
 export const workspaces: WorkspaceItem[] = [
   {

@@ -6,6 +6,7 @@ import {
   EditorContext,
   JSONContent,
   useEditor,
+  BubbleMenu,
 } from "@tiptap/react";
 
 // --- Tiptap Core Extensions ---
@@ -19,6 +20,8 @@ import { Highlight } from "@tiptap/extension-highlight";
 import { Subscript } from "@tiptap/extension-subscript";
 import { Superscript } from "@tiptap/extension-superscript";
 import { Underline } from "@tiptap/extension-underline";
+import Color from "@tiptap/extension-color";
+import TextStyle from "@tiptap/extension-text-style";
 
 // --- Custom Extensions ---
 import { Link } from "@/components/tiptap-extension/link-extension";
@@ -59,6 +62,7 @@ import {
 import { MarkButton } from "@/components/tiptap-ui/mark-button";
 import { TextAlignButton } from "@/components/tiptap-ui/text-align-button";
 import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button";
+import { TextAlignPopover } from "@/components/tiptap-ui/text-align-button/text-align-popover";
 
 // --- Icons ---
 import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon";
@@ -73,22 +77,29 @@ import { useWindowSize } from "@/hooks/use-window-size";
 import { ThemeToggle } from "@/components/tiptap-editor/simple/theme-toggle";
 
 // --- Lib ---
-import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
+import { handleImageUpload, MAX_FILE_SIZE } from "@/app/lib/tiptap-utils";
 
 // --- Styles ---
 import "@/components/tiptap-editor/simple/simple-editor.scss";
+import {
+  TextColorButton,
+  TextColorContent,
+  TextColorPopover,
+} from "@/components/tiptap-ui/textcolor-popover/textcolor-popover";
+import { Palette } from "lucide-react";
 
-// import content from "@/components/tiptap-editor/simple/data/content.json";
 type Props = {
   content: JSONContent;
 };
 
 const MainToolbarContent = ({
   onHighlighterClick,
+  onTextColorClick,
   onLinkClick,
   isMobile,
 }: {
   onHighlighterClick: () => void;
+  onTextColorClick: () => void;
   onLinkClick: () => void;
   isMobile: boolean;
 }) => {
@@ -108,6 +119,7 @@ const MainToolbarContent = ({
         <ListDropdownMenu types={["bulletList", "orderedList", "taskList"]} />
         <NodeButton type="codeBlock" />
         <NodeButton type="blockquote" />
+        {!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
       </ToolbarGroup>
 
       <ToolbarSeparator />
@@ -116,21 +128,21 @@ const MainToolbarContent = ({
         <MarkButton type="bold" />
         <MarkButton type="italic" />
         <MarkButton type="strike" />
-        <MarkButton type="code" />
         <MarkButton type="underline" />
+      </ToolbarGroup>
+      <ToolbarSeparator />
+
+      <ToolbarGroup>
         {!isMobile ? (
           <HighlightPopover />
         ) : (
           <HighlighterButton onClick={onHighlighterClick} />
         )}
-        {!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
-      </ToolbarGroup>
-
-      <ToolbarSeparator />
-
-      <ToolbarGroup>
-        <MarkButton type="superscript" />
-        <MarkButton type="subscript" />
+        {!isMobile ? (
+          <TextColorPopover />
+        ) : (
+          <TextColorButton onClick={onTextColorClick} />
+        )}
       </ToolbarGroup>
 
       <ToolbarSeparator />
@@ -163,32 +175,53 @@ const MobileToolbarContent = ({
   type,
   onBack,
 }: {
-  type: "highlighter" | "link";
+  type: "highlighter" | "link" | "textcolor";
   onBack: () => void;
 }) => (
   <>
     <ToolbarGroup>
       <Button data-style="ghost" onClick={onBack}>
         <ArrowLeftIcon className="tiptap-button-icon" />
-        {type === "highlighter" ? (
-          <HighlighterIcon className="tiptap-button-icon" />
-        ) : (
-          <LinkIcon className="tiptap-button-icon" />
-        )}
+        {getEditorIcon(type)}
       </Button>
     </ToolbarGroup>
-
     <ToolbarSeparator />
 
-    {type === "highlighter" ? <HighlightContent /> : <LinkContent />}
+    {getEditorContent(type)}
   </>
 );
+
+const getEditorIcon = (type: "highlighter" | "link" | "textcolor") => {
+  switch (type) {
+    case "highlighter":
+      return <HighlighterIcon className="tiptap-button-icon" />;
+    case "textcolor":
+      return <Palette className="tiptap-button-icon w-4 h-4" />;
+    case "link":
+      return <LinkIcon className="tiptap-button-icon" />;
+    default:
+      return null;
+  }
+};
+
+const getEditorContent = (type: "highlighter" | "link" | "textcolor") => {
+  switch (type) {
+    case "highlighter":
+      return <HighlightContent />;
+    case "link":
+      return <LinkContent />;
+    case "textcolor":
+      return <TextColorContent />;
+    default:
+      return null;
+  }
+};
 
 export function SimpleEditor({ content }: Props) {
   const isMobile = useIsMobile();
   const windowSize = useWindowSize();
   const [mobileView, setMobileView] = React.useState<
-    "main" | "highlighter" | "link"
+    "main" | "highlighter" | "link" | "textcolor"
   >("main");
   const [rect, setRect] = React.useState<
     Pick<DOMRect, "x" | "y" | "width" | "height">
@@ -239,7 +272,8 @@ export function SimpleEditor({ content }: Props) {
       Typography,
       Superscript,
       Subscript,
-
+      TextStyle,
+      Color,
       Selection,
       ImageUploadNode.configure({
         accept: "image/*",
@@ -312,7 +346,11 @@ export function SimpleEditor({ content }: Props) {
         style={
           isMobile
             ? {
+                position: "absolute",
                 bottom: `calc(100% - ${windowSize.height - rect.y}px)`,
+                left: 0,
+                right: 0,
+                zIndex: 999,
               }
             : {}
         }
@@ -320,17 +358,37 @@ export function SimpleEditor({ content }: Props) {
         {mobileView === "main" ? (
           <MainToolbarContent
             onHighlighterClick={() => setMobileView("highlighter")}
+            onTextColorClick={() => setMobileView("textcolor")}
             onLinkClick={() => setMobileView("link")}
             isMobile={isMobile}
           />
         ) : (
           <MobileToolbarContent
-            type={mobileView === "highlighter" ? "highlighter" : "link"}
+            type={mobileView}
             onBack={() => setMobileView("main")}
           />
         )}
       </Toolbar>
       <div className="content-wrapper h-full overflow-y-auto px-4 pb-4">
+        {editor && (
+          <BubbleMenu
+            editor={editor}
+            tippyOptions={{ duration: 150, placement: "top-start" }}
+            className="tiptap-bubble-menu"
+          >
+            <div className="bubble-toolbar flex items-center gap-1 fit-content">
+              <MarkButton type="bold" />
+              <MarkButton type="italic" />
+              <MarkButton type="strike" />
+              <MarkButton type="underline" />
+              <HighlightPopover editor={editor} />
+              <TextColorPopover editor={editor} />
+              <LinkButton onClick={() => setMobileView("link")} />
+              <TextAlignPopover editor={editor} />
+            </div>
+          </BubbleMenu>
+        )}
+
         <EditorContent
           editor={editor}
           role="presentation"

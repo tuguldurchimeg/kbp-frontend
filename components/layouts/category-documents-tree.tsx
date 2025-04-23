@@ -28,6 +28,8 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import clsx from "clsx";
+import { usePathname } from "next/navigation";
 
 interface CategoryDocumentsProps {
   item: MenuItemChildren;
@@ -35,6 +37,7 @@ interface CategoryDocumentsProps {
 
 const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
   const isCollapsible = item.collapsible;
+  const pathname = usePathname();
 
   return (
     <Collapsible
@@ -46,7 +49,9 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
         <div className="flex items-center justify-between w-full">
           <CollapsibleTrigger asChild>
             <SidebarMenuButton
-              className="peer"
+              className={clsx("peer", {
+                " bg-sky-100 text-blue-600": pathname === item.uri,
+              })}
               data-state-open={item.isCollapsed}
             >
               {isCollapsible ? (
@@ -105,15 +110,19 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
           )}
         </div>
 
-        {isCollapsible && item.children && (
+        {isCollapsible && (
           <CollapsibleContent>
-            <SidebarMenuSub className="px-0 ml-1.5 mr-0">
-              {item.children.map((child) => (
-                <SidebarMenuSubItem key={child.label}>
-                  <CategoryDocuments item={child} />
-                </SidebarMenuSubItem>
-              ))}
-            </SidebarMenuSub>
+            {item.children && item.children.length > 0 ? (
+              <SidebarMenuSub className="px-0 ml-1.5 mr-0">
+                {item.children.map((child) => (
+                  <SidebarMenuSubItem key={child.label}>
+                    <CategoryDocuments item={child} />
+                  </SidebarMenuSubItem>
+                ))}
+              </SidebarMenuSub>
+            ) : (
+              <div className="ml-4 text-muted text-sm py-2">Loading...</div>
+            )}
           </CollapsibleContent>
         )}
       </div>

@@ -10,7 +10,7 @@ export type UserItem = {
   firstname: string;
   lastname: string;
   avatar: string;
-  company: { data: CompanyItem };
+  company?: { data: CompanyItem };
 };
 
 export interface CurrentUser {
