@@ -15,7 +15,7 @@ import { HeadingFiveIcon } from "@/components/tiptap-icons/heading-five-icon";
 import { HeadingSixIcon } from "@/components/tiptap-icons/heading-six-icon";
 
 // --- Lib ---
-import { isNodeInSchema } from "@/app/lib/tiptap-utils";
+import { isNodeInSchema } from "@/lib/tiptap-utils";
 
 // --- UI Primitives ---
 import { Button, ButtonProps } from "@/components/tiptap-ui-primitive/button";

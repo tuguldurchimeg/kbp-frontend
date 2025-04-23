@@ -12,7 +12,7 @@ import { BanIcon } from "@/components/tiptap-icons/ban-icon";
 import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon";
 
 // --- Lib ---
-import { isMarkInSchema } from "@/app/lib/tiptap-utils";
+import { isMarkInSchema } from "@/lib/tiptap-utils";
 
 // --- UI Primitives ---
 import { Button, ButtonProps } from "@/components/tiptap-ui-primitive/button";

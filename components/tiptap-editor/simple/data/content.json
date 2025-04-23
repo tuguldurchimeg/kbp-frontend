@@ -2,19 +2,6 @@
   "type": "doc",
   "content": [
     {
-      "type": "heading",
-      "attrs": {
-        "textAlign": null,
-        "level": 1
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Getting started"
-        }
-      ]
-    },
-    {
       "type": "paragraph",
       "attrs": {
         "textAlign": null

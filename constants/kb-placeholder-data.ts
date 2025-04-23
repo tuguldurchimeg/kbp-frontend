@@ -6,8 +6,14 @@ export const KB_CATEGORIES: CategoryItem[] = [
     id: "1",
     name: "Getting Started",
     documents: [
-      { id: "1", title: "Welcome to the Platform", content: {} },
-      { id: "2", title: "User Roles Overview", content: {} },
+      {
+        id: "1",
+        title: "Welcome to the Platform",
+      },
+      {
+        id: "2",
+        title: "User Roles Overview",
+      },
     ],
     subcategories: [
       {
@@ -15,8 +21,22 @@ export const KB_CATEGORIES: CategoryItem[] = [
         name: "Account Setup",
         parentId: "1",
         documents: [
-          { id: "3", title: "Sign Up", content: {} },
-          { id: "4", title: "Verify Email", content: {} },
+          {
+            id: "3",
+            title: "Sign Up",
+            content: {},
+            tags: [],
+            created_at: "2025-01-15T12:00:00Z",
+            updated_at: "2025-02-25T10:00:00Z",
+          },
+          {
+            id: "4",
+            title: "Verify Email",
+            content: {},
+            tags: [],
+            created_at: "2025-01-18T09:30:00Z",
+            updated_at: "2025-03-01T14:15:00Z",
+          },
         ],
         subcategories: [
           {
@@ -24,8 +44,22 @@ export const KB_CATEGORIES: CategoryItem[] = [
             name: "Advanced Setup",
             parentId: "3",
             documents: [
-              { id: "5", title: "Connect External Services", content: {} },
-              { id: "6", title: "Two-Factor Authentication", content: {} },
+              {
+                id: "5",
+                title: "Connect External Services",
+                content: {},
+                tags: [],
+                created_at: "2025-01-22T15:45:00Z",
+                updated_at: "2025-03-05T16:00:00Z",
+              },
+              {
+                id: "6",
+                title: "Two-Factor Authentication",
+                content: {},
+                tags: [],
+                created_at: "2025-01-25T08:00:00Z",
+                updated_at: "2025-03-10T17:30:00Z",
+              },
             ],
           },
         ],
@@ -42,8 +76,22 @@ export const KB_CATEGORIES: CategoryItem[] = [
         name: "Writing Articles",
         parentId: "2",
         documents: [
-          { id: "7", title: "Markdown Support", content: {} },
-          { id: "8", title: "Embedding Media", content: {} },
+          {
+            id: "7",
+            title: "Markdown Support",
+            content: {},
+            tags: [],
+            created_at: "2025-02-01T09:00:00Z",
+            updated_at: "2025-03-12T11:45:00Z",
+          },
+          {
+            id: "8",
+            title: "Embedding Media",
+            content: {},
+            tags: [],
+            created_at: "2025-02-05T13:20:00Z",
+            updated_at: "2025-03-15T14:30:00Z",
+          },
         ],
       },
       {
@@ -56,7 +104,16 @@ export const KB_CATEGORIES: CategoryItem[] = [
             id: "7",
             name: "Tags and Labels",
             parentId: "6",
-            documents: [{ id: "9", title: "Managing Tags", content: {} }],
+            documents: [
+              {
+                id: "9",
+                title: "Managing Tags",
+                content: {},
+                tags: [],
+                created_at: "2025-02-10T10:10:00Z",
+                updated_at: "2025-03-18T12:00:00Z",
+              },
+            ],
           },
         ],
       },

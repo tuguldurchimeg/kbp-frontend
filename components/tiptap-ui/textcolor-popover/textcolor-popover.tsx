@@ -19,7 +19,7 @@ import { Palette } from "lucide-react";
 // --- Hooks & Utils ---
 import { useMenuNavigation } from "@/hooks/use-menu-navigation";
 import { useTiptapEditor } from "@/hooks/use-tiptap-editor";
-import { isMarkInSchema } from "@/app/lib/tiptap-utils";
+import { isMarkInSchema } from "@/lib/tiptap-utils";
 
 // --- Types ---
 export interface TextColor {

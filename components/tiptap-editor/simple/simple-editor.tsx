@@ -4,7 +4,6 @@ import * as React from "react";
 import {
   EditorContent,
   EditorContext,
-  JSONContent,
   useEditor,
   BubbleMenu,
 } from "@tiptap/react";
@@ -77,7 +76,7 @@ import { useWindowSize } from "@/hooks/use-window-size";
 import { ThemeToggle } from "@/components/tiptap-editor/simple/theme-toggle";
 
 // --- Lib ---
-import { handleImageUpload, MAX_FILE_SIZE } from "@/app/lib/tiptap-utils";
+import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
 
 // --- Styles ---
 import "@/components/tiptap-editor/simple/simple-editor.scss";
@@ -86,10 +85,15 @@ import {
   TextColorContent,
   TextColorPopover,
 } from "@/components/tiptap-ui/textcolor-popover/textcolor-popover";
-import { Palette } from "lucide-react";
+import { Palette, Pencil } from "lucide-react";
+import { DocumentItem } from "@/types/document";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"; // adjust the path if needed
+import { formatDistanceToNow } from "date-fns";
+import { Button as CNButton } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 type Props = {
-  content: JSONContent;
+  document: DocumentItem;
 };
 
 const MainToolbarContent = ({
@@ -217,7 +221,7 @@ const getEditorContent = (type: "highlighter" | "link" | "textcolor") => {
   }
 };
 
-export function SimpleEditor({ content }: Props) {
+export function SimpleEditor({ document }: Props) {
   const isMobile = useIsMobile();
   const windowSize = useWindowSize();
   const [mobileView, setMobileView] = React.useState<
@@ -233,15 +237,27 @@ export function SimpleEditor({ content }: Props) {
   });
   const toolbarRef = React.useRef<HTMLDivElement>(null);
 
+  const editorContainerRef = React.useRef<HTMLDivElement>(null);
+
   React.useEffect(() => {
     const updateRect = () => {
-      setRect(document.body.getBoundingClientRect());
+      if (editorContainerRef.current) {
+        const bounds = editorContainerRef.current.getBoundingClientRect();
+        setRect({
+          x: bounds.x,
+          y: bounds.y,
+          width: bounds.width,
+          height: bounds.height,
+        });
+      }
     };
 
     updateRect();
 
     const resizeObserver = new ResizeObserver(updateRect);
-    resizeObserver.observe(document.body);
+    if (editorContainerRef.current) {
+      resizeObserver.observe(editorContainerRef.current);
+    }
 
     window.addEventListener("scroll", updateRect);
 
@@ -251,7 +267,12 @@ export function SimpleEditor({ content }: Props) {
     };
   }, []);
 
+  const [isEditable, setEditable] = React.useState(false);
+  const [isTitleEditing, setIsTitleEditing] = React.useState(false);
+  const [title, setTitle] = React.useState<string>(document.title);
+
   const editor = useEditor({
+    editable: isEditable,
     immediatelyRender: false,
     editorProps: {
       attributes: {
@@ -285,7 +306,7 @@ export function SimpleEditor({ content }: Props) {
       TrailingNode,
       Link.configure({ openOnClick: false }),
     ],
-    content: content,
+    content: document.content,
   });
 
   React.useEffect(() => {
@@ -327,49 +348,122 @@ export function SimpleEditor({ content }: Props) {
     }
   }, [isMobile, mobileView]);
 
-  // React.useEffect(() => {
-  //   if (editor) {
-  //     editor.setEditable(isEditable);
-  //   }
-  // }, [isEditable, editor]);
+  const handleToggleEditable = () => {
+    if (editor) {
+      editor.setEditable(!isEditable);
+    }
+    setEditable(!isEditable);
+  };
 
   return (
     <EditorContext.Provider value={{ editor }}>
-      {/* <div className="flex justify-end p-4">
-        <Button onClick={() => setEditable(!isEditable)}>
-          {isEditable ? "Switch to Read-Only" : "Switch to Edit"}
-        </Button>
-      </div> */}
+      {isEditable && (
+        <Toolbar
+          ref={toolbarRef}
+          style={
+            isMobile
+              ? {
+                  position: "absolute",
+                  bottom: `calc(100% - ${windowSize.height - rect.y}px)`,
+                  left: 0,
+                  right: 0,
+                  zIndex: 999,
+                  background: "#fffbe6",
+                  border: "1px solid #ccc",
+                }
+              : {}
+          }
+        >
+          {mobileView === "main" ? (
+            <MainToolbarContent
+              onHighlighterClick={() => setMobileView("highlighter")}
+              onTextColorClick={() => setMobileView("textcolor")}
+              onLinkClick={() => setMobileView("link")}
+              isMobile={isMobile}
+            />
+          ) : (
+            <MobileToolbarContent
+              type={mobileView}
+              onBack={() => setMobileView("main")}
+            />
+          )}
+        </Toolbar>
+      )}
 
-      <Toolbar
-        ref={toolbarRef}
-        style={
-          isMobile
-            ? {
-                position: "absolute",
-                bottom: `calc(100% - ${windowSize.height - rect.y}px)`,
-                left: 0,
-                right: 0,
-                zIndex: 999,
-              }
-            : {}
-        }
+      <CNButton
+        variant="outline"
+        onClick={() => handleToggleEditable()}
+        size="icon"
+        className="absolute top-15 right-15 h-8 w-8"
+        aria-label="Toggle edit mode"
       >
-        {mobileView === "main" ? (
-          <MainToolbarContent
-            onHighlighterClick={() => setMobileView("highlighter")}
-            onTextColorClick={() => setMobileView("textcolor")}
-            onLinkClick={() => setMobileView("link")}
-            isMobile={isMobile}
+        <Pencil className="w-4 h-4 " />
+      </CNButton>
+
+      <div className="simple-editor-title mt-10">
+        {isEditable && isTitleEditing ? (
+          <Input
+            type="text"
+            value={title}
+            onChange={(e) =>
+              // setDocument((prev) =>
+              //   prev ? { ...prev, title: e.target.value } : prev
+              // )
+              setTitle(e.target.value)
+            }
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                setIsTitleEditing(false);
+                // Focus the Tiptap editor
+                editor?.commands.focus("start");
+              }
+            }}
+            onBlur={() => {
+              setIsTitleEditing(false);
+              editor?.commands.focus("start");
+            }}
+            className="text-black dark:text-white bg-transparent font-bold text-lg w-full resize-none border-none outline-none focus:ring-0 focus-visible:ring-0"
+            placeholder="Untitled document"
           />
         ) : (
-          <MobileToolbarContent
-            type={mobileView}
-            onBack={() => setMobileView("main")}
-          />
+          <h1
+            className="text-4xl font-bold text-gray-900 cursor-pointer"
+            onClick={() => {
+              if (isEditable) setIsTitleEditing(true);
+            }}
+          >
+            {title}
+          </h1>
         )}
-      </Toolbar>
-      <div className="content-wrapper h-full overflow-y-auto px-4 pb-4">
+        {!isEditable && (
+          <div className="mt-2 flex items-center gap-3 text-sm text-muted-foreground">
+            {document.user && (
+              <div className="flex items-center gap-2">
+                <Avatar className="h-6 w-6">
+                  <AvatarImage src={document.user.avatar} />
+                  <AvatarFallback>
+                    {document.user.firstname?.[0]}
+                    {document.user.lastname?.[0]}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="font-medium text-gray-700">
+                  {document.user.firstname} {document.user.lastname}
+                </span>
+              </div>
+            )}
+            <span className="text-xs text-gray-500">
+              •{" "}
+              {document.created_at &&
+                formatDistanceToNow(new Date(document.created_at), {
+                  addSuffix: true,
+                })}
+            </span>
+          </div>
+        )}
+      </div>
+
+      <div className="content-wrapper h-full overflow-y-auto py-4">
         {editor && (
           <BubbleMenu
             editor={editor}

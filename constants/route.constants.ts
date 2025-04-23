@@ -17,9 +17,6 @@ export const ROUTE = {
     DOCUMENT: {
       DETAIL: (id: string, docId: string) =>
         `${workspaceBase(id)}/documents/${docId}`,
-
-      EDIT: (id: string, docId: string) =>
-        `${workspaceBase(id)}/documents/${docId}/edit`,
     },
   },
   TOOLS: {
