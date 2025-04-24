@@ -71,7 +71,10 @@ export function initInterceptors() {
 
         return new Promise((resolve) => {
           addSubscriber((token) => {
-            originalRequest.headers.Authorization = `Bearer ${token}`;
+            originalRequest.headers = {
+              ...originalRequest.headers,
+              Authorization: `Bearer ${token}`,
+            };
             resolve(api(originalRequest));
           });
         });

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import * as React from "react";
@@ -85,12 +86,27 @@ import {
   TextColorContent,
   TextColorPopover,
 } from "@/components/tiptap-ui/textcolor-popover/textcolor-popover";
-import { Palette, Pencil } from "lucide-react";
-import { DocumentItem } from "@/types/document";
+import { FileCheck, Palette, Pencil, Plus } from "lucide-react";
+import { DocumentItem, TagCreateParams, TagItem } from "@/types/document";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"; // adjust the path if needed
 import { formatDistanceToNow } from "date-fns";
 import { Button as CNButton } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { updateDocument } from "@/services/document.services";
+import { Badge } from "@/components/ui/badge";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { TAG_PLACEHOLDERS } from "@/constants/kb-placeholder-data";
+import { TAG_COLORS } from "@/constants/color.constants";
 
 type Props = {
   document: DocumentItem;
@@ -355,25 +371,76 @@ export function SimpleEditor({ document }: Props) {
     setEditable(!isEditable);
   };
 
+  const handleDocUpdate = async () => {
+    if (!editor) return;
+    const updatedContent = editor.getJSON();
+
+    const success = await updateDocument(document.id, {
+      ...document,
+      content: updatedContent,
+      category_id: document.category?.data?.id ?? "",
+    });
+
+    if (success) {
+      console.log("Document updated successfully");
+      editor.setEditable(false);
+      setEditable(false);
+    } else {
+      console.error("Failed to update document");
+    }
+  };
+
+  const [tagOpen, setTagOpen] = React.useState(false);
+  const [tagInputValue, setTagInputValue] = React.useState("");
+  const [selectedValue, setSelectedValue] = React.useState<string | null>(null);
+  const [selectedTag, setSelectedTag] = React.useState<TagItem>();
+  const [allTags, setAllTags] = React.useState<TagItem[]>(TAG_PLACEHOLDERS);
+  React.useEffect(() => {
+    const fetchTags = async () => {
+      // Replace this with real API call later
+      const mockTags: TagItem[] = TAG_PLACEHOLDERS;
+      setAllTags(mockTags);
+    };
+    fetchTags();
+  }, []);
+
+  const handleSelectTag = (tag: TagItem) => {
+    setSelectedTag(tag);
+    setSelectedValue(tag.name);
+    setTagInputValue("");
+    setTagOpen(false);
+  };
+
+  const handleCreateTag = (name: string) => {
+    // const newTag: TagCreateParams = {
+    //   name,
+    //   description: "",
+    //   color: "bg-purple-100 text-purple-800",
+    // };
+    // createTag(newTag);
+    console.log(" Creating tag:", name);
+  };
+
+  const handleTagColorChange = async (tag: TagItem, newColor: string) => {
+    try {
+      // await updateTag(tag.id, { ...tag, color: newColor });
+      console.log("Color updated");
+    } catch (err) {
+      console.error("Failed to update color", err);
+    }
+  };
+
+  const applyAlpha = (hex: string, alpha: number) => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
+
   return (
     <EditorContext.Provider value={{ editor }}>
       {isEditable && (
-        <Toolbar
-          ref={toolbarRef}
-          style={
-            isMobile
-              ? {
-                  position: "absolute",
-                  bottom: `calc(100% - ${windowSize.height - rect.y}px)`,
-                  left: 0,
-                  right: 0,
-                  zIndex: 999,
-                  background: "#fffbe6",
-                  border: "1px solid #ccc",
-                }
-              : {}
-          }
-        >
+        <Toolbar ref={toolbarRef}>
           {mobileView === "main" ? (
             <MainToolbarContent
               onHighlighterClick={() => setMobileView("highlighter")}
@@ -390,16 +457,28 @@ export function SimpleEditor({ document }: Props) {
         </Toolbar>
       )}
 
-      <CNButton
-        variant="outline"
-        onClick={() => handleToggleEditable()}
-        size="icon"
-        className="absolute top-15 right-15 h-8 w-8"
-        aria-label="Toggle edit mode"
-      >
-        <Pencil className="w-4 h-4 " />
-      </CNButton>
+      {/* Edit buttons */}
+      {isEditable ? (
+        <CNButton
+          onClick={() => handleDocUpdate()}
+          size="lg"
+          className="fixed bottom-15 right-15 h-12 w-12 rounded-xl"
+          aria-label="Update document"
+        >
+          <FileCheck className="w-4 h-4 " />
+        </CNButton>
+      ) : (
+        <CNButton
+          onClick={() => handleToggleEditable()}
+          size="lg"
+          className="fixed bottom-15 right-15 h-12 w-12 rounded-xl"
+          aria-label="Toggle edit mode"
+        >
+          <Pencil className="w-4 h-4 " />
+        </CNButton>
+      )}
 
+      {/* Document header with input edit */}
       <div className="simple-editor-title mt-10">
         {isEditable && isTitleEditing ? (
           <Input
@@ -462,8 +541,93 @@ export function SimpleEditor({ document }: Props) {
           </div>
         )}
       </div>
+      <div className="mt-4 flex flex-wrap gap-1">
+        {(document.tags?.length ?? 0) > 0 &&
+          document.tags?.map((tag) => (
+            <Badge
+              key={tag.id}
+              className="text-xs font-medium rounded-lg px-4"
+              style={{
+                backgroundColor: applyAlpha(tag.color, 0.2),
+                color: tag.color,
+              }}
+            >
+              {tag.name}
+            </Badge>
+          ))}
+        {isEditable && (
+          <Popover open={tagOpen} onOpenChange={setTagOpen}>
+            <PopoverTrigger asChild>
+              <CNButton
+                variant="ghost"
+                size="xs"
+                className="text-xs font-medium rounded-lg px-4 bg-muted hover:bg-muted/80"
+              >
+                {selectedValue || "+ Add tag"}
+              </CNButton>
+            </PopoverTrigger>
+            <PopoverContent className="w-[240px] py-1 px-0">
+              <Command>
+                <CommandInput
+                  placeholder="Search tags..."
+                  value={tagInputValue}
+                  onValueChange={setTagInputValue}
+                />
+                <CommandList>
+                  {allTags.map((tag) => (
+                    <CommandItem
+                      key={tag.id}
+                      className="flex text-sm items-center gap-2.5 px-2 py-1 hover:bg-muted rounded-sm"
+                    >
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <button
+                            className="w-3 h-3 rounded-sm border ml-2"
+                            style={{ backgroundColor: tag.color }}
+                            aria-label={`Change color of ${tag.name}`}
+                          />
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[180px] p-2 grid grid-cols-5 gap-1">
+                          {TAG_COLORS.map((color) => (
+                            <button
+                              key={color}
+                              className={`w-6 h-6 rounded-sm border hover:ring-2 hover:ring-offset-2 transition-colors`}
+                              style={{ backgroundColor: color }}
+                              onClick={() => handleTagColorChange(tag, color)}
+                            />
+                          ))}
+                        </PopoverContent>
+                      </Popover>
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => handleSelectTag(tag)}
+                      >
+                        <span>{tag.name}</span>
+                      </div>
+                    </CommandItem>
+                  ))}
 
-      <div className="content-wrapper h-full overflow-y-auto py-4">
+                  {tagInputValue &&
+                    !allTags?.some(
+                      (tag) =>
+                        tag.name.toLowerCase() === tagInputValue.toLowerCase()
+                    ) && (
+                      <CommandItem
+                        onSelect={() => handleCreateTag(tagInputValue)}
+                        className="pl-3.5"
+                      >
+                        <Plus className="w-3 h-3" />
+                        <span>Create tag “{tagInputValue}”</span>
+                      </CommandItem>
+                    )}
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        )}
+      </div>
+
+      <div className="content-wrapper py-4">
         {editor && (
           <BubbleMenu
             editor={editor}

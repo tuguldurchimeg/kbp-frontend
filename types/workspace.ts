@@ -6,6 +6,6 @@ export type WorkspaceItem = {
 };
 
 export type WorkspaceCreateParams = {
-  title: string;
-  company_id: string;
+  name: string;
+  description: string;
 };

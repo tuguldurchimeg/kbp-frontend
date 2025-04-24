@@ -1,4 +1,4 @@
-import { CategoryItem } from "@/types/document";
+import { CategoryItem, TagItem } from "@/types/document";
 import { UserItem } from "@/types/user";
 
 export const KB_CATEGORIES: CategoryItem[] = [
@@ -129,3 +129,36 @@ export const CURRENT_USER: UserItem = {
   email: "tgldrchmg@gmail.com",
   avatar: "/avatar.jpg",
 };
+
+export const TAG_PLACEHOLDERS: TagItem[] = [
+  {
+    id: "1",
+    name: "Intro",
+    description: "Introductory content",
+    color: "#C62828", // Red
+  },
+  {
+    id: "2",
+    name: "Tip",
+    description: "Helpful tip",
+    color: "#2E7D32", // Green
+  },
+  {
+    id: "3",
+    name: "Warning",
+    description: "Use with caution",
+    color: "#F9A825", // Amber
+  },
+  {
+    id: "4",
+    name: "Idea",
+    description: "Creative thought",
+    color: "#1565C0", // Blue
+  },
+  {
+    id: "5",
+    name: "Reference",
+    description: "For further reading",
+    color: "#6A1B9A", // Purple
+  },
+];

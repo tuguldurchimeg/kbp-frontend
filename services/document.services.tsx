@@ -1,4 +1,4 @@
-import api from "@/services/api";
+import api from "@/app/lib/api";
 import { URI } from "@/constants/uri.constants";
 import { DocumentCreateParams, DocumentItem } from "@/types/document";
 

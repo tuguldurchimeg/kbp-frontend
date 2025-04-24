@@ -206,6 +206,20 @@
   background: #777;
 }
 
+&::-webkit-scrollbar {
+  display: block;
+  width: 0.5rem;
+}
+
+&::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+&::-webkit-scrollbar-thumb {
+  background-color: var(--tt-scrollbar-color);
+  border-radius: 4px;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

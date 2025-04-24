@@ -32,11 +32,11 @@ body {
 
 .tiptap.ProseMirror {
   font-family: "DM Sans", sans-serif;
+  padding-bottom: 7rem;
 }
 
 .content-wrapper {
   height: calc(100% - var(--tt-toolbar-height));
-  overflow-y: auto;
 
   &::-webkit-scrollbar {
     display: block;
@@ -55,7 +55,6 @@ body {
   /* Firefox scrollbar */
   scrollbar-width: thin;
   scrollbar-color: var(--tt-scrollbar-color) transparent;
-  padding-bottom: 7rem;
 }
 
 @media screen and (max-width: 480px) {
@@ -90,6 +89,6 @@ body {
   transition: background 0.2s ease;
 }
 
-.bubble-toolbar button:hover {
-  background: var(--tt-gray-light-900);
-}
+// .bubble-toolbar button:hover {
+//   background: var(--tt-gray-light-900);
+// }

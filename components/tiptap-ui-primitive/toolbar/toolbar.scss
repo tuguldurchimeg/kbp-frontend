@@ -1,5 +1,5 @@
 :root {
-  --tt-toolbar-height: 2.75rem;
+  --tt-toolbar-height: 3rem;
   --tt-safe-area-bottom: env(safe-area-inset-bottom, 0px);
   --tt-toolbar-bg-color: var(--white);
   --tt-toolbar-border-color: var(--tt-gray-light-a-100);
@@ -38,7 +38,7 @@
     min-height: var(--tt-toolbar-height);
     background: var(--tt-toolbar-bg-color);
     border-bottom: 1px solid var(--tt-toolbar-border-color);
-    padding: 0 0.5rem;
+    padding: 0 0.7rem;
     overflow-x: auto;
     overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
@@ -60,6 +60,10 @@
       flex-wrap: nowrap;
       justify-content: flex-start;
 
+      left: 0;
+      right: 0;
+      background: "#fffbe6";
+      border: "1px solid #ccc";
       .tiptap-toolbar-group {
         flex: 0 0 auto;
       }
@@ -67,7 +71,7 @@
   }
 
   &[data-variant="floating"] {
-    --tt-toolbar-padding: 0.25rem;
+    --tt-toolbar-padding: 0.7rem;
     --tt-toolbar-border-width: 1px;
 
     padding: 0.188rem;
@@ -80,6 +84,7 @@
     box-shadow: var(--tt-shadow-elevated-md);
     outline: none;
     overflow: hidden;
+    z-index: 10;
 
     &[data-plain="true"] {
       padding: 0;
