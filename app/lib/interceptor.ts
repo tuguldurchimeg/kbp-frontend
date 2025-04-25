@@ -24,14 +24,13 @@ function saveUser(user: CurrentUser) {
 }
 
 export function initInterceptors() {
-  // Request Interceptor
   api.interceptors.request.use(
     (config) => {
       const user = getUser();
       const token = user?.access_token;
 
       if (token) {
-        config.headers.set("Authorization", `Bearer ${token}`);
+        config.headers["Authorization"] = `Bearer ${token}`;
       }
 
       return config;

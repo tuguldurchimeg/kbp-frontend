@@ -5,7 +5,7 @@ import {
   loginService,
   logoutService,
   refreshTokenService,
-} from "@/services/auth.services";
+} from "@/app/lib/actions/auth.actions";
 import { CurrentUser } from "@/types/user";
 
 type AuthContextType = {

@@ -10,8 +10,15 @@ export const URI = {
   RESET_PASSWORD: "/v1/passwords/reset",
   CHANGE_PASSWORD: "/v1/passwords/change",
   PROFILE: "/v1/employee/users/profile",
+
+  //
   WORKSPACES: "/v1/workspaces",
   DOCUMENTS: "/v1/documents",
+  TAGS: "/v1/tags",
+  GLOSSARIES: "/v1/glossaries",
+  CATEGORIES: "/v1/categories",
+  ISSUES: "/v1/issues",
+  SEOS: "/v1/seos",
 };
 
 export const excludeURI = [

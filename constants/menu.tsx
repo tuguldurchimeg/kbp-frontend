@@ -3,7 +3,6 @@ import {
   User,
   FilePlus2,
   Tag,
-  SearchCode,
   BookOpen,
   Dot,
   Folder,
@@ -14,9 +13,10 @@ import { KB_CATEGORIES } from "./kb-placeholder-data";
 import { CategoryItem } from "@/types/document";
 
 export type MenuItemChildren = {
+  id?: string;
   label: string;
   uri?: string;
-  icon: LucideIcon;
+  icon?: LucideIcon;
   children?: MenuItemChildren[];
   collapsible?: boolean;
   isCollapsed?: boolean;
@@ -37,9 +37,9 @@ const buildCategoryTree = (
 
   return categories.map((category) => {
     const subcategories =
-      category.subcategories && depth < maxDepth
+      category.attributes?.subcategories && depth < maxDepth
         ? buildCategoryTree(
-            category.subcategories,
+            category.attributes?.subcategories?.data,
             workspaceId,
             depth + 1,
             maxDepth
@@ -47,17 +47,17 @@ const buildCategoryTree = (
         : [];
 
     const documents =
-      category.documents?.map((doc) => ({
-        label: doc.title,
+      category.attributes?.documents?.data.map((doc) => ({
+        label: doc.attributes.title,
         uri: ROUTE.BASE.DOCUMENT.DETAIL(workspaceId, doc.id),
         icon: Dot,
       })) || [];
 
     return {
-      label: category.name,
+      id: category.id,
+      label: category.attributes?.name,
       collapsible: true,
       isCollapsed: false,
-      icon: Folder,
       children: [...subcategories, ...documents],
     };
   });
@@ -107,11 +107,11 @@ export const generateMenus = (workspaceId: string): MenuSection[] => {
           uri: ROUTE.TOOLS.GLOSSARY.ROOT(workspaceId),
           icon: BookOpen,
         },
-        {
-          label: "SEO",
-          uri: ROUTE.TOOLS.SEO.ROOT(workspaceId),
-          icon: SearchCode,
-        },
+        // {
+        //   label: "SEO",
+        //   uri: ROUTE.TOOLS.SEO.ROOT(workspaceId),
+        //   icon: SearchCode,
+        // },
       ],
     },
   ];

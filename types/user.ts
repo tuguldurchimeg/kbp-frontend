@@ -1,16 +1,21 @@
 export type CompanyItem = {
   id: string;
-  name: string;
-  uid: string;
+  type: "company";
+  attributes: {
+    name: string;
+    uid: string;
+  };
 };
 export type UserItem = {
   id: string;
-  uid: string;
-  email: string;
-  firstname: string;
-  lastname: string;
-  avatar: string;
-  company?: { data: CompanyItem };
+  type: "user";
+  attributes: {
+    uid: string;
+    email: string;
+    firstname: string;
+    lastname: string;
+    avatar: string;
+  };
 };
 
 export interface CurrentUser {

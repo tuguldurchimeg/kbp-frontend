@@ -1,0 +1,130 @@
+"use client";
+
+import { ColumnDef } from "@tanstack/react-table";
+import { DocumentItem } from "@/types/document";
+import { formatDistanceToNow } from "date-fns";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Copy, MoreVerticalIcon, Pencil, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+
+export function getColumns(pathname: string): ColumnDef<DocumentItem>[] {
+  return [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected()
+              ? true
+              : table.getIsSomePageRowsSelected()
+              ? "indeterminate"
+              : false
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "attributes.title",
+      header: "Template",
+      cell: ({ row }) => {
+        const title = row.original.attributes.title;
+        const id = row.original.id;
+        return (
+          <Link
+            href={`${pathname}/${id}`}
+            className="text-blue-600 hover:underline"
+          >
+            {title}
+          </Link>
+        );
+      },
+    },
+    {
+      id: "createdBy",
+      header: "Created by",
+      cell: ({ row }) => {
+        const user = row.original.attributes.user?.data?.attributes;
+        const name = user?.firstname ?? "";
+        return (
+          <div className="flex items-center space-x-2">
+            <Avatar className="h-6 w-6 rounded-full">
+              <AvatarImage src={user?.avatar} alt={user?.firstname} />
+              <AvatarFallback className="bg-green-200">
+                {`${user?.firstname?.[0] ?? ""}${
+                  user?.lastname?.[0] ?? ""
+                }`.toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <span>{name}</span>
+          </div>
+        );
+      },
+    },
+    {
+      id: "lastUpdated",
+      accessorFn: (row) => row.attributes.updated_at,
+      header: "Last updated",
+      cell: ({ getValue }) => {
+        const updatedAt = getValue<string>();
+        return updatedAt
+          ? formatDistanceToNow(new Date(updatedAt), { addSuffix: true })
+          : "N/A";
+      },
+      sortingFn: "datetime",
+    },
+    {
+      id: "actions",
+      header: "",
+      cell: ({ row }) => {
+        const id = row.original.id;
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <MoreVerticalIcon className="h-4 w-4" />
+                <span className="sr-only">Open row menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <Link href={`${pathname}/${id}`} passHref>
+                <DropdownMenuItem>
+                  <Pencil className="mr-2 h-4 w-4" />
+                  Edit
+                </DropdownMenuItem>
+              </Link>
+              <DropdownMenuItem>
+                <Copy className="mr-2 h-4 w-4" />
+                Duplicate
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+      enableSorting: false,
+      enableHiding: false,
+    },
+  ];
+}

@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getWorkspaces, createWorkspace } from "@/services/workspace.services";
+import {
+  getWorkspaces,
+  createWorkspace,
+} from "@/app/lib/actions/workspace.actions";
 import { WorkspaceItem, WorkspaceCreateParams } from "@/types/workspace";
 
 export default function useWorkspace() {

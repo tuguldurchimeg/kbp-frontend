@@ -30,23 +30,29 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 
-import { Plus, FolderPlus, FileText } from "lucide-react";
+import { Plus, FolderPlus, FileText, Building2 } from "lucide-react";
 
 import Link from "next/link";
 import CategoryDocuments from "./category-documents-tree";
 import { Separator } from "@/components/ui/separator";
-import { NavUser } from "./app-sidebar-user";
+import { NavUser } from "./app-header";
 import { NavHeader } from "./app-sidebar-header";
 import { useParams, usePathname } from "next/navigation";
 import { generateMenus } from "@/constants/menu";
 import clsx from "clsx";
 import { CURRENT_USER } from "@/constants/kb-placeholder-data";
+import { ROUTE } from "@/constants/route.constants";
+import NewDocumentDialog from "@/components/@documents/new-document-dialog";
+import { createCategory } from "@/app/lib/actions/category.actions";
+import { toast } from "sonner"; // or your toast lib
+import { useState } from "react";
 
 export function AppSidebar() {
   const params = useParams();
   const workspaceId = params.workspaceId as string;
   const menus = generateMenus(workspaceId);
   const pathname = usePathname();
+  const [newDocDialogOpen, setNewDocDialogOpen] = useState(false);
 
   return (
     <Sidebar
@@ -83,7 +89,7 @@ export function AppSidebar() {
                               tooltip={item.label}
                             >
                               <div>
-                                <item.icon />
+                                {item.icon && <item.icon />}
                                 <span>{item.label}</span>
                               </div>
                             </SidebarMenuButton>
@@ -95,13 +101,30 @@ export function AppSidebar() {
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
                                 <DropdownMenuItem
-                                  onClick={() => console.log("New Category")}
+                                  onClick={async () => {
+                                    try {
+                                      const newCategory = await createCategory({
+                                        name: "Untitled Category",
+                                      });
+                                      toast.success("Category created");
+
+                                      // Optional: trigger re-fetch or refresh logic
+                                      // e.g., if using SWR, trigger a mutate
+                                      // or emit event to update <CategoryDocuments />
+                                    } catch (err) {
+                                      console.error(
+                                        "Failed to create category",
+                                        err
+                                      );
+                                      toast.error("Failed to create category");
+                                    }
+                                  }}
                                 >
                                   <FolderPlus className="w-4 h-4 mr-2 text-blue-600" />{" "}
                                   New Category
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
-                                  onClick={() => console.log("New Document")}
+                                  onClick={() => setNewDocDialogOpen(true)}
                                 >
                                   <FileText className="w-4 h-4 mr-2 text-indigo-600" />{" "}
                                   New Document
@@ -133,7 +156,7 @@ export function AppSidebar() {
                         })}
                       >
                         <Link href={item.uri || "#"}>
-                          <item.icon />
+                          {item.icon && <item.icon />}
                           <span>{item.label}</span>
                         </Link>
                       </SidebarMenuButton>
@@ -147,9 +170,19 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="gap-0.5">
-        <NavUser user={CURRENT_USER} />
+        <Link href={ROUTE.WORKSPACES.ROOT}>
+          <SidebarMenuButton className="w-full justify-start gap-2">
+            <Building2 className="h-4 w-4" />
+            Back to Workspaces
+          </SidebarMenuButton>
+        </Link>
       </SidebarFooter>
       {/* <SidebarRail /> */}
+      <NewDocumentDialog
+        open={newDocDialogOpen}
+        onOpenChange={setNewDocDialogOpen}
+        categoryId={""}
+      />
     </Sidebar>
   );
 }

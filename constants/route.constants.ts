@@ -9,45 +9,48 @@ export const ROUTE = {
   },
   BASE: {
     ISSUES: {
-      ROOT: (id: string) => `${workspaceBase(id)}/issues`,
-      DETAIL: (id: string, issueId: string) =>
-        `${workspaceBase(id)}/issues/${issueId}`,
+      ROOT: (workspaceId: string) => `${workspaceBase(workspaceId)}/issues`,
+      DETAIL: (workspaceId: string, id: string) =>
+        `${workspaceBase(id)}/issues/${id}`,
     },
 
     DOCUMENT: {
-      DETAIL: (id: string, docId: string) =>
-        `${workspaceBase(id)}/documents/${docId}`,
+      DETAIL: (workspaceId: string, id: string) =>
+        `${workspaceBase(workspaceId)}/documents/${id}`,
     },
   },
   TOOLS: {
     USER_ACCESS: {
-      ROOT: (id: string) => `${workspaceBase(id)}/tools/user-access`,
-      DETAIL: (id: string, userId: string) =>
-        `${workspaceBase(id)}/tools/user-access/${userId}`,
+      ROOT: (workspaceId: string) =>
+        `${workspaceBase(workspaceId)}/tools/user-access`,
+      DETAIL: (workspaceId: string, id: string) =>
+        `${workspaceBase(workspaceId)}/tools/user-access/${id}`,
     },
 
     TEMPLATES: {
-      ROOT: (id: string) => `${workspaceBase(id)}/tools/templates`,
-      DETAIL: (id: string, templateId: string) =>
-        `${workspaceBase(id)}/tools/templates/${templateId}`,
+      ROOT: (workspaceId: string) =>
+        `${workspaceBase(workspaceId)}/tools/templates`,
+      DETAIL: (workspaceId: string, id: string) =>
+        `${workspaceBase(workspaceId)}/tools/templates/${id}`,
     },
 
     TAGS: {
-      ROOT: (id: string) => `${workspaceBase(id)}/tools/tags`,
-      DETAIL: (id: string, tagId: string) =>
-        `${workspaceBase(id)}/tools/tags/${tagId}`,
+      ROOT: (workspaceId: string) => `${workspaceBase(workspaceId)}/tools/tags`,
+      DETAIL: (workspaceId: string, id: string) =>
+        `${workspaceBase(workspaceId)}/tools/tags/${id}`,
     },
 
     GLOSSARY: {
-      ROOT: (id: string) => `${workspaceBase(id)}/tools/glossaries`,
-      DETAIL: (id: string, glossaryId: string) =>
-        `${workspaceBase(id)}/tools/glossaries/${glossaryId}`,
+      ROOT: (workspaceId: string) =>
+        `${workspaceBase(workspaceId)}/tools/glossaries`,
+      DETAIL: (workspaceId: string, id: string) =>
+        `${workspaceBase(workspaceId)}/tools/glossaries/${id}`,
     },
 
     SEO: {
-      ROOT: (id: string) => `${workspaceBase(id)}/tools/seos`,
-      DETAIL: (id: string, seoId: string) =>
-        `${workspaceBase(id)}/tools/seos/${seoId}`,
+      ROOT: (workspaceId: string) => `${workspaceBase(workspaceId)}/tools/seos`,
+      DETAIL: (workspaceId: string, id: string) =>
+        `${workspaceBase(workspaceId)}/tools/seos/${id}`,
     },
   },
 };

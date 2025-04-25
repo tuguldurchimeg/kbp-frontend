@@ -92,7 +92,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"; //
 import { formatDistanceToNow } from "date-fns";
 import { Button as CNButton } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { updateDocument } from "@/services/document.services";
+import { updateDocument } from "@/app/lib/actions/document.actions";
 import { Badge } from "@/components/ui/badge";
 import {
   Popover,
@@ -285,7 +285,7 @@ export function SimpleEditor({ document }: Props) {
 
   const [isEditable, setEditable] = React.useState(false);
   const [isTitleEditing, setIsTitleEditing] = React.useState(false);
-  const [title, setTitle] = React.useState<string>(document.title);
+  const [title, setTitle] = React.useState<string>(document.attributes.title);
 
   const editor = useEditor({
     editable: isEditable,
@@ -322,7 +322,7 @@ export function SimpleEditor({ document }: Props) {
       TrailingNode,
       Link.configure({ openOnClick: false }),
     ],
-    content: document.content,
+    content: document.attributes.content,
   });
 
   React.useEffect(() => {
@@ -376,9 +376,8 @@ export function SimpleEditor({ document }: Props) {
     const updatedContent = editor.getJSON();
 
     const success = await updateDocument(document.id, {
-      ...document,
+      ...document.attributes,
       content: updatedContent,
-      category_id: document.category?.data?.id ?? "",
     });
 
     if (success) {
@@ -406,7 +405,7 @@ export function SimpleEditor({ document }: Props) {
 
   const handleSelectTag = (tag: TagItem) => {
     setSelectedTag(tag);
-    setSelectedValue(tag.name);
+    setSelectedValue(tag.attributes?.name);
     setTagInputValue("");
     setTagOpen(false);
   };
@@ -423,7 +422,7 @@ export function SimpleEditor({ document }: Props) {
 
   const handleTagColorChange = async (tag: TagItem, newColor: string) => {
     try {
-      // await updateTag(tag.id, { ...tag, color: newColor });
+      // await updateTag(tag.attributes?.id, { ...tag, color: newColor });
       console.log("Color updated");
     } catch (err) {
       console.error("Failed to update color", err);
@@ -517,24 +516,27 @@ export function SimpleEditor({ document }: Props) {
         )}
         {!isEditable && (
           <div className="mt-2 flex items-center gap-3 text-sm text-muted-foreground">
-            {document.user && (
+            {document.attributes?.user?.data.attributes && (
               <div className="flex items-center gap-2">
                 <Avatar className="h-6 w-6">
-                  <AvatarImage src={document.user.avatar} />
+                  <AvatarImage
+                    src={document.attributes?.user.data.attributes?.avatar}
+                  />
                   <AvatarFallback>
-                    {document.user.firstname?.[0]}
-                    {document.user.lastname?.[0]}
+                    {document.attributes?.user.data.attributes?.firstname?.[0]}
+                    {document.attributes?.user.data.attributes?.lastname?.[0]}
                   </AvatarFallback>
                 </Avatar>
                 <span className="font-medium text-gray-700">
-                  {document.user.firstname} {document.user.lastname}
+                  {document.attributes?.user.data.attributes?.firstname}{" "}
+                  {document.attributes?.user.data.attributes?.lastname}
                 </span>
               </div>
             )}
             <span className="text-xs text-gray-500">
               •{" "}
-              {document.created_at &&
-                formatDistanceToNow(new Date(document.created_at), {
+              {document.attributes?.created_at &&
+                formatDistanceToNow(new Date(document.attributes?.created_at), {
                   addSuffix: true,
                 })}
             </span>
@@ -542,17 +544,17 @@ export function SimpleEditor({ document }: Props) {
         )}
       </div>
       <div className="mt-4 flex flex-wrap gap-1">
-        {(document.tags?.length ?? 0) > 0 &&
-          document.tags?.map((tag) => (
+        {(document.attributes.tags?.data.length ?? 0) > 0 &&
+          document.attributes.tags?.data.map((tag) => (
             <Badge
               key={tag.id}
               className="text-xs font-medium rounded-lg px-4"
               style={{
-                backgroundColor: applyAlpha(tag.color, 0.2),
-                color: tag.color,
+                backgroundColor: applyAlpha(tag.attributes?.color, 0.2),
+                color: tag.attributes?.color,
               }}
             >
-              {tag.name}
+              {tag.attributes?.name}
             </Badge>
           ))}
         {isEditable && (
@@ -576,15 +578,15 @@ export function SimpleEditor({ document }: Props) {
                 <CommandList>
                   {allTags.map((tag) => (
                     <CommandItem
-                      key={tag.id}
+                      key={tag?.id}
                       className="flex text-sm items-center gap-2.5 px-2 py-1 hover:bg-muted rounded-sm"
                     >
                       <Popover>
                         <PopoverTrigger asChild>
                           <button
                             className="w-3 h-3 rounded-sm border ml-2"
-                            style={{ backgroundColor: tag.color }}
-                            aria-label={`Change color of ${tag.name}`}
+                            style={{ backgroundColor: tag.attributes?.color }}
+                            aria-label={`Change color of ${tag.attributes?.name}`}
                           />
                         </PopoverTrigger>
                         <PopoverContent className="w-[180px] p-2 grid grid-cols-5 gap-1">
@@ -602,7 +604,7 @@ export function SimpleEditor({ document }: Props) {
                         className="cursor-pointer"
                         onClick={() => handleSelectTag(tag)}
                       >
-                        <span>{tag.name}</span>
+                        <span>{tag.attributes?.name}</span>
                       </div>
                     </CommandItem>
                   ))}
@@ -610,7 +612,8 @@ export function SimpleEditor({ document }: Props) {
                   {tagInputValue &&
                     !allTags?.some(
                       (tag) =>
-                        tag.name.toLowerCase() === tagInputValue.toLowerCase()
+                        tag.attributes?.name.toLowerCase() ===
+                        tagInputValue.toLowerCase()
                     ) && (
                       <CommandItem
                         onSelect={() => handleCreateTag(tagInputValue)}

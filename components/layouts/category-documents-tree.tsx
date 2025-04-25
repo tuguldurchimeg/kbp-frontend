@@ -15,8 +15,6 @@ import {
   FileText,
   Ellipsis,
   Edit,
-  Copy,
-  Move,
   Trash2,
 } from "lucide-react";
 import Link from "next/link";
@@ -30,14 +28,61 @@ import {
 } from "@/components/ui/dropdown-menu";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
+import {
+  createCategory,
+  updateCategory,
+} from "@/app/lib/actions/category.actions";
+import { toast } from "sonner";
+import { Input } from "../ui/input";
+import { useState } from "react";
+import NewDocumentDialog from "../@documents/new-document-dialog";
 
 interface CategoryDocumentsProps {
   item: MenuItemChildren;
 }
 
 const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
-  const isCollapsible = item.collapsible;
+  const [isEditing, setIsEditing] = useState(false);
+  const [newName, setNewName] = useState(item.label);
+  const [newDocDialogOpen, setNewDocDialogOpen] = useState(false);
   const pathname = usePathname();
+
+  const handleRename = async () => {
+    if (!newName || newName === item.label) return; // If no change or name is the same, do nothing
+    try {
+      if (item.id) {
+        const updatedCategory = await updateCategory(item.id, {
+          name: newName,
+        });
+        toast.success(
+          `Category renamed to "${updatedCategory.attributes.name}"`
+        );
+        setIsEditing(false); // Exit editing mode after saving
+      }
+    } catch (err) {
+      console.error("Error renaming category", err);
+      toast.error("Failed to rename category");
+    }
+  };
+
+  const handleCreateDocument = () => {
+    setNewDocDialogOpen(true); // Open the new document dialog
+  };
+
+  // Handler to create a new category under this one
+  const handleCreateCategory = async () => {
+    try {
+      const newCategory = await createCategory({
+        name: "Untitled Category",
+        parent_id: item.id, // Assuming item.id exists and maps to the parent category
+      });
+      toast.success(`Category created: "${newCategory.attributes.name}"`);
+      // Optionally trigger refresh or reload of category tree
+    } catch (err) {
+      console.error("Error creating category", err);
+      toast.error("Failed to create category");
+    }
+  };
 
   return (
     <Collapsible
@@ -54,28 +99,53 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
               })}
               data-state-open={item.isCollapsed}
             >
-              {isCollapsible ? (
+              {item.collapsible && (
+                <div
+                  className="transition-transform duration-200"
+                  style={{
+                    transform: item.isCollapsed
+                      ? "rotate(90deg)"
+                      : "rotate(0deg)",
+                  }}
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </div>
+              )}
+              {isEditing ? (
                 <div className="flex items-center gap-2">
-                  <ChevronRight className="w-4 h-4 ml-auto transition-transform duration-200" />
-                  {/* <ChevronRight className="w-4 h-4 ml-auto group-data-[state=closed]/collapsible:hidden" /> */}
-                  {/* <ChevronDown className="w-4 h-4 ml-auto group-data-[state=open]/collapsible:hidden" /> */}
-                  <span className="truncate whitespace-nowrap ellipsis">
-                    {item.label}
-                  </span>
+                  <Input
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    className="text-sm border-0"
+                    autoFocus
+                    onBlur={() => {
+                      handleRename();
+                      setIsEditing(false); // Set isEditing to false when the input loses focus
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleRename(); // Save on Enter
+                    }}
+                  />
                 </div>
               ) : (
-                <Link
-                  href={item.uri || "#"}
-                  className="flex items-center gap-1"
-                >
-                  <item.icon />
-                  <span>{item.label}</span>
-                </Link>
+                <div className="flex items-center gap-1">
+                  {item.uri ? (
+                    <Link
+                      href={item.uri || "#"}
+                      className="flex items-center gap-1"
+                    >
+                      {item.icon && <item.icon />}
+                      <span>{item.label}</span>
+                    </Link>
+                  ) : (
+                    <span>{item.label}</span>
+                  )}
+                </div>
               )}
             </SidebarMenuButton>
           </CollapsibleTrigger>
 
-          {isCollapsible && (
+          {item.collapsible && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuAction className="invisible peer-hover:visible hover:visible transition-all duration-200">
@@ -83,23 +153,20 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
                 </SidebarMenuAction>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => console.log("Rename item")}>
-                  <Edit className="w-4 h-4 mr-2 text-green-500" /> Rename
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => console.log("Copy item")}>
-                  <Copy className="w-4 h-4 mr-2 text-purple-500" /> Copy
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => console.log("Move item")}>
-                  <Move className="w-4 h-4 mr-2 text-yellow-500" /> Move
+                {/* Inline Rename */}
+                <DropdownMenuItem onClick={() => setIsEditing(true)}>
+                  <Edit className="w-4 h-4 mr-2 text-green-500" />
+                  Rename
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => console.log("New Category")}>
-                  <FolderPlus className="w-4 h-4 mr-2 text-blue-600" /> New
-                  Category
+                <DropdownMenuItem onClick={handleCreateCategory}>
+                  <FolderPlus className="w-4 h-4 mr-2 text-blue-600" />
+                  New Category
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => console.log("New Document")}>
-                  <FileText className="w-4 h-4 mr-2 text-indigo-600" /> New
-                  Document
+
+                <DropdownMenuItem onClick={handleCreateDocument}>
+                  <FileText className="w-4 h-4 mr-2 text-indigo-600" />
+                  New Document
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => console.log("Delete item")}>
@@ -110,7 +177,7 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
           )}
         </div>
 
-        {isCollapsible && (
+        {item.collapsible && (
           <CollapsibleContent>
             {item.children && item.children.length > 0 ? (
               <SidebarMenuSub className="px-0 ml-1.5 mr-0">
@@ -126,6 +193,11 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
           </CollapsibleContent>
         )}
       </div>
+      <NewDocumentDialog
+        open={newDocDialogOpen}
+        onOpenChange={setNewDocDialogOpen}
+        categoryId={item.id || ""}
+      />
     </Collapsible>
   );
 };

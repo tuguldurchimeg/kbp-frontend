@@ -19,41 +19,41 @@ export default function DocumentPage() {
       const mockDatabase: DocumentItem[] = [
         {
           id: "1",
-          title: "Sample Doc",
-          content: content,
-          tags: [
-            {
-              id: "1",
-              name: "Intro",
-              description: "Introductory content",
-              color: "#C62828", // Red
+          type: "document",
+          attributes: {
+            title: "Sample Doc",
+            content: content,
+            tags: {
+              data: [
+                {
+                  id: "1",
+                  type: "tag",
+                  attributes: {
+                    name: "Intro",
+                    description: "Introductory content",
+                    color: "#C62828", // Red
+                  },
+                },
+                {
+                  id: "2",
+                  type: "tag",
+                  attributes: {
+                    name: "Tip",
+                    description: "Helpful tip",
+                    color: "#2E7D32", // Green}
+                  },
+                },
+              ],
             },
-            {
-              id: "2",
-              name: "Tip",
-              description: "Helpful tip",
-              color: "#2E7D32", // Green
-            },
-            {
-              id: "3",
-              name: "Warning",
-              description: "Use with caution",
-              color: "#F9A825", // Amber
-            },
-            {
-              id: "4",
-              name: "Idea",
-              description: "Creative thought",
-              color: "#1565C0", // Blue
-            },
-          ],
-          created_at: "2025-01-01T08:00:00Z",
-          updated_at: "2025-02-21T10:00:00Z",
-          user: CURRENT_USER,
-          category: {
-            data: {
-              id: "1",
-              name: "Category 1",
+            created_at: "2025-01-01T08:00:00Z",
+            updated_at: "2025-02-21T10:00:00Z",
+            user: { data: CURRENT_USER },
+            category: {
+              data: {
+                id: "1",
+                type: "category",
+                attributes: { name: "Category 1" },
+              },
             },
           },
         },

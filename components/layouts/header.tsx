@@ -20,10 +20,13 @@ export default function Header() {
           </Link>
         </nav>
         <Avatar className="h-10 w-10 rounded-full">
-          <AvatarImage src={user.avatar} alt={user.firstname} />
+          <AvatarImage
+            src={user.attributes.avatar}
+            alt={user.attributes.firstname}
+          />
           <AvatarFallback className="rounded-full">
-            {`${user.firstname?.[0] ?? ""}${
-              user.lastname?.[0] ?? ""
+            {`${user.attributes.firstname?.[0] ?? ""}${
+              user.attributes.lastname?.[0] ?? ""
             }`.toUpperCase()}
           </AvatarFallback>
         </Avatar>
