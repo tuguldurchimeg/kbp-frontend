@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { SimpleEditor } from "@/components/tiptap-editor/simple/simple-editor";
+import { SimpleEditor } from "@/components/tiptap-editor/simple/text-editor";
 import { DocumentItem } from "@/types/document";
 import content from "@/components/tiptap-editor/simple/data/content.json";
 import { CURRENT_USER } from "@/constants/kb-placeholder-data";

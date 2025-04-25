@@ -176,7 +176,7 @@ export function AppSidebar() {
                         <CollapsibleContent>
                           <SidebarMenuSub className="ml-1.5 px-0 mr-0">
                             {documentMenus.map((child) => (
-                              <SidebarMenuSubItem key={child.label}>
+                              <SidebarMenuSubItem key={child.id}>
                                 <CategoryDocuments item={child} />
                               </SidebarMenuSubItem>
                             ))}

@@ -57,13 +57,18 @@ body {
   scrollbar-color: var(--tt-scrollbar-color) transparent;
 }
 
+.simple-editor-title {
+  margin-top: 2rem;
+}
+
 @media screen and (max-width: 480px) {
   .content-wrapper {
     padding: 1rem 2rem;
     padding-bottom: 10rem;
   }
   .simple-editor-title {
-    padding: 1rem 2rem;
+    padding: 0.5rem 2rem;
+    margin-top: 0rem;
   }
 }
 

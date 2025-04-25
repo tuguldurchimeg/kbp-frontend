@@ -2,219 +2,50 @@
   "type": "doc",
   "content": [
     {
-      "type": "paragraph",
+      "type": "heading",
       "attrs": {
-        "textAlign": null
+        "level": 1,
+        "style": "color: #8E44AD; font-size: 32px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);"
       },
       "content": [
         {
           "type": "text",
-          "text": "Welcome to the "
-        },
-        {
-          "type": "text",
-          "marks": [
-            {
-              "type": "italic"
-            },
-            {
-              "type": "highlight",
-              "attrs": {
-                "color": "var(--tt-highlight-yellow)"
-              }
-            }
-          ],
-          "text": "Simple Editor"
-        },
-        {
-          "type": "text",
-          "text": " template! This template integrates "
-        },
-        {
-          "type": "text",
-          "marks": [
-            {
-              "type": "bold"
-            }
-          ],
-          "text": "open source"
-        },
-        {
-          "type": "text",
-          "text": " UI components and Tiptap extensions licensed under "
-        },
-        {
-          "type": "text",
-          "marks": [
-            {
-              "type": "bold"
-            }
-          ],
-          "text": "MIT"
-        },
-        {
-          "type": "text",
-          "text": "."
+          "text": "Танилцуулга"
         }
       ]
     },
     {
       "type": "paragraph",
-      "attrs": {
-        "textAlign": null
-      },
       "content": [
         {
           "type": "text",
-          "text": "Integrate it by following the "
-        },
-        {
-          "type": "text",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "https://tiptap.dev/docs/ui-components/templates/simple-editor",
-                "target": "_blank",
-                "rel": "noopener noreferrer nofollow",
-                "class": null
-              }
-            }
-          ],
-          "text": "Tiptap UI Components docs"
-        },
-        {
-          "type": "text",
-          "text": " or using our CLI tool."
+          "text": "Манай компани нь олон жилийн түүхтэй бөгөөд хамгийн сүүлийн үеийн технологиудыг ашиглан хэрэглэгчдэд өндөр чанартай үйлчилгээг үзүүлж байна.",
+          "style": "font-style: italic; color: #2C3E50; background-color: #ECF0F1; padding: 5px;"
         }
       ]
     },
     {
-      "type": "codeBlock",
-      "attrs": {
-        "language": null
-      },
+      "type": "paragraph",
       "content": [
         {
           "type": "text",
-          "text": "npx @tiptap/cli init"
+          "text": "Бидний зорилго бол олон улсад өргөжиж, үйл ажиллагаа, үйлчилгээ, бүтээгдэхүүний хувьд тэргүүлэгч байр суурь эзлэх явдал юм.",
+          "style": "font-style: italic; color: #2C3E50; background-color: #ECF0F1; padding: 5px;"
         }
       ]
     },
     {
       "type": "heading",
       "attrs": {
-        "textAlign": null,
-        "level": 2
+        "level": 2,
+        "style": "color: #3498DB; font-size: 28px; font-weight: bold; text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);"
       },
       "content": [
         {
           "type": "text",
-          "text": "Features"
+          "text": "Тус компанийн салбарууд"
         }
       ]
-    },
-    {
-      "type": "blockquote",
-      "content": [
-        {
-          "type": "paragraph",
-          "attrs": {
-            "textAlign": null
-          },
-          "content": [
-            {
-              "type": "text",
-              "marks": [
-                {
-                  "type": "italic"
-                }
-              ],
-              "text": "A fully responsive rich text editor with built-in support for common formatting and layout tools. Type markdown "
-            },
-            {
-              "type": "text",
-              "marks": [
-                {
-                  "type": "code"
-                }
-              ],
-              "text": "**"
-            },
-            {
-              "type": "text",
-              "marks": [
-                {
-                  "type": "italic"
-                }
-              ],
-              "text": " or use keyboard shortcuts "
-            },
-            {
-              "type": "text",
-              "marks": [
-                {
-                  "type": "code"
-                }
-              ],
-              "text": "⌘+B"
-            },
-            {
-              "type": "text",
-              "text": " for "
-            },
-            {
-              "type": "text",
-              "marks": [
-                {
-                  "type": "strike"
-                }
-              ],
-              "text": "most"
-            },
-            {
-              "type": "text",
-              "text": " all common markdown marks. 🪄"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "paragraph",
-      "attrs": {
-        "textAlign": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Add images, customize alignment, and apply "
-        },
-        {
-          "type": "text",
-          "marks": [
-            {
-              "type": "highlight",
-              "attrs": {
-                "color": "var(--tt-highlight-blue)"
-              }
-            }
-          ],
-          "text": "advanced formatting"
-        },
-        {
-          "type": "text",
-          "text": " to make your writing more engaging and professional."
-        }
-      ]
-    },
-    {
-      "type": "image",
-      "attrs": {
-        "src": "/avatar.jpg",
-        "alt": "placeholder-image",
-        "title": "placeholder-image"
-      }
     },
     {
       "type": "bulletList",
@@ -224,61 +55,11 @@
           "content": [
             {
               "type": "paragraph",
-              "attrs": {
-                "textAlign": "left"
-              },
               "content": [
                 {
                   "type": "text",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ],
-                  "text": "Superscript"
-                },
-                {
-                  "type": "text",
-                  "text": " (x"
-                },
-                {
-                  "type": "text",
-                  "marks": [
-                    {
-                      "type": "superscript"
-                    }
-                  ],
-                  "text": "2"
-                },
-                {
-                  "type": "text",
-                  "text": ") and "
-                },
-                {
-                  "type": "text",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ],
-                  "text": "Subscript"
-                },
-                {
-                  "type": "text",
-                  "text": " (H"
-                },
-                {
-                  "type": "text",
-                  "marks": [
-                    {
-                      "type": "subscript"
-                    }
-                  ],
-                  "text": "2"
-                },
-                {
-                  "type": "text",
-                  "text": "O) for precision."
+                  "text": "Техникийн үйлчилгээ",
+                  "style": "color: #27AE60; font-weight: bold; background-color: #F1C40F; padding: 5px; border-radius: 5px;"
                 }
               ]
             }
@@ -289,164 +70,26 @@
           "content": [
             {
               "type": "paragraph",
-              "attrs": {
-                "textAlign": "left"
-              },
               "content": [
                 {
                   "type": "text",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ],
-                  "text": "Typographic conversion"
-                },
-                {
-                  "type": "text",
-                  "text": ": automatically convert to "
-                },
-                {
-                  "type": "text",
-                  "marks": [
-                    {
-                      "type": "code"
-                    }
-                  ],
-                  "text": "->"
-                },
-                {
-                  "type": "text",
-                  "text": " an arrow "
-                },
-                {
-                  "type": "text",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ],
-                  "text": "→"
-                },
-                {
-                  "type": "text",
-                  "text": "."
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "paragraph",
-      "attrs": {
-        "textAlign": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "marks": [
-            {
-              "type": "italic"
-            }
-          ],
-          "text": "→ "
-        },
-        {
-          "type": "text",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "https://tiptap.dev/docs/ui-components/templates/simple-editor#features",
-                "target": "_blank",
-                "rel": "noopener noreferrer nofollow",
-                "class": null
-              }
-            }
-          ],
-          "text": "Learn more"
-        }
-      ]
-    },
-    {
-      "type": "horizontalRule"
-    },
-    {
-      "type": "heading",
-      "attrs": {
-        "textAlign": "left",
-        "level": 2
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Make it your own"
-        }
-      ]
-    },
-    {
-      "type": "paragraph",
-      "attrs": {
-        "textAlign": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Switch between light and dark modes, and tailor the editor's appearance with customizable CSS to match your style."
-        }
-      ]
-    },
-    {
-      "type": "taskList",
-      "content": [
-        {
-          "type": "taskItem",
-          "attrs": {
-            "checked": true
-          },
-          "content": [
-            {
-              "type": "paragraph",
-              "attrs": {
-                "textAlign": "left"
-              },
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Test template"
+                  "text": "Санхүүгийн зөвлөгөө",
+                  "style": "color: #E67E22; font-weight: bold; background-color: #F1C40F; padding: 5px; border-radius: 5px;"
                 }
               ]
             }
           ]
         },
         {
-          "type": "taskItem",
-          "attrs": {
-            "checked": false
-          },
+          "type": "listItem",
           "content": [
             {
               "type": "paragraph",
-              "attrs": {
-                "textAlign": "left"
-              },
               "content": [
                 {
                   "type": "text",
-                  "marks": [
-                    {
-                      "type": "link",
-                      "attrs": {
-                        "href": "https://tiptap.dev/docs/ui-components/templates/simple-editor",
-                        "target": "_blank",
-                        "rel": "noopener noreferrer nofollow",
-                        "class": null
-                      }
-                    }
-                  ],
-                  "text": "Integrate the free template"
+                  "text": "Бүтээгдэхүүн хөгжүүлэлт",
+                  "style": "color: #E74C3C; font-weight: bold; background-color: #F1C40F; padding: 5px; border-radius: 5px;"
                 }
               ]
             }
@@ -455,10 +98,23 @@
       ]
     },
     {
-      "type": "paragraph",
+      "type": "image",
       "attrs": {
-        "textAlign": "left"
+        "src": "/document.png",
+        "alt": "Тус компанийн логотип",
+        "title": "Манай компанийн танилцуулга",
+        "style": "width: 150px; height: auto; margin: 10px auto; display: block;"
       }
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Манай компани салбар бүртээ мэргэшсэн багтай бөгөөд үйл ажиллагаагаа хамгийн өндөр стандартын дагуу явуулдаг.",
+          "style": "font-style: italic; color: #34495E; background-color: #ECF0F1; padding: 5px;"
+        }
+      ]
     }
   ]
 }

@@ -87,6 +87,8 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
     }
   };
 
+  console.log("child ", item);
+
   return (
     <Collapsible
       key={item.label}
@@ -103,16 +105,19 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
               data-state-open={item.isCollapsed}
             >
               {item.collapsible && (
-                <div
-                  className="transition-transform duration-200"
-                  style={{
-                    transform: item.isCollapsed
-                      ? "rotate(90deg)"
-                      : "rotate(0deg)",
-                  }}
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </div>
+                <>
+                  <div
+                    className="transition-transform duration-200"
+                    style={{
+                      transform: item.isCollapsed
+                        ? "rotate(90deg)"
+                        : "rotate(0deg)",
+                    }}
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </div>
+                  <span>{item.label}</span>
+                </>
               )}
               {isEditing ? (
                 <div className="flex items-center gap-2">
@@ -123,16 +128,16 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
                     autoFocus
                     onBlur={() => {
                       handleRename();
-                      setIsEditing(false); // Set isEditing to false when the input loses focus
+                      setIsEditing(false);
                     }}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") handleRename(); // Save on Enter
+                      if (e.key === "Enter") handleRename();
                     }}
                   />
                 </div>
               ) : (
                 <div className="flex items-center gap-1">
-                  {item.uri ? (
+                  {item.uri && (
                     <Link
                       href={item.uri || "#"}
                       className="flex items-center gap-1"
@@ -140,8 +145,6 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
                       {item.icon && <item.icon />}
                       <span>{item.label}</span>
                     </Link>
-                  ) : (
-                    <span>{item.label}</span>
                   )}
                 </div>
               )}

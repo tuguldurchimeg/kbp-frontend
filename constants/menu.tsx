@@ -79,6 +79,7 @@ const buildCategoryTree = (
   maxDepth = 2
 ): MenuItemChildren[] => {
   if (depth > maxDepth) return [];
+  console.log("categories ", categories);
 
   return categories.map((category) => {
     const subcategories =
@@ -97,7 +98,6 @@ const buildCategoryTree = (
         uri: ROUTE.BASE.DOCUMENT.DETAIL(workspaceId, doc.id),
         icon: Dot,
       })) || [];
-
     return {
       id: category.id,
       label: category.attributes?.name,
@@ -111,7 +111,6 @@ const buildCategoryTree = (
 export const generateDocumentMenus = async (
   workspaceId: string
 ): Promise<MenuItemChildren[]> => {
-  console.log("id ", workspaceId);
   const categories = await getCategories(workspaceId);
   return buildCategoryTree(categories, workspaceId);
 };

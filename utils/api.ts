@@ -26,7 +26,6 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Interceptor for handling token refresh on 401 (Unauthorized)
 api.interceptors.response.use(
   (response) => response,
   async (error) => {

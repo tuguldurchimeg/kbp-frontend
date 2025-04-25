@@ -80,7 +80,7 @@ import { ThemeToggle } from "@/components/tiptap-editor/simple/theme-toggle";
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
 
 // --- Styles ---
-import "@/components/tiptap-editor/simple/simple-editor.scss";
+import "@/components/tiptap-editor/simple/text-editor.scss";
 import {
   TextColorButton,
   TextColorContent,
@@ -107,6 +107,7 @@ import {
 } from "@/components/ui/command";
 import { TAG_PLACEHOLDERS } from "@/constants/kb-placeholder-data";
 import { TAG_COLORS } from "@/constants/color.constants";
+import clsx from "clsx";
 
 type Props = {
   document: DocumentItem;
@@ -456,29 +457,33 @@ export function SimpleEditor({ document }: Props) {
         </Toolbar>
       )}
 
-      {/* Edit buttons */}
       {isEditable ? (
         <CNButton
           onClick={() => handleDocUpdate()}
           size="lg"
-          className="fixed bottom-15 right-15 h-12 w-12 rounded-xl"
+          className={clsx(
+            "fixed bottom-15 right-15 h-12 w-12 rounded-xl",
+            isMobile && "right-5 bottom-13"
+          )}
           aria-label="Update document"
         >
-          <FileCheck className="w-4 h-4 " />
+          <FileCheck className="w-5 h-5 " />
         </CNButton>
       ) : (
         <CNButton
           onClick={() => handleToggleEditable()}
           size="lg"
-          className="fixed bottom-15 right-15 h-12 w-12 rounded-xl"
+          className={clsx(
+            "fixed bottom-15 right-15 h-12 w-12 rounded-xl",
+            isMobile && "right-5 bottom-13"
+          )}
           aria-label="Toggle edit mode"
         >
-          <Pencil className="w-4 h-4 " />
+          <Pencil className="w-5 h-5 " />
         </CNButton>
       )}
 
-      {/* Document header with input edit */}
-      <div className="simple-editor-title mt-10">
+      <div className="simple-editor-title">
         {isEditable && isTitleEditing ? (
           <Input
             type="text"
@@ -543,7 +548,13 @@ export function SimpleEditor({ document }: Props) {
           </div>
         )}
       </div>
-      <div className="mt-4 flex flex-wrap gap-1">
+      <div
+        className={clsx(
+          "mt-4 flex flex-wrap gap-1",
+          isMobile && "ml-8 mt-3",
+          isEditable && "mt-0"
+        )}
+      >
         {(document.attributes.tags?.data.length ?? 0) > 0 &&
           document.attributes.tags?.data.map((tag) => (
             <Badge
