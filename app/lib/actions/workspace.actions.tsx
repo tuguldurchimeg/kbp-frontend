@@ -1,4 +1,4 @@
-import api from "@/app/lib/api";
+import api from "@/utils/api";
 import { URI } from "@/constants/uri.constants";
 import { WorkspaceCreateParams, WorkspaceItem } from "@/types/workspace";
 

@@ -27,7 +27,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import clsx from "clsx";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import {
   createCategory,
   updateCategory,
@@ -42,6 +42,8 @@ interface CategoryDocumentsProps {
 }
 
 const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
+  const params = useParams();
+  const workspaceId = params.workspaceId as string;
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState(item.label);
   const [newDocDialogOpen, setNewDocDialogOpen] = useState(false);
@@ -74,7 +76,8 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
     try {
       const newCategory = await createCategory({
         name: "Untitled Category",
-        parent_id: item.id, // Assuming item.id exists and maps to the parent category
+        parent_id: item.id,
+        workspace_id: workspaceId,
       });
       toast.success(`Category created: "${newCategory.attributes.name}"`);
       // Optionally trigger refresh or reload of category tree

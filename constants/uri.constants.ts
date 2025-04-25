@@ -13,12 +13,12 @@ export const URI = {
 
   //
   WORKSPACES: "/v1/workspaces",
-  DOCUMENTS: "/v1/documents",
-  TAGS: "/v1/tags",
-  GLOSSARIES: "/v1/glossaries",
-  CATEGORIES: "/v1/categories",
-  ISSUES: "/v1/issues",
-  SEOS: "/v1/seos",
+  CATEGORIES: "/v1/documents/categories",
+  DOCUMENTS: "/v1/documents/documents",
+  ISSUES: "/v1/documents/issues",
+  TAGS: "/v1/tools/tags",
+  GLOSSARIES: "/v1/tools/glossaries",
+  SEOS: "/v1/tools/seos",
 };
 
 export const excludeURI = [

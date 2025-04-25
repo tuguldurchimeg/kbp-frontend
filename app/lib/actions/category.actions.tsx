@@ -1,9 +1,13 @@
-import api from "@/app/lib/api";
+import api from "../../../utils/api";
 import { URI } from "@/constants/uri.constants";
 import { CategoryItem, CategoryCreateParams } from "@/types/document";
 
-export const getCategories = async (): Promise<CategoryItem[]> => {
-  const res = await api.get(URI.CATEGORIES);
+export const getCategories = async (
+  workspaceId: string
+): Promise<CategoryItem[]> => {
+  const res = await api.get(URI.CATEGORIES, {
+    params: { workspace_id: workspaceId },
+  });
   return res.data;
 };
 

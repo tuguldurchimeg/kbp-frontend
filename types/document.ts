@@ -30,6 +30,7 @@ export type CategoryItem = {
 export type CategoryCreateParams = {
   name: string;
   parent_id?: string;
+  workspace_id: string;
 };
 
 export type DocumentCreateParams = {

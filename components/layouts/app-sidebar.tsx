@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import {
@@ -35,24 +34,35 @@ import { Plus, FolderPlus, FileText, Building2 } from "lucide-react";
 import Link from "next/link";
 import CategoryDocuments from "./category-documents-tree";
 import { Separator } from "@/components/ui/separator";
-import { NavUser } from "./app-header";
 import { NavHeader } from "./app-sidebar-header";
 import { useParams, usePathname } from "next/navigation";
-import { generateMenus } from "@/constants/menu";
+import { staticMenus, MenuItemChildren, dynamicMenu } from "@/constants/menu";
 import clsx from "clsx";
-import { CURRENT_USER } from "@/constants/kb-placeholder-data";
 import { ROUTE } from "@/constants/route.constants";
 import NewDocumentDialog from "@/components/@documents/new-document-dialog";
 import { createCategory } from "@/app/lib/actions/category.actions";
 import { toast } from "sonner"; // or your toast lib
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { generateDocumentMenus } from "@/constants/menu"; // Assuming this function is in a separate file
 
 export function AppSidebar() {
   const params = useParams();
   const workspaceId = params.workspaceId as string;
-  const menus = generateMenus(workspaceId);
   const pathname = usePathname();
   const [newDocDialogOpen, setNewDocDialogOpen] = useState(false);
+  const [documentMenus, setDocumentMenus] = useState<MenuItemChildren[]>([]); // Dynamic document menus state
+
+  const fetchDocumentMenus = async () => {
+    try {
+      const fetchedDocumentMenus = await generateDocumentMenus(workspaceId);
+      setDocumentMenus(fetchedDocumentMenus);
+    } catch (error) {
+      console.error("Failed to generate document menus", error);
+    }
+  };
+  useEffect(() => {
+    fetchDocumentMenus();
+  }, [workspaceId]);
 
   return (
     <Sidebar
@@ -65,15 +75,46 @@ export function AppSidebar() {
       </SidebarHeader>
       <Separator />
       <SidebarContent>
-        {menus.map((section) => (
+        {staticMenus.map((section) => (
           <SidebarGroup key={section.label}>
             <SidebarGroupLabel className="text-muted-foreground">
               {section.label}
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {section.children.map((item) =>
-                  item.children ? (
+                {section.children.map((item) => (
+                  <SidebarMenuItem key={item.label}>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={item.label}
+                      className={clsx({
+                        "bg-sky-100 text-blue-600": pathname.startsWith(
+                          item.uri || ""
+                        ),
+                      })}
+                    >
+                      <Link href={item.uri || "#"}>
+                        {item.icon && <item.icon />}
+                        <span>{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
+
+        {/* Dynamic Document Menus */}
+        {dynamicMenu && (
+          <SidebarGroup key="Documents">
+            <SidebarGroupLabel className="text-muted-foreground">
+              {dynamicMenu.label}
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {dynamicMenu.children.map((item) =>
+                  item.collapsible ? (
                     <Collapsible
                       key={item.label}
                       asChild
@@ -103,14 +144,13 @@ export function AppSidebar() {
                                 <DropdownMenuItem
                                   onClick={async () => {
                                     try {
+                                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
                                       const newCategory = await createCategory({
                                         name: "Untitled Category",
+                                        workspace_id: workspaceId,
                                       });
                                       toast.success("Category created");
-
-                                      // Optional: trigger re-fetch or refresh logic
-                                      // e.g., if using SWR, trigger a mutate
-                                      // or emit event to update <CategoryDocuments />
+                                      fetchDocumentMenus();
                                     } catch (err) {
                                       console.error(
                                         "Failed to create category",
@@ -135,7 +175,7 @@ export function AppSidebar() {
                         </CollapsibleTrigger>
                         <CollapsibleContent>
                           <SidebarMenuSub className="ml-1.5 px-0 mr-0">
-                            {item.children.map((child) => (
+                            {documentMenus.map((child) => (
                               <SidebarMenuSubItem key={child.label}>
                                 <CategoryDocuments item={child} />
                               </SidebarMenuSubItem>
@@ -146,15 +186,7 @@ export function AppSidebar() {
                     </Collapsible>
                   ) : (
                     <SidebarMenuItem key={item.label}>
-                      <SidebarMenuButton
-                        asChild
-                        tooltip={item.label}
-                        className={clsx({
-                          " bg-sky-100 text-blue-600": pathname.startsWith(
-                            item.uri || ""
-                          ),
-                        })}
-                      >
+                      <SidebarMenuButton asChild tooltip={item.label}>
                         <Link href={item.uri || "#"}>
                           {item.icon && <item.icon />}
                           <span>{item.label}</span>
@@ -166,7 +198,7 @@ export function AppSidebar() {
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
-        ))}
+        )}
       </SidebarContent>
 
       <SidebarFooter className="gap-0.5">
@@ -177,7 +209,6 @@ export function AppSidebar() {
           </SidebarMenuButton>
         </Link>
       </SidebarFooter>
-      {/* <SidebarRail /> */}
       <NewDocumentDialog
         open={newDocDialogOpen}
         onOpenChange={setNewDocDialogOpen}

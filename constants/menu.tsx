@@ -1,3 +1,4 @@
+import { getCategories } from "@/app/lib/actions/category.actions";
 import { ROUTE } from "./route.constants";
 import {
   User,
@@ -9,7 +10,6 @@ import {
   FileQuestion,
   LucideIcon,
 } from "lucide-react";
-import { KB_CATEGORIES } from "./kb-placeholder-data";
 import { CategoryItem } from "@/types/document";
 
 export type MenuItemChildren = {
@@ -27,6 +27,51 @@ export type MenuSection = {
   children: MenuItemChildren[];
 };
 
+export const staticMenus = [
+  {
+    label: "Tools",
+    children: [
+      {
+        label: "User access",
+        uri: ROUTE.TOOLS.USER_ACCESS.ROOT("workspaceId"),
+        icon: User,
+      },
+      {
+        label: "Templates",
+        uri: ROUTE.TOOLS.TEMPLATES.ROOT("workspaceId"),
+        icon: FilePlus2,
+      },
+      {
+        label: "Tags",
+        uri: ROUTE.TOOLS.TAGS.ROOT("workspaceId"),
+        icon: Tag,
+      },
+      {
+        label: "Glossary",
+        uri: ROUTE.TOOLS.GLOSSARY.ROOT("workspaceId"),
+        icon: BookOpen,
+      },
+    ],
+  },
+];
+
+export const dynamicMenu = {
+  label: "Knowledge base",
+  children: [
+    {
+      label: "Issues",
+      uri: ROUTE.BASE.ISSUES.ROOT("workspaceId"),
+      icon: FileQuestion,
+    },
+    {
+      label: "Documents",
+      icon: Folder,
+      collapsible: true,
+      isCollapsed: false,
+    },
+  ],
+};
+
 const buildCategoryTree = (
   categories: CategoryItem[],
   workspaceId: string,
@@ -37,9 +82,9 @@ const buildCategoryTree = (
 
   return categories.map((category) => {
     const subcategories =
-      category.attributes?.subcategories && depth < maxDepth
+      category.attributes?.subcategories?.data && depth < maxDepth
         ? buildCategoryTree(
-            category.attributes?.subcategories?.data,
+            category.attributes.subcategories.data,
             workspaceId,
             depth + 1,
             maxDepth
@@ -63,56 +108,10 @@ const buildCategoryTree = (
   });
 };
 
-export const generateMenus = (workspaceId: string): MenuSection[] => {
-  const knowledgeBaseChildren = buildCategoryTree(KB_CATEGORIES, workspaceId);
-
-  return [
-    {
-      label: "Knowledge base",
-      children: [
-        {
-          label: "Issues",
-          uri: ROUTE.BASE.ISSUES.ROOT(workspaceId),
-          icon: FileQuestion,
-        },
-        {
-          label: "Documents",
-          collapsible: true,
-          isCollapsed: true,
-          icon: Folder,
-          children: knowledgeBaseChildren,
-        },
-      ],
-    },
-    {
-      label: "Tools",
-      children: [
-        {
-          label: "User access",
-          uri: ROUTE.TOOLS.USER_ACCESS.ROOT(workspaceId),
-          icon: User,
-        },
-        {
-          label: "Templates",
-          uri: ROUTE.TOOLS.TEMPLATES.ROOT(workspaceId),
-          icon: FilePlus2,
-        },
-        {
-          label: "Tags",
-          uri: ROUTE.TOOLS.TAGS.ROOT(workspaceId),
-          icon: Tag,
-        },
-        {
-          label: "Glossary",
-          uri: ROUTE.TOOLS.GLOSSARY.ROOT(workspaceId),
-          icon: BookOpen,
-        },
-        // {
-        //   label: "SEO",
-        //   uri: ROUTE.TOOLS.SEO.ROOT(workspaceId),
-        //   icon: SearchCode,
-        // },
-      ],
-    },
-  ];
+export const generateDocumentMenus = async (
+  workspaceId: string
+): Promise<MenuItemChildren[]> => {
+  console.log("id ", workspaceId);
+  const categories = await getCategories(workspaceId);
+  return buildCategoryTree(categories, workspaceId);
 };

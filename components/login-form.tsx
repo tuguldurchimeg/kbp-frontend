@@ -1,4 +1,5 @@
 "use client";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,14 +7,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { useAuth } from "@/hooks/useAuth";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { ROUTE } from "@/constants/route.constants";
+import { CircularProgress } from "@mui/material";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const { login } = useAuth();
+  const { login, loading: authLoading } = useAuth(); // Access loading from AuthContext
   const router = useRouter();
 
   const [email, setEmail] = useState("");
@@ -23,14 +26,16 @@ export function LoginForm({
     e.preventDefault();
     try {
       await login(email, password);
-      router.push("/workspaces");
-    } catch {}
+      router.push(ROUTE.WORKSPACES.ROOT); // Redirect after successful login
+    } catch (error) {
+      console.error("Login failed", error); // Handle login failure
+    }
   };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
+          <form className="p-6 md:p-8" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
@@ -66,8 +71,12 @@ export function LoginForm({
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-              <Button type="submit" className="w-full" onClick={handleSubmit}>
-                Login
+              <Button type="submit" className="w-full" disabled={authLoading}>
+                {authLoading ? (
+                  <CircularProgress size={24} className="text-white" />
+                ) : (
+                  "Login"
+                )}
               </Button>
               <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                 <span className="bg-card text-muted-foreground relative z-10 px-2">

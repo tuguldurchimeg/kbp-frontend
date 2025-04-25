@@ -23,39 +23,55 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<CurrentUser | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const isClient = typeof window !== "undefined";
+
   const login = async (email: string, password: string) => {
     const data = await loginService({ email, password });
     setUser(data);
-    localStorage.setItem("authUser", JSON.stringify(data));
+
+    if (isClient) {
+      localStorage.setItem("authUser", JSON.stringify(data));
+    }
   };
 
   const logout = async () => {
     await logoutService();
     setUser(null);
-    localStorage.removeItem("authUser");
+
+    if (isClient) {
+      localStorage.removeItem("authUser"); // Remove from localStorage on client
+    }
   };
 
   const refresh = async () => {
+    if (!isClient) return; // Ensure this only runs on client
+
     const raw = localStorage.getItem("authUser");
     if (!raw) return;
+
     const parsed = JSON.parse(raw);
     try {
       const updated = await refreshTokenService(parsed.refresh_token);
       const newUser = { ...parsed, ...updated };
       setUser(newUser);
-      localStorage.setItem("authUser", JSON.stringify(newUser));
+
+      if (isClient) {
+        localStorage.setItem("authUser", JSON.stringify(newUser)); // Update localStorage on client
+      }
     } catch {
       logout();
     }
   };
 
   useEffect(() => {
-    const raw = localStorage.getItem("authUser");
-    if (raw) {
-      setUser(JSON.parse(raw));
+    if (isClient) {
+      const raw = localStorage.getItem("authUser");
+      if (raw) {
+        setUser(JSON.parse(raw));
+      }
+      setLoading(false);
     }
-    setLoading(false);
-  }, []);
+  }, [isClient]);
 
   return (
     <AuthContext.Provider

@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createWorkspace } from "@/app/lib/actions/workspace.actions";
+import { createWorkspace } from "@/app/lib/actions/workspace.actions"; // Import the createWorkspace API action
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
-import { WorkspaceItem } from "@/types/workspace";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   name: z.string().min(1, "Workspace name is required"),
@@ -24,11 +24,8 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-type Props = {
-  onCreated: (workspace: WorkspaceItem) => void;
-};
-
-export default function CreateWorkspaceForm({ onCreated }: Props) {
+export default function CreateWorkspaceForm() {
+  const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -39,12 +36,13 @@ export default function CreateWorkspaceForm({ onCreated }: Props) {
 
   const handleSubmit = async (values: FormValues) => {
     try {
-      const workspace = await createWorkspace({
-        name: values.name,
+      await createWorkspace({
+        ...values,
         description: values.description || "",
       });
-      onCreated(workspace); // ✅ callback to parent
+
       form.reset();
+      router.push("/workspaces");
     } catch (err) {
       console.error("Failed to create workspace:", err);
     }
