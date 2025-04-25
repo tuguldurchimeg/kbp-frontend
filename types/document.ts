@@ -109,3 +109,22 @@ export type SeoUpdateParams = {
   id: string;
   params: SeoCreateParams;
 };
+
+export type AccessItem = {
+  id: string;
+  type: "access";
+  attributes: {
+    role: string;
+    user: { data: UserItem };
+  };
+};
+
+export type AccessCreateParams = {
+  user_id: string;
+  role: string;
+};
+
+export type AccessUpdateParams = {
+  id: string;
+  params: AccessCreateParams;
+};

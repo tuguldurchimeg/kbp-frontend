@@ -1,5 +1,4 @@
-"use client";
-
+import { useState } from "react";
 import {
   Building,
   Building2,
@@ -11,7 +10,6 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  //   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -23,9 +21,19 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 export function NavHeader() {
   const { isMobile } = useSidebar();
+  const [isDialogOpen, setDialogOpen] = useState(false);
+
+  const openDialog = () => setDialogOpen(true);
+  const closeDialog = () => setDialogOpen(false);
 
   return (
     <SidebarMenu>
@@ -73,23 +81,30 @@ export function NavHeader() {
         </DropdownMenu>
       </SidebarMenuItem>
       <SidebarMenuItem>
-        {/* <Input
-          type="search"
-          placeholder="Search documents..."
-          className="pl-10 h-8 text-sm"
-        />
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs">
-          <Search className="w-4 h-4" />
-        </span> */}
         <SidebarMenuButton
           variant="outline"
           className="w-full justify-start shadow-sm text-xs text-muted-foreground text-zinc-400 font-normal"
-          onClick={() => console.log("Open search modal")}
+          onClick={openDialog}
         >
           <Search className=" w-4 h-4 text-muted-foreground" />
           Search documents...
         </SidebarMenuButton>
       </SidebarMenuItem>
+
+      <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
+        <DialogTrigger />
+        <DialogContent>
+          <div className="flex justify-between items-center">
+            <h3 className="text-lg font-semibold">Search for documents</h3>
+            <DialogClose onClick={closeDialog}>Close</DialogClose>
+          </div>
+          <input
+            type="text"
+            placeholder="Type to search..."
+            className="w-full p-2 mt-4 border rounded"
+          />
+        </DialogContent>
+      </Dialog>
     </SidebarMenu>
   );
 }

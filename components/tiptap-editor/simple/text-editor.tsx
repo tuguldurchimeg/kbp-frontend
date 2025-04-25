@@ -462,7 +462,7 @@ export function SimpleEditor({ document }: Props) {
           onClick={() => handleDocUpdate()}
           size="lg"
           className={clsx(
-            "fixed bottom-15 right-15 h-12 w-12 rounded-xl",
+            "fixed bottom-15 right-15 h-12 w-12 rounded-xl z-99",
             isMobile && "right-5 bottom-13"
           )}
           aria-label="Update document"

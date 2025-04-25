@@ -56,7 +56,7 @@ export default function TemplateTable() {
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-semibold">Tags</h2>
-          <p className="text-muted-foreground">Create and manage tags</p>
+          <p className="text-muted-foreground">Create and employees access</p>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

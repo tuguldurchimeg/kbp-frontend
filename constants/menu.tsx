@@ -67,7 +67,7 @@ export const dynamicMenu = {
       label: "Documents",
       icon: Folder,
       collapsible: true,
-      isCollapsed: false,
+      isCollapsed: true,
     },
   ],
 };

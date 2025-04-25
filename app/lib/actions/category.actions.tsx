@@ -8,7 +8,7 @@ export const getCategories = async (
   const res = await api.get(URI.CATEGORIES, {
     params: { workspace_id: workspaceId },
   });
-  return res.data;
+  return res.data.data;
 };
 
 export const createCategory = async (

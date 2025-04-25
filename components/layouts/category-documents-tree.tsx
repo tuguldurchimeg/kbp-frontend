@@ -188,7 +188,7 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
             {item.children && item.children.length > 0 ? (
               <SidebarMenuSub className="px-0 ml-1.5 mr-0">
                 {item.children.map((child) => (
-                  <SidebarMenuSubItem key={child.label}>
+                  <SidebarMenuSubItem key={child.id}>
                     <CategoryDocuments item={child} />
                   </SidebarMenuSubItem>
                 ))}

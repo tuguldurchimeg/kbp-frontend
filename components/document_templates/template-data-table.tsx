@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import {
@@ -34,10 +35,11 @@ import {
   createDocument,
 } from "@/app/lib/actions/document.actions";
 import { DocumentItem } from "@/types/document";
+import { DOC_TEMPLATES } from "@/constants/kb-placeholder-data";
 
 export default function TemplateTable() {
   const [rowSelection, setRowSelection] = useState({});
-  const [data, setData] = useState<DocumentItem[]>([]);
+  const [data, setData] = useState<DocumentItem[]>(DOC_TEMPLATES);
   const [loading, setLoading] = useState(true);
 
   const pathname = usePathname();
@@ -47,8 +49,8 @@ export default function TemplateTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const docs = await getTemplateDocuments();
-        setData(docs);
+        // const docs = await getTemplateDocuments();
+        // setData(docs);
       } catch (err) {
         console.error("Failed to fetch templates:", err);
       } finally {
