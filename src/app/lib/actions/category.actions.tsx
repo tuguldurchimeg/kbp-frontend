@@ -15,7 +15,7 @@ export const createCategory = async (
   params: CategoryCreateParams
 ): Promise<CategoryItem> => {
   const res = await api.post(URI.CATEGORIES, params);
-  return res.data;
+  return res.data.data;
 };
 
 export const updateCategory = async (
@@ -23,7 +23,7 @@ export const updateCategory = async (
   params: Partial<CategoryCreateParams>
 ): Promise<CategoryItem> => {
   const res = await api.put(`${URI.CATEGORIES}/${id}`, params);
-  return res.data;
+  return res.data.data;
 };
 
 export const deleteCategory = async (id: string): Promise<void> => {

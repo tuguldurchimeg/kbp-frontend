@@ -9,7 +9,7 @@ export async function getDocuments(): Promise<DocumentItem[]> {
 
 export async function getDocument(id: string): Promise<DocumentItem> {
   const res = await api.get(`${URI.DOCUMENTS}/${id}`);
-  return res.data;
+  return res.data.data;
 }
 
 export const createDocument = async (
@@ -30,6 +30,11 @@ export const updateDocument = async (
 export async function deleteDocument(id: string): Promise<void> {
   await api.delete(`${URI.DOCUMENTS}/${id}`);
 }
+
+export const getQuickAccessDocuments = async (): Promise<DocumentItem[]> => {
+  const res = await api.get(`${URI.DOCUMENTS}/quick_access`);
+  return res.data?.data;
+};
 
 // Get only template documents
 export const getTemplateDocuments = async (): Promise<DocumentItem[]> => {

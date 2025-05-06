@@ -129,5 +129,16 @@
     "issues": "Асуудал, шийдэл",
     "documents": "Нийтлэл",
     "workspaces": "Ажлын орчин"
+  },
+  "Main": {
+    "issues": "Асуудал, шийдэл"
+  },
+  "Workspace": {
+    "documents": "Нийтлэлүүд",
+    "newDocument": "Шинэ нийтлэл нэмэх",
+    "summary_title": "Ажлын орчны тойм",
+    "summary_desc": "Ангилал болон нийтлэлийн товч мэдээлэл",
+    "total_categories": "Нийт ангилал",
+    "total_documents": "Нийт нийтлэл"
   }
 }

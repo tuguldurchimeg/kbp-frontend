@@ -129,5 +129,13 @@
     "issues": "Issues",
     "documents": "Documents",
     "workspaces": "Workspaces"
+  },
+  "Workspace": {
+    "documents": "Documents",
+    "newDocument": "New Document",
+    "summary_title": "Workspace Summary",
+    "summary_desc": "Quick overview of categories and documents",
+    "total_categories": "Total Categories",
+    "total_documents": "Total Documents"
   }
 }

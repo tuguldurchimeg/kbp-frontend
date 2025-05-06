@@ -503,6 +503,7 @@ const MOCK_DOCUMENT: DocumentItem = {
   type: "document",
   attributes: {
     title: "How APIs Work",
+    workspace_id: "2",
   },
 };
 
@@ -530,35 +531,137 @@ export const SEO_PLACEHOLDERS: SeoItem[] = [
   },
 ];
 
-export const topics = [
+export const topics: DocumentItem[] = [
   {
-    title: "Getting started",
-    author: "Tuguldurchimeg Renchinchime",
-    views: 234,
+    id: "1",
+    type: "document",
+    attributes: {
+      title: "Эхлүүлэх гарын авлага",
+      user: {
+        data: {
+          id: "u1",
+          type: "user",
+          attributes: {
+            uid: "tg123",
+            email: "tuguldur@example.com",
+            firstname: "Төгөлдөрчимэг",
+            lastname: "Рэнчинчимэ",
+            avatar: "/avatars/tuguldur.png",
+          },
+        },
+      },
+      view_count: 234,
+      workspace_id: "2",
+    },
   },
   {
-    title: "Overview",
-    author: "Tuguldurchimeg Renchinchime",
-    views: 198,
+    id: "2",
+    type: "document",
+    attributes: {
+      title: "Ерөнхий танилцуулга",
+      user: {
+        data: {
+          id: "u1",
+          type: "user",
+          attributes: {
+            uid: "tg123",
+            email: "tuguldur@example.com",
+            firstname: "Төгөлдөрчимэг",
+            lastname: "Рэнчинчимэ",
+            avatar: "/avatars/tuguldur.png",
+          },
+        },
+      },
+      view_count: 198,
+      workspace_id: "2",
+    },
   },
   {
-    title: "Template - Troubleshooting article",
-    author: "KKK test",
-    views: 142,
+    id: "3",
+    type: "document",
+    attributes: {
+      title: "Загвар - Асуудал шийдвэрлэх заавар",
+      user: {
+        data: {
+          id: "u2",
+          type: "user",
+          attributes: {
+            uid: "kkk001",
+            email: "kkk@example.com",
+            firstname: "Тест",
+            lastname: "Хэрэглэгч",
+            avatar: "/avatars/kkk.png",
+          },
+        },
+      },
+      view_count: 142,
+      workspace_id: "2",
+    },
   },
   {
-    title: "Template - How-to guide",
-    author: "KKK test",
-    views: 95,
+    id: "4",
+    type: "document",
+    attributes: {
+      title: "Загвар - Хэрхэн хийх заавар",
+      user: {
+        data: {
+          id: "u2",
+          type: "user",
+          attributes: {
+            uid: "kkk001",
+            email: "kkk@example.com",
+            firstname: "Тест",
+            lastname: "Хэрэглэгч",
+            avatar: "/avatars/kkk.png",
+          },
+        },
+      },
+      view_count: 95,
+      workspace_id: "2",
+    },
   },
   {
-    title: "KKK test",
-    author: "KKK test",
-    views: 77,
+    id: "5",
+    type: "document",
+    attributes: {
+      title: "Тест бичиг баримт",
+      user: {
+        data: {
+          id: "u2",
+          type: "user",
+          attributes: {
+            uid: "kkk001",
+            email: "kkk@example.com",
+            firstname: "Тест",
+            lastname: "Хэрэглэгч",
+            avatar: "/avatars/kkk.png",
+          },
+        },
+      },
+      view_count: 77,
+      workspace_id: "2",
+    },
   },
   {
-    title: "2025-03-18 Meeting notes",
-    author: "Tuguldurchimeg Renchinchime",
-    views: 120,
+    id: "6",
+    type: "document",
+    attributes: {
+      title: "2025-03-18 Хурлын тэмдэглэл",
+      user: {
+        data: {
+          id: "u1",
+          type: "user",
+          attributes: {
+            uid: "tg123",
+            email: "tuguldur@example.com",
+            firstname: "Төгөлдөрчимэг",
+            lastname: "Рэнчинчимэ",
+            avatar: "/avatars/tuguldur.png",
+          },
+        },
+      },
+      view_count: 120,
+      workspace_id: "2",
+    },
   },
 ];

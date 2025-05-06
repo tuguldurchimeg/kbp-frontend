@@ -92,7 +92,10 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"; //
 import { formatDistanceToNow } from "date-fns";
 import { Button as CNButton } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { updateDocument } from "@/src/app/lib/actions/document.actions";
+import {
+  getDocument,
+  updateDocument,
+} from "@/src/app/lib/actions/document.actions";
 import { Badge } from "@/components/ui/badge";
 import {
   Popover,
@@ -286,7 +289,7 @@ export function SimpleEditor({ document }: Props) {
 
   const [isEditable, setEditable] = React.useState(false);
   const [isTitleEditing, setIsTitleEditing] = React.useState(false);
-  const [title, setTitle] = React.useState<string>(document.attributes.title);
+  const [title, setTitle] = React.useState<string>("");
 
   const editor = useEditor({
     editable: isEditable,
@@ -323,7 +326,7 @@ export function SimpleEditor({ document }: Props) {
       TrailingNode,
       Link.configure({ openOnClick: false }),
     ],
-    content: document.attributes.content,
+    content: "",
   });
 
   React.useEffect(() => {
@@ -364,6 +367,20 @@ export function SimpleEditor({ document }: Props) {
       setMobileView("main");
     }
   }, [isMobile, mobileView]);
+  const hasInitializedContent = React.useRef(false);
+
+  const initializeEditorContent = React.useCallback(() => {
+    if (!document?.attributes || !editor || hasInitializedContent.current)
+      return;
+
+    setTitle(document.attributes.title);
+    editor.commands.setContent(document.attributes.content ?? "");
+    hasInitializedContent.current = true;
+  }, [document, editor]);
+
+  React.useEffect(() => {
+    initializeEditorContent();
+  }, [initializeEditorContent]);
 
   const handleToggleEditable = () => {
     if (editor) {
@@ -373,20 +390,19 @@ export function SimpleEditor({ document }: Props) {
   };
 
   const handleDocUpdate = async () => {
-    if (!editor) return;
+    if (!editor || !document) return;
     const updatedContent = editor.getJSON();
+    console.log("Updated content:", updatedContent);
 
-    const success = await updateDocument(document.id, {
-      ...document.attributes,
-      content: updatedContent,
-    });
-
-    if (success) {
-      console.log("Document updated successfully");
+    try {
+      await updateDocument(document.id, {
+        title,
+        content: updatedContent,
+      });
       editor.setEditable(false);
       setEditable(false);
-    } else {
-      console.error("Failed to update document");
+    } catch (error) {
+      console.error("Failed to update document", error);
     }
   };
 
@@ -555,8 +571,9 @@ export function SimpleEditor({ document }: Props) {
           isEditable && "mt-0"
         )}
       >
-        {(document.attributes.tags?.data.length ?? 0) > 0 &&
-          document.attributes.tags?.data.map((tag) => (
+        {Array.isArray(document.attributes?.tags?.data) &&
+          document.attributes.tags.data.length > 0 &&
+          document.attributes.tags.data.map((tag) => (
             <Badge
               key={tag.id}
               className="text-xs font-medium rounded-lg px-4"
@@ -568,6 +585,7 @@ export function SimpleEditor({ document }: Props) {
               {tag.attributes?.name}
             </Badge>
           ))}
+
         {isEditable && (
           <Popover open={tagOpen} onOpenChange={setTagOpen}>
             <PopoverTrigger asChild>

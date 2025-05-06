@@ -11,11 +11,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import PrivateRoute from "@/components/PrivateRoute";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { topics } from "@/constants/kb-placeholder-data";
-import { Eye, FileText, Rocket, Zap } from "lucide-react";
+import { Rocket, Zap } from "lucide-react";
 import SiteLayout from "@/components/layouts/SiteLayout";
+import QuickAccessDocumentList from "@/components/@workspace/QuickAccessDocumentList";
 
 export default function Home() {
   const t = useTranslations("SYSCOMMON");
@@ -57,31 +56,7 @@ export default function Home() {
               <Zap className="w-4 h-4" />
               {t("quick_access")}
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {topics.map((topic, index) => (
-                <Card key={index} className="border rounded-lg p-4">
-                  <CardContent className="flex flex-col gap-1 p-0">
-                    <div className="flex items-start gap-3">
-                      <div className="p-2 bg-purple-100 text-purple-700 rounded-md">
-                        <FileText className="w-5 h-5" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-semibold text-base">{topic.title}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {topic.author}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground mt-2 ml-1">
-                      <Eye className="w-4 h-4" />
-                      <span>
-                        {topic.views.toLocaleString()} {t("views")}
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            <QuickAccessDocumentList />
           </section>
         </main>
       </SiteLayout>

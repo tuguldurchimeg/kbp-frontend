@@ -4,7 +4,7 @@ import { WorkspaceCreateParams, WorkspaceItem } from "@/types/workspace";
 
 export const getWorkspaces = async (): Promise<WorkspaceItem[]> => {
   const res = await api.get(URI.WORKSPACES);
-  return res.data;
+  return res.data.data;
 };
 
 export const createWorkspace = async (
@@ -24,4 +24,9 @@ export const updateWorkspace = async (
 
 export const deleteWorkspace = async (id: string): Promise<void> => {
   await api.delete(`${URI.WORKSPACES}/${id}`);
+};
+
+export const getWorkspace = async (id: string): Promise<WorkspaceItem> => {
+  const res = await api.get(`${URI.WORKSPACES}/${id}`);
+  return res.data.data;
 };

@@ -13,6 +13,8 @@ export type DocumentItem = {
     user?: { data: UserItem };
     category?: { data: CategoryItem };
     is_template?: boolean;
+    view_count?: number;
+    workspace_id: string;
   };
 };
 

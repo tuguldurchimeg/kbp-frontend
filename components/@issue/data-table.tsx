@@ -54,6 +54,7 @@ import { ISSUEDATA } from "@/constants/kb-placeholder-data";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { PRIORITY_MAP, STATUS_MAP } from "@/constants/issue.constants";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 function DraggableRow({ row }: { row: Row<IssueItem> }) {
   const { setNodeRef, transform, transition } = useSortable({
@@ -275,11 +276,12 @@ export function DataTable() {
       console.log("Reordered data:", newData);
     }
   };
+  const t = useTranslations("Main");
 
   return (
     <div className="w-full space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Issue Table</h2>
+        <h2 className="text-xl font-semibold">{t("issues")}</h2>
         <Button className="fixed bottom-15 right-15 h-12 w-12 rounded-xl hover:bg-purple-700">
           <Plus />
         </Button>

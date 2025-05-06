@@ -23,10 +23,13 @@ export default function WorkspaceCard({ item }: WorkspaceCardProps) {
         <CardHeader className="p-0">
           <div className="relative h-20 w-full">
             <Image
-              src={"/workspace.png"}
-              alt={item.name}
+              src={"/document.png"}
+              alt={item.attributes.name}
               fill
-              style={{ objectFit: "cover" }}
+              style={{
+                objectFit: "cover",
+                objectPosition: "top",
+              }}
               className="rounded-t-xl"
             />
           </div>
@@ -35,10 +38,10 @@ export default function WorkspaceCard({ item }: WorkspaceCardProps) {
         <CardContent className="flex justify-between items-start px-5 gap-2">
           <div className="w-[80%] overflow-hidden">
             <CardTitle className="text-base font-semibold truncate">
-              {item.name}
+              {item.attributes.name}
             </CardTitle>
             <CardDescription className="text-sm line-clamp-2">
-              {item.description}
+              {item.attributes.description}
             </CardDescription>
           </div>
           <Star className="w-5 h-5 text-muted-foreground hover:text-yellow-500 cursor-pointer flex-shrink-0 mt-1" />
