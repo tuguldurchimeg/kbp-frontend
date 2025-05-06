@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import {
   getWorkspaces,
   createWorkspace,
-} from "@/app/lib/actions/workspace.actions";
+} from "@/src/app/lib/actions/workspace.actions";
 import { WorkspaceItem, WorkspaceCreateParams } from "@/types/workspace";
 
 export default function useWorkspace() {

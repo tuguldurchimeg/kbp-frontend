@@ -1,4 +1,4 @@
-import api from "../../../utils/api";
+import api from "../../../../utils/api";
 import { URI } from "@/constants/uri.constants";
 import { DocumentCreateParams, DocumentItem } from "@/types/document";
 

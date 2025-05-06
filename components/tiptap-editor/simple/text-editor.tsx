@@ -92,7 +92,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"; //
 import { formatDistanceToNow } from "date-fns";
 import { Button as CNButton } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { updateDocument } from "@/app/lib/actions/document.actions";
+import { updateDocument } from "@/src/app/lib/actions/document.actions";
 import { Badge } from "@/components/ui/badge";
 import {
   Popover,

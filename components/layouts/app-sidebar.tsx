@@ -40,7 +40,7 @@ import { staticMenus, MenuItemChildren, dynamicMenu } from "@/constants/menu";
 import clsx from "clsx";
 import { ROUTE } from "@/constants/route.constants";
 import NewDocumentDialog from "@/components/@documents/new-document-dialog";
-import { createCategory } from "@/app/lib/actions/category.actions";
+import { createCategory } from "@/src/app/lib/actions/category.actions";
 import { toast } from "sonner"; // or your toast lib
 import { useEffect, useState } from "react";
 import { generateDocumentMenus } from "@/constants/menu"; // Assuming this function is in a separate file

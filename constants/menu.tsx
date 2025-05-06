@@ -1,4 +1,4 @@
-import { getCategories } from "@/app/lib/actions/category.actions";
+import { getCategories } from "@/src/app/lib/actions/category.actions";
 import { ROUTE } from "./route.constants";
 import {
   User,

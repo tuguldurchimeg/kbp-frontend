@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { WorkspaceItem } from "@/types/workspace";
-import { getWorkspaces } from "@/app/lib/actions/workspace.actions";
+import { getWorkspaces } from "@/src/app/lib/actions/workspace.actions";
 import WorkspaceCard from "@/components/@workspace/WorkspaceCard";
 
 const WorkspaceCardList = () => {

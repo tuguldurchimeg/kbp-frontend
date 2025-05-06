@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createWorkspace } from "@/app/lib/actions/workspace.actions"; // Import the createWorkspace API action
+import { createWorkspace } from "@/src/app/lib/actions/workspace.actions"; // Import the createWorkspace API action
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {

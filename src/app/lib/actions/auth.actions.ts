@@ -1,5 +1,5 @@
 import { URI } from "@/constants/uri.constants";
-import api from "../../../utils/api";
+import api from "../../../../utils/api";
 import { CurrentUser, UserLoginParams } from "@/types/user";
 
 export const loginService = async (

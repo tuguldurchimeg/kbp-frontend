@@ -33,7 +33,7 @@ import {
 import {
   getTemplateDocuments,
   createDocument,
-} from "@/app/lib/actions/document.actions";
+} from "@/src/app/lib/actions/document.actions";
 import { DocumentItem } from "@/types/document";
 import { DOC_TEMPLATES } from "@/constants/kb-placeholder-data";
 

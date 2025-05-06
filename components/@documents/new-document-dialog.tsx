@@ -21,7 +21,7 @@ import {
   getTemplateDocuments,
   createDocumentFromTemplate,
   createDocument,
-} from "@/app/lib/actions/document.actions";
+} from "@/src/app/lib/actions/document.actions";
 import { useRouter } from "next/navigation";
 import { DocumentItem } from "@/types/document";
 

@@ -9,7 +9,7 @@ import {
   updateDocument,
   deleteDocument,
   getDocument,
-} from "@/app/lib/actions/document.actions";
+} from "@/src/app/lib/actions/document.actions";
 import { DocumentCreateParams, DocumentItem } from "@/types/document";
 
 export default function useDocuments() {

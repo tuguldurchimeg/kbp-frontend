@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ROUTE } from "@/constants/route.constants";
 import { CircularProgress } from "@mui/material";
+import { useTranslations } from "next-intl";
 
 export function LoginForm({
   className,
@@ -21,6 +22,7 @@ export function LoginForm({
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const t = useTranslations("LOGIN");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,13 +40,13 @@ export function LoginForm({
           <form className="p-6 md:p-8" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold">Тавтай морил</h1>
+                <h1 className="text-2xl font-bold">{t("welcome")}</h1>
                 <p className="text-muted-foreground text-balance">
-                  Хэрэглэгчийн эрхээрээ нэвтэрч орно уу.
+                  {t("welcome_desc")}
                 </p>
               </div>
               <div className="grid gap-3">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("email")}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -55,7 +57,7 @@ export function LoginForm({
               </div>
               <div className="grid gap-3">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">{t("password")}</Label>
                   {/* <a
                     href="#"
                     className="ml-auto text-sm underline-offset-2 hover:underline"
@@ -75,12 +77,12 @@ export function LoginForm({
                 {authLoading ? (
                   <CircularProgress size={24} className="text-white" />
                 ) : (
-                  "Login"
+                  t("login")
                 )}
               </Button>
               <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                 <span className="bg-card text-muted-foreground relative z-10 px-2">
-                  Or continue with
+                  {t("or_sign_in_with")}
                 </span>
               </div>
               <div className="flex w-full flex-col gap-4">
@@ -95,9 +97,9 @@ export function LoginForm({
                 </Button>
               </div>
               <div className="text-center text-sm">
-                Don&apos;t have an account?{" "}
+                {t("ask_registration")}
                 <a href="#" className="underline underline-offset-4">
-                  Sign up
+                  {t("sign_up")}
                 </a>
               </div>
             </div>

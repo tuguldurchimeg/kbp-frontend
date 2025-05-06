@@ -31,7 +31,7 @@ import { useParams, usePathname } from "next/navigation";
 import {
   createCategory,
   updateCategory,
-} from "@/app/lib/actions/category.actions";
+} from "@/src/app/lib/actions/category.actions";
 import { toast } from "sonner";
 import { Input } from "../ui/input";
 import { useState } from "react";
