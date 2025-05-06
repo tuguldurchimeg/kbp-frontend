@@ -2,18 +2,18 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { routing } from "@/src/i18n/routing";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "../../../styles/globals.css";
 import { AuthProvider } from "@/hooks/useAuth";
+import { Noto_Sans, Roboto } from "next/font/google";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const roboto = Roboto({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-roboto",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const notoSans = Noto_Sans({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-noto-sans",
 });
 
 export const metadata: Metadata = {
@@ -35,7 +35,7 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className="h-full">
       <body
-        className={`h-full ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`h-full ${notoSans.variable} ${roboto.variable} antialiased`}
       >
         <NextIntlClientProvider locale={locale}>
           <AuthProvider>{children}</AuthProvider>

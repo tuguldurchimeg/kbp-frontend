@@ -4,13 +4,15 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "../ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { AppBreadcrumb } from "./app-breadcrumb";
-import { NavUser } from "./app-header";
-import { CURRENT_USER } from "@/constants/kb-placeholder-data";
+import HeaderControls from "./header-controls";
 
 export function AppSidebarInset({ children }: { children: React.ReactNode }) {
   return (
     <SidebarInset className="flex flex-col h-screen overflow-y-auto">
-      <NavUser user={CURRENT_USER} />
+      {/* header */}
+      <div className="flex justify-end shadow-lg items-center px-5 py-2">
+        <HeaderControls />
+      </div>
       <header className="bg-background/80 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 justify-between">
         <div className="flex items-center gap-2 px-4">
           <Tooltip>

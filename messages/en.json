@@ -1,4 +1,8 @@
 {
+  "Language": {
+    "mn": "Mongolian",
+    "en": "English"
+  },
   "SYSCOMMON": {
     "yes": "Yes",
     "no": "No",
@@ -93,7 +97,11 @@
     "close": "Close",
     "submit": "Submit",
     "prev": "Previous",
-    "retry": "Retry"
+    "retry": "Retry",
+    "views": "views",
+    "quick_access": "Quick Access",
+    "workspaces": "Workspaces",
+    "documents": "Documents"
   },
   "LOGIN": {
     "title": "Sign In",
@@ -119,6 +127,7 @@
     "glossary": "Glossary",
     "knowledge_base": "Knowledge Base",
     "issues": "Issues",
-    "documents": "Documents"
+    "documents": "Documents",
+    "workspaces": "Workspaces"
   }
 }

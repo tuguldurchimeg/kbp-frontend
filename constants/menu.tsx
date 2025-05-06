@@ -1,3 +1,5 @@
+"use client";
+
 import { getCategories } from "@/src/app/lib/actions/category.actions";
 import { ROUTE } from "./route.constants";
 import {
@@ -11,12 +13,14 @@ import {
   LucideIcon,
 } from "lucide-react";
 import { CategoryItem } from "@/types/document";
+import { useTranslations } from "next-intl";
 
 export type MenuItemChildren = {
   id?: string;
   label: string;
   uri?: string;
   icon?: LucideIcon;
+  iconClass?: string;
   children?: MenuItemChildren[];
   collapsible?: boolean;
   isCollapsed?: boolean;
@@ -27,51 +31,69 @@ export type MenuSection = {
   children: MenuItemChildren[];
 };
 
-export const staticMenus = [
-  {
-    label: "Tools",
+// // Map label keys to icon colors
+// const iconColorMap: Record<string, string> = {
+//   user_access: "text-blue-600",
+//   templates: "text-purple-600",
+//   tags: "text-yellow-600",
+//   glossary: "text-green-600",
+//   issues: "text-red-600",
+//   documents: "text-indigo-600",
+// };
+
+// This function is now dynamic so should be called inside a React component
+export function useSidebarMenus(workspaceId: string) {
+  const t = useTranslations("MENUS");
+
+  const staticMenus: MenuSection[] = [
+    {
+      label: t("tools"),
+      children: [
+        {
+          label: t("user_access"),
+          uri: ROUTE.TOOLS.USER_ACCESS.ROOT(workspaceId),
+          icon: User,
+        },
+        {
+          label: t("templates"),
+          uri: ROUTE.TOOLS.TEMPLATES.ROOT(workspaceId),
+          icon: FilePlus2,
+        },
+        {
+          label: t("tags"),
+          uri: ROUTE.TOOLS.TAGS.ROOT(workspaceId),
+          icon: Tag,
+        },
+        {
+          label: t("glossary"),
+          uri: ROUTE.TOOLS.GLOSSARY.ROOT(workspaceId),
+          icon: BookOpen,
+        },
+      ],
+    },
+  ];
+
+  const dynamicMenu: MenuSection = {
+    label: t("knowledge_base"),
     children: [
       {
-        label: "User access",
-        uri: ROUTE.TOOLS.USER_ACCESS.ROOT("workspaceId"),
-        icon: User,
+        label: t("issues"),
+        uri: ROUTE.BASE.ISSUES.ROOT(workspaceId),
+        icon: FileQuestion,
       },
       {
-        label: "Templates",
-        uri: ROUTE.TOOLS.TEMPLATES.ROOT("workspaceId"),
-        icon: FilePlus2,
-      },
-      {
-        label: "Tags",
-        uri: ROUTE.TOOLS.TAGS.ROOT("workspaceId"),
-        icon: Tag,
-      },
-      {
-        label: "Glossary",
-        uri: ROUTE.TOOLS.GLOSSARY.ROOT("workspaceId"),
-        icon: BookOpen,
+        label: t("documents"),
+        icon: Folder,
+        collapsible: true,
+        isCollapsed: true,
       },
     ],
-  },
-];
+  };
 
-export const dynamicMenu = {
-  label: "Knowledge base",
-  children: [
-    {
-      label: "Issues",
-      uri: ROUTE.BASE.ISSUES.ROOT("workspaceId"),
-      icon: FileQuestion,
-    },
-    {
-      label: "Documents",
-      icon: Folder,
-      collapsible: true,
-      isCollapsed: true,
-    },
-  ],
-};
+  return { staticMenus, dynamicMenu };
+}
 
+// Recursive category → menu transformation
 const buildCategoryTree = (
   categories: CategoryItem[],
   workspaceId: string,
@@ -79,7 +101,6 @@ const buildCategoryTree = (
   maxDepth = 2
 ): MenuItemChildren[] => {
   if (depth > maxDepth) return [];
-  console.log("categories ", categories);
 
   return categories.map((category) => {
     const subcategories =
@@ -98,6 +119,7 @@ const buildCategoryTree = (
         uri: ROUTE.BASE.DOCUMENT.DETAIL(workspaceId, doc.id),
         icon: Dot,
       })) || [];
+
     return {
       id: category.id,
       label: category.attributes?.name,
@@ -108,6 +130,7 @@ const buildCategoryTree = (
   });
 };
 
+// Fetch and build document-related menu items (used by AppSidebar)
 export const generateDocumentMenus = async (
   workspaceId: string
 ): Promise<MenuItemChildren[]> => {

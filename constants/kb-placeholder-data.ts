@@ -529,3 +529,36 @@ export const SEO_PLACEHOLDERS: SeoItem[] = [
     },
   },
 ];
+
+export const topics = [
+  {
+    title: "Getting started",
+    author: "Tuguldurchimeg Renchinchime",
+    views: 234,
+  },
+  {
+    title: "Overview",
+    author: "Tuguldurchimeg Renchinchime",
+    views: 198,
+  },
+  {
+    title: "Template - Troubleshooting article",
+    author: "KKK test",
+    views: 142,
+  },
+  {
+    title: "Template - How-to guide",
+    author: "KKK test",
+    views: 95,
+  },
+  {
+    title: "KKK test",
+    author: "KKK test",
+    views: 77,
+  },
+  {
+    title: "2025-03-18 Meeting notes",
+    author: "Tuguldurchimeg Renchinchime",
+    views: 120,
+  },
+];

@@ -15,51 +15,54 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-
 import { Plus, FolderPlus, FileText, Building2 } from "lucide-react";
-
 import Link from "next/link";
 import CategoryDocuments from "./category-documents-tree";
 import { Separator } from "@/components/ui/separator";
 import { NavHeader } from "./app-sidebar-header";
 import { useParams, usePathname } from "next/navigation";
-import { staticMenus, MenuItemChildren, dynamicMenu } from "@/constants/menu";
+import {
+  useSidebarMenus,
+  generateDocumentMenus,
+  MenuItemChildren,
+} from "@/constants/menu";
 import clsx from "clsx";
 import { ROUTE } from "@/constants/route.constants";
 import NewDocumentDialog from "@/components/@documents/new-document-dialog";
 import { createCategory } from "@/src/app/lib/actions/category.actions";
-import { toast } from "sonner"; // or your toast lib
+import { toast } from "sonner";
 import { useEffect, useState } from "react";
-import { generateDocumentMenus } from "@/constants/menu"; // Assuming this function is in a separate file
 
 export function AppSidebar() {
   const params = useParams();
   const workspaceId = params.workspaceId as string;
   const pathname = usePathname();
   const [newDocDialogOpen, setNewDocDialogOpen] = useState(false);
-  const [documentMenus, setDocumentMenus] = useState<MenuItemChildren[]>([]); // Dynamic document menus state
+  const [documentMenus, setDocumentMenus] = useState<MenuItemChildren[]>([]);
+
+  const { staticMenus, dynamicMenu } = useSidebarMenus(workspaceId);
 
   const fetchDocumentMenus = async () => {
     try {
-      const fetchedDocumentMenus = await generateDocumentMenus(workspaceId);
-      setDocumentMenus(fetchedDocumentMenus);
-    } catch (error) {
-      console.error("Failed to generate document menus", error);
+      const fetched = await generateDocumentMenus(workspaceId);
+      setDocumentMenus(fetched);
+    } catch {
+      toast.error("Failed to load documents");
     }
   };
+  const cleanPath = pathname.replace(/^\/(en|mn)/, ""); // adjust locale codes as needed
+
   useEffect(() => {
     fetchDocumentMenus();
   }, [workspaceId]);
@@ -75,6 +78,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <Separator />
       <SidebarContent>
+        {/* Static Menus */}
         {staticMenus.map((section) => (
           <SidebarGroup key={section.label}>
             <SidebarGroupLabel className="text-muted-foreground">
@@ -87,15 +91,20 @@ export function AppSidebar() {
                     <SidebarMenuButton
                       asChild
                       tooltip={item.label}
-                      className={clsx({
-                        "bg-sky-100 text-blue-600": pathname.startsWith(
-                          item.uri || ""
-                        ),
-                      })}
+                      className={clsx(
+                        "flex items-center gap-2 px-3 py-2 rounded-lg transition-colors",
+                        cleanPath.startsWith(item.uri || "")
+                          ? "bg-primary-light text-primary-foreground font-semibold pointer-events-none"
+                          : "text-muted-foreground hover:bg-muted"
+                      )}
                     >
                       <Link href={item.uri || "#"}>
-                        {item.icon && <item.icon />}
-                        <span>{item.label}</span>
+                        {item.icon && (
+                          <item.icon className={`stroke-[3] w-5 h-5`} />
+                        )}
+                        <span className="text-sm font-medium">
+                          {item.label}
+                        </span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -105,9 +114,9 @@ export function AppSidebar() {
           </SidebarGroup>
         ))}
 
-        {/* Dynamic Document Menus */}
+        {/* Dynamic Menu (e.g. Documents & Categories) */}
         {dynamicMenu && (
-          <SidebarGroup key="Documents">
+          <SidebarGroup key="dynamic">
             <SidebarGroupLabel className="text-muted-foreground">
               {dynamicMenu.label}
             </SidebarGroupLabel>
@@ -130,8 +139,14 @@ export function AppSidebar() {
                               tooltip={item.label}
                             >
                               <div>
-                                {item.icon && <item.icon />}
-                                <span>{item.label}</span>
+                                {item.icon && (
+                                  <item.icon
+                                    className={`${item.iconClass} stroke-[3] w-5 h-5`}
+                                  />
+                                )}
+                                <span className="text-sm font-medium">
+                                  {item.label}
+                                </span>
                               </div>
                             </SidebarMenuButton>
                             <DropdownMenu>
@@ -144,29 +159,24 @@ export function AppSidebar() {
                                 <DropdownMenuItem
                                   onClick={async () => {
                                     try {
-                                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                                      const newCategory = await createCategory({
+                                      await createCategory({
                                         name: "Untitled Category",
                                         workspace_id: workspaceId,
                                       });
                                       toast.success("Category created");
                                       fetchDocumentMenus();
-                                    } catch (err) {
-                                      console.error(
-                                        "Failed to create category",
-                                        err
-                                      );
+                                    } catch {
                                       toast.error("Failed to create category");
                                     }
                                   }}
                                 >
-                                  <FolderPlus className="w-4 h-4 mr-2 text-blue-600" />{" "}
+                                  <FolderPlus className="w-4 h-4 mr-2 text-blue-600" />
                                   New Category
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                   onClick={() => setNewDocDialogOpen(true)}
                                 >
-                                  <FileText className="w-4 h-4 mr-2 text-indigo-600" />{" "}
+                                  <FileText className="w-4 h-4 mr-2 text-indigo-600" />
                                   New Document
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
@@ -188,8 +198,14 @@ export function AppSidebar() {
                     <SidebarMenuItem key={item.label}>
                       <SidebarMenuButton asChild tooltip={item.label}>
                         <Link href={item.uri || "#"}>
-                          {item.icon && <item.icon />}
-                          <span>{item.label}</span>
+                          {item.icon && (
+                            <item.icon
+                              className={`${item.iconClass} stroke-[3] w-5 h-5`}
+                            />
+                          )}
+                          <span className="text-sm font-medium">
+                            {item.label}
+                          </span>
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -209,10 +225,11 @@ export function AppSidebar() {
           </SidebarMenuButton>
         </Link>
       </SidebarFooter>
+
       <NewDocumentDialog
         open={newDocDialogOpen}
         onOpenChange={setNewDocDialogOpen}
-        categoryId={""}
+        categoryId=""
       />
     </Sidebar>
   );
