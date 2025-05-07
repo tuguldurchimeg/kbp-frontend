@@ -118,6 +118,7 @@ const buildCategoryTree = (
         label: doc.attributes.title,
         uri: ROUTE.BASE.DOCUMENT.DETAIL(workspaceId, doc.id),
         icon: Dot,
+        id: doc.id,
       })) || [];
 
     return {

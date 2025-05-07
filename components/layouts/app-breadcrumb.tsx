@@ -11,6 +11,9 @@ import {
 } from "@/components/ui/breadcrumb";
 import { useTranslations, useLocale } from "next-intl";
 import React from "react";
+import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "../ui/sidebar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export function AppBreadcrumb() {
   const pathname = usePathname();
@@ -22,15 +25,14 @@ export function AppBreadcrumb() {
     workspaces: t("workspaces"),
     documents: t("documents"),
     templates: t("templates"),
-    settings: t("tools"),
+    tools: t("tools"),
     tags: t("tags"),
-    glossary: t("glossary"),
+    glossaries: t("glossary"),
     issues: t("issues"),
     account: t("user_access"),
     profile: t("user_access"),
   };
 
-  // Parse path, remove locale, skip numeric segments (IDs)
   const rawSegments = pathname.split("/").filter(Boolean);
   const segments =
     rawSegments[0] === locale ? rawSegments.slice(1) : rawSegments;
@@ -43,27 +45,39 @@ export function AppBreadcrumb() {
       return { href, name };
     });
 
-  // If no breadcrumb items (e.g. homepage), render nothing
   if (breadcrumbItems.length === 0) return null;
 
   return (
-    <Breadcrumb>
-      <BreadcrumbList>
-        {breadcrumbItems.map((segment, index) => (
-          <React.Fragment key={segment.href}>
-            {index > 0 && <BreadcrumbSeparator />}
-            <BreadcrumbItem>
-              {index === breadcrumbItems.length - 1 ? (
-                <BreadcrumbPage>{segment.name}</BreadcrumbPage>
-              ) : (
-                <BreadcrumbLink href={segment.href}>
-                  {segment.name}
-                </BreadcrumbLink>
-              )}
-            </BreadcrumbItem>
-          </React.Fragment>
-        ))}
-      </BreadcrumbList>
-    </Breadcrumb>
+    <header className="bg-background/80 flex shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 justify-between">
+      <div className="flex items-center gap-2 px-4">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <SidebarTrigger className="-ml-1" />
+          </TooltipTrigger>
+          <TooltipContent side="bottom" align="start">
+            Toggle
+          </TooltipContent>
+        </Tooltip>
+        <Separator orientation="vertical" className="mr-2 h-4" />
+        <Breadcrumb>
+          <BreadcrumbList>
+            {breadcrumbItems.map((segment, index) => (
+              <React.Fragment key={segment.href}>
+                {index > 0 && <BreadcrumbSeparator />}
+                <BreadcrumbItem>
+                  {index === breadcrumbItems.length - 1 ? (
+                    <BreadcrumbPage>{segment.name}</BreadcrumbPage>
+                  ) : (
+                    <BreadcrumbLink href={segment.href}>
+                      {segment.name}
+                    </BreadcrumbLink>
+                  )}
+                </BreadcrumbItem>
+              </React.Fragment>
+            ))}
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+    </header>
   );
 }

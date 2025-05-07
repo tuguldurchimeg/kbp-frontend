@@ -73,9 +73,6 @@ import { LinkIcon } from "@/components/tiptap-icons/link-icon";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useWindowSize } from "@/hooks/use-window-size";
 
-// --- Components ---
-import { ThemeToggle } from "@/components/tiptap-editor/simple/theme-toggle";
-
 // --- Lib ---
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
 
@@ -188,9 +185,7 @@ const MainToolbarContent = ({
 
       {isMobile && <ToolbarSeparator />}
 
-      <ToolbarGroup>
-        <ThemeToggle />
-      </ToolbarGroup>
+      <ToolbarGroup></ToolbarGroup>
     </>
   );
 };
@@ -456,7 +451,7 @@ export function SimpleEditor({ document }: Props) {
   return (
     <EditorContext.Provider value={{ editor }}>
       {isEditable && (
-        <Toolbar ref={toolbarRef}>
+        <Toolbar ref={toolbarRef} variant="floating">
           {mobileView === "main" ? (
             <MainToolbarContent
               onHighlighterClick={() => setMobileView("highlighter")}
@@ -527,7 +522,7 @@ export function SimpleEditor({ document }: Props) {
           />
         ) : (
           <h1
-            className="text-4xl font-bold text-gray-900 cursor-pointer"
+            className="text-4xl font-bold text-foreground cursor-pointer"
             onClick={() => {
               if (isEditable) setIsTitleEditing(true);
             }}

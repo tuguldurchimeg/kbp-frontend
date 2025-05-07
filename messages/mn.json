@@ -148,7 +148,10 @@
     "priority_breakdown": "Тэргүүлэх зэрэглэл",
     "high_priority": "Өндөр тэргүүлэх зэрэглэл",
     "low_priority": "Бага тэргүүлэх зэрэглэл",
-    "status_breakdown": "Төлөвийн хуваарилалт"
+    "status_breakdown": "Төлөвийн хуваарилалт",
+    "by_assignee": "Хариуцагчаар",
+    "by_status": "Төлөвөөр",
+    "by_priority": "Зэрэглэлээр"
   },
   "Home": {
     "title": "Танд юугаар туслах вэ?",

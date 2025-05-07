@@ -27,7 +27,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import clsx from "clsx";
-import { useParams, usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import {
   createCategory,
   updateCategory,
@@ -47,10 +47,17 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState(item.label);
   const [newDocDialogOpen, setNewDocDialogOpen] = useState(false);
-  const pathname = usePathname();
+  const documentIdFromUrl = params.docId as string;
+  const isActive =
+    !!documentIdFromUrl &&
+    item.id?.toString() === documentIdFromUrl &&
+    !item.collapsible;
+
+  console.log("item id: ", item);
+  console.log("documentIdFromUrl: ", documentIdFromUrl);
 
   const handleRename = async () => {
-    if (!newName || newName === item.label) return; // If no change or name is the same, do nothing
+    if (!newName || newName === item.label) return;
     try {
       if (item.id) {
         const updatedCategory = await updateCategory(item.id, {
@@ -59,7 +66,7 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
         toast.success(
           `Category renamed to "${updatedCategory.attributes.name}"`
         );
-        setIsEditing(false); // Exit editing mode after saving
+        setIsEditing(false);
       }
     } catch (err) {
       console.error("Error renaming category", err);
@@ -68,7 +75,7 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
   };
 
   const handleCreateDocument = () => {
-    setNewDocDialogOpen(true); // Open the new document dialog
+    setNewDocDialogOpen(true);
   };
 
   // Handler to create a new category under this one
@@ -87,8 +94,6 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
     }
   };
 
-  console.log("child ", item);
-
   return (
     <Collapsible
       key={item.label}
@@ -99,9 +104,12 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
         <div className="flex items-center justify-between w-full">
           <CollapsibleTrigger asChild>
             <SidebarMenuButton
-              className={clsx("peer", {
-                " bg-sky-100 text-blue-600": pathname === item.uri,
-              })}
+              className={clsx(
+                "peer flex gap-2 px-3 py-2 rounded-lg transition-colors",
+                isActive
+                  ? "bg-primary-light text-primary font-medium pointer-events-none"
+                  : "text-foreground-2 hover:bg-muted"
+              )}
               data-state-open={item.isCollapsed}
             >
               {item.collapsible && (
@@ -142,7 +150,13 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
                       href={item.uri || "#"}
                       className="flex items-center gap-1"
                     >
-                      {item.icon && <item.icon />}
+                      {item.icon && (
+                        <item.icon
+                          className={clsx(
+                            isActive ? "text-primary" : "text-transparent"
+                          )}
+                        />
+                      )}
                       <span>{item.label}</span>
                     </Link>
                   )}

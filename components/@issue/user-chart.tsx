@@ -8,6 +8,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useTranslations } from "next-intl";
 const chartData = [
   { month: "January", desktop: 186 },
   { month: "February", desktop: 305 },
@@ -36,10 +37,11 @@ interface UserChartData {
 
 export function UserChart({ data }: { data: UserChartData[] }) {
   console.log("user data ", data);
+  const t = useTranslations("Main");
   return (
     <Card className="col-span-2">
       <CardHeader>
-        <CardTitle>By Assignee</CardTitle>
+        <CardTitle>{t("by_assignee")}</CardTitle>
       </CardHeader>
       <CardContent className="h-[130px] flex items-center justify-center">
         <ChartContainer config={chartConfig} className="w-full h-full">
@@ -56,7 +58,7 @@ export function UserChart({ data }: { data: UserChartData[] }) {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
+            <Bar dataKey="desktop" fill="var(--color-chart-2)" radius={8} />
           </BarChart>
         </ChartContainer>
       </CardContent>

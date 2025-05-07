@@ -46,7 +46,7 @@ export default function DocumentCard({ document }: DocumentCardProps) {
         <CardContent className="flex flex-col justify-between h-full p-0">
           {/* Top Section */}
           <div className="flex items-start gap-3">
-            <div className="p-2 bg-emerald-100 text-emerald-700 rounded-md">
+            <div className="p-2 bg-emerald-50 text-emerald-400 rounded-md">
               <FileText className="w-4 h-4" />
             </div>
 
@@ -54,7 +54,7 @@ export default function DocumentCard({ document }: DocumentCardProps) {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <p className="font-semibold text-base truncate w-full cursor-default">
+                    <p className="font-medium text-base truncate w-full cursor-default">
                       {document.attributes.title}
                     </p>
                   </TooltipTrigger>

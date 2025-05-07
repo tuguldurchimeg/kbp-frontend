@@ -276,40 +276,14 @@ export function DataTable() {
       console.log("Reordered data:", newData);
     }
   };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const t = useTranslations("Main");
 
   return (
     <div className="w-full space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">{t("issues")}</h2>
-        <Button className="fixed bottom-15 right-15 h-12 w-12 rounded-xl hover:bg-purple-700">
-          <Plus />
-        </Button>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              Columns <ChevronDownIcon className="ml-1 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((col) => col.getCanHide())
-              .map((col) => (
-                <DropdownMenuCheckboxItem
-                  key={col.id}
-                  checked={col.getIsVisible()}
-                  onCheckedChange={(value) => col.toggleVisibility(!!value)}
-                >
-                  {typeof col.columnDef.header === "string"
-                    ? col.columnDef.header
-                    : col.id}
-                </DropdownMenuCheckboxItem>
-              ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+      <Button className="fixed bottom-15 right-15 h-12 w-12 rounded-xl hover:bg-emerald-600 z-99">
+        <Plus />
+      </Button>
       <div className="w-full overflow-x-auto rounded-md border p-4">
         <DndContext
           sensors={sensors}
@@ -343,6 +317,31 @@ export function DataTable() {
             </Table>
           </SortableContext>
         </DndContext>
+      </div>
+      <div className="flex items-center justify-end">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              Columns <ChevronDownIcon className="ml-1 h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter((col) => col.getCanHide())
+              .map((col) => (
+                <DropdownMenuCheckboxItem
+                  key={col.id}
+                  checked={col.getIsVisible()}
+                  onCheckedChange={(value) => col.toggleVisibility(!!value)}
+                >
+                  {typeof col.columnDef.header === "string"
+                    ? col.columnDef.header
+                    : col.id}
+                </DropdownMenuCheckboxItem>
+              ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );

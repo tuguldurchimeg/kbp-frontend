@@ -4,12 +4,12 @@ import HeaderControls from "./header-controls";
 
 export default function Header() {
   return (
-    <header className="border-b bg-white px-6 py-3 shadow-sm sticky top-0 z-50">
+    <header className="border-b px-6 py-3 shadow-sm sticky top-0 z-50">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center space-x-2 text-[var(--color-primary)] font-bold text-xl"
+          className="flex items-center space-x-2 text-foreground font-bold text-xl"
         >
           <Image
             src="/login.png"

@@ -9,14 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles,
-} from "lucide-react";
+import { BadgeCheck, Bell, CreditCard, LogOut, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CURRENT_USER } from "@/constants/kb-placeholder-data";
 
@@ -26,23 +19,18 @@ export default function UserDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          size="lg"
-          variant="ghost"
-          className="data-[state=open]:bg-muted data-[state=open]:text-foreground flex items-center gap-2"
-        >
-          <Avatar className="h-8 w-8 rounded-lg">
+        <Button size="lg" variant="ghost" className="p-0">
+          <Avatar className="h-9 w-9 rounded-full">
             <AvatarImage
               src={user.attributes.avatar}
               alt={user.attributes.firstname}
             />
-            <AvatarFallback className="rounded-lg">
+            <AvatarFallback className="rounded-full">
               {`${user.attributes?.firstname?.[0] ?? ""}${
                 user.attributes?.lastname?.[0] ?? ""
               }`.toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <ChevronsUpDown className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent

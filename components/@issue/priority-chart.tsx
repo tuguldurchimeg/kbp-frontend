@@ -8,6 +8,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useTranslations } from "next-intl";
 const chartData = [
   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
   { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
@@ -22,23 +23,23 @@ const chartConfig = {
   },
   chrome: {
     label: "Chrome",
-    color: "hsl(var(--chart-1))",
+    color: "var(--color-chart-1)",
   },
   safari: {
     label: "Safari",
-    color: "hsl(var(--chart-2))",
+    color: "var(--color-chart-2)",
   },
   firefox: {
     label: "Firefox",
-    color: "hsl(var(--chart-3))",
+    color: "var(--color-chart-3)",
   },
   edge: {
     label: "Edge",
-    color: "hsl(var(--chart-4))",
+    color: "var(--color-chart-4)",
   },
   other: {
     label: "Other",
-    color: "hsl(var(--chart-5))",
+    color: "var(--color-chart-5)",
   },
 } satisfies ChartConfig;
 interface PriorityData {
@@ -49,10 +50,13 @@ interface PriorityData {
 
 export function PriorityChart({ data }: { data: PriorityData[] }) {
   console.log("priority data ", data);
+  const t = useTranslations("Main");
   return (
     <Card className="gap-3">
       <CardHeader>
-        <CardTitle className="text-sm text-center">By priority</CardTitle>
+        <CardTitle className="text-sm text-center">
+          {t("by_priority")}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

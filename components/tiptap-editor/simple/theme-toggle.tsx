@@ -12,25 +12,29 @@ import { SunIcon } from "@/components/tiptap-icons/sun-icon";
 export function ThemeToggle() {
   const [isDarkMode, setIsDarkMode] = React.useState<boolean>(false);
 
+  // On mount: load saved preference or fallback to system preference
   React.useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleChange = () => setIsDarkMode(mediaQuery.matches);
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
+    const storedTheme = localStorage.getItem("theme");
+    if (storedTheme === "dark") {
+      setIsDarkMode(true);
+    } else if (storedTheme === "light") {
+      setIsDarkMode(false);
+    } else {
+      // fallback to system preference
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      setIsDarkMode(prefersDark);
+    }
   }, []);
 
-  React.useEffect(() => {
-    // const initialDarkMode =
-    //   !!document.querySelector('meta[name="color-scheme"][content="dark"]') ||
-    //   window.matchMedia("(prefers-color-scheme: dark)").matches;
-    // setIsDarkMode(initialDarkMode);
-  }, []);
-
+  // Apply and persist theme whenever it changes
   React.useEffect(() => {
     document.documentElement.classList.toggle("dark", isDarkMode);
+    localStorage.setItem("theme", isDarkMode ? "dark" : "light");
   }, [isDarkMode]);
 
-  const toggleDarkMode = () => setIsDarkMode((isDark) => !isDark);
+  const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
   return (
     <Button

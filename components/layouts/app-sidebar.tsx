@@ -92,10 +92,10 @@ export function AppSidebar() {
                       asChild
                       tooltip={item.label}
                       className={clsx(
-                        "flex items-center gap-2 px-3 py-2 rounded-lg transition-colors",
+                        "flex gap-2 px-3 py-2 rounded-lg transition-colors",
                         cleanPath.startsWith(item.uri || "")
-                          ? "bg-primary text-primary-foreground font-semibold pointer-events-none"
-                          : "text-muted-foreground hover:bg-muted"
+                          ? "bg-primary-light text-primary font-extrabold pointer-events-none"
+                          : "text-foreground-2 hover:bg-muted"
                       )}
                     >
                       <Link href={item.uri || "#"}>
@@ -135,7 +135,7 @@ export function AppSidebar() {
                           <div>
                             <SidebarMenuButton
                               asChild
-                              className="peer"
+                              className="peer text-foreground-2"
                               tooltip={item.label}
                             >
                               <div>
@@ -196,7 +196,15 @@ export function AppSidebar() {
                     </Collapsible>
                   ) : (
                     <SidebarMenuItem key={item.label}>
-                      <SidebarMenuButton asChild tooltip={item.label}>
+                      <SidebarMenuButton
+                        asChild
+                        tooltip={item.label}
+                        className={clsx(
+                          "text-foreground-2 hover:bg-muted",
+                          cleanPath.startsWith(item.uri || "") &&
+                            "bg-primary-light text-primary font-extrabold pointer-events-none"
+                        )}
+                      >
                         <Link href={item.uri || "#"}>
                           {item.icon && (
                             <item.icon

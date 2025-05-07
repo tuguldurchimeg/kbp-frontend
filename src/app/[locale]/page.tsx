@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <PrivateRoute>
       <SiteLayout>
-        <section className="bg-gradient-to-r from-emerald-100 via-cyan-50 to-teal-100 rounded-xl px-6 py-10 text-center space-y-6 shadow-sm border">
+        <section className="bg-gradient-to-r from-[var(--gradient-from)] via-[var(--gradient-via)] to-[var(--gradient-to)] rounded-xl px-6 py-10 text-center space-y-6 shadow-sm border">
           <div className="space-y-2">
             <h1 className="text-2xl md:text-3xl font-semibold">
               {t("Home.title")}
@@ -37,7 +37,7 @@ export default function Home() {
             </span>
             <Input
               placeholder={t("Home.search_placeholder")}
-              className="pl-10 pr-20 py-6 text-sm bg-white text-foreground placeholder:text-muted-foreground rounded-xl"
+              className="pl-10 pr-20 py-6 text-sm bg-background text-foreground placeholder:text-muted-foreground rounded-xl"
             />
           </div>
         </section>

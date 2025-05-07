@@ -38,15 +38,15 @@ export default function Page() {
 
   return (
     <main className="w-full px-6 space-y-8">
+      <h2 className="text-xl font-semibold">{t("issues")}</h2>
+      <DataTable />
       <section className="space-y-6">
-        <h2 className="text-xl font-semibold">{t("overview")}</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <UserChart data={userData} />
           <StatusChart data={statusData} />
           <PriorityChart data={priorityData} />
         </div>
       </section>
-      <DataTable />
     </main>
   );
 }

@@ -34,17 +34,6 @@ export default function WorkspaceDetailPage() {
 
   return (
     <main className="flex flex-col gap-10 px-4 w-full mx-10">
-      {/* <section className="w-full flex justify-between items-center max-w-6xl mx-auto">
-        <h2 className="text-2xl font-bold flex items-center gap-2">
-          <FolderOpen className="w-5 h-5" />
-          {t("documents")}
-        </h2>
-
-        <Button className="bg-purple-600 hover:bg-purple-700 text-white">
-          <Plus className="w-4 h-4 mr-1" />
-          {t("newDocument")}
-        </Button>
-      </section> */}
       <WorkspaceSummary
         categories={workspace.attributes.categories?.data || []}
       />
@@ -53,7 +42,7 @@ export default function WorkspaceDetailPage() {
       <section className="w-full space-y-12 max-w-6xl mx-auto">
         {workspace.attributes.categories?.data.map((category) => (
           <div key={category.id} className="space-y-4">
-            <h3 className="text-lg font-semibold flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-muted-foreground flex items-center gap-2">
               <FolderOpen className="w-4 h-4" />
               {category.attributes.name}
             </h3>

@@ -148,7 +148,10 @@
     "priority_breakdown": "Priority Breakdown",
     "high_priority": "High Priority",
     "low_priority": "Low Priority",
-    "status_breakdown": "Status Breakdown"
+    "status_breakdown": "Status Breakdown",
+    "by_assignee": "By assignee",
+    "by_status": "By status",
+    "by_priority": "by priority"
   },
   "Home": {
     "title": "How can we help you?",

@@ -35,7 +35,7 @@ export default function LanguageSwitcher() {
   return (
     <Select value={selectedLang} onValueChange={handleLanguageChange}>
       <SelectTrigger
-        className="flex items-center gap-1 border text-[#4B2E83] bg-white px-2 py-1 rounded-md h-8 text-xs w-[78px] shadow-sm"
+        className="flex items-center gap-1 text-muted-foreground px-2 py-1 rounded-md h-8 text-xs w-[78px] shadow-sm border-none"
         aria-label="Select language"
       >
         <Globe className="w-4 h-4" />

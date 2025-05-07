@@ -23,7 +23,7 @@ export default function WorkspaceCard({ item }: WorkspaceCardProps) {
         <CardHeader className="p-0">
           <div className="relative h-20 w-full">
             <Image
-              src={"/document.png"}
+              src={"/workspace_placeholder.jpg"}
               alt={item.attributes.name}
               fill
               style={{

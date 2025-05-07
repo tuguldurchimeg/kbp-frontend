@@ -3,7 +3,6 @@
 import {
   Card,
   CardContent,
-  CardHeader,
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
@@ -24,11 +23,11 @@ export default function WorkspaceSummary({
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>{t("summary_title")}</CardTitle>
-        <CardDescription>{t("summary_desc")}</CardDescription>
-      </CardHeader>
-      <CardContent className="grid grid-cols-2 gap-6">
+      <CardContent className="flex gap-20">
+        <div>
+          <CardTitle>{t("summary_title")}</CardTitle>
+          <CardDescription>{t("summary_desc")}</CardDescription>
+        </div>
         <div>
           <p className="text-sm text-muted-foreground">
             {t("total_categories")}

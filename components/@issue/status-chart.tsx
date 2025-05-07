@@ -10,6 +10,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useTranslations } from "next-intl";
 const chartData = [
   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
   { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
@@ -24,23 +25,23 @@ const chartConfig = {
   },
   chrome: {
     label: "Chrome",
-    color: "hsl(var(--chart-1))",
+    color: "var(--color-chart-1)",
   },
   safari: {
     label: "Safari",
-    color: "hsl(var(--chart-2))",
+    color: "var(--color-chart-2)",
   },
   firefox: {
     label: "Firefox",
-    color: "hsl(var(--chart-3))",
+    color: "var(--color-chart-3)",
   },
   edge: {
     label: "Edge",
-    color: "hsl(var(--chart-4))",
+    color: "var(--color-chart-4)",
   },
   other: {
     label: "Other",
-    color: "hsl(var(--chart-5))",
+    color: "var(--color-chart-5)",
   },
 } satisfies ChartConfig;
 
@@ -52,11 +53,11 @@ interface StatusData {
 
 export function StatusChart({ data }: { data: StatusData[] }) {
   console.log("status data ", data);
-
+  const t = useTranslations("Main");
   return (
     <Card className="gap-3">
       <CardHeader className="items-center pb-0">
-        <CardTitle className="text-sm text-center">By status</CardTitle>
+        <CardTitle className="text-sm text-center">{t("by_status")}</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
