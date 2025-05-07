@@ -28,9 +28,9 @@ export function LoginForm({
     e.preventDefault();
     try {
       await login(email, password);
-      router.push(ROUTE.WORKSPACES.ROOT); // Redirect after successful login
+      router.push(ROUTE.ROOT);
     } catch (error) {
-      console.error("Login failed", error); // Handle login failure
+      console.error("Login failed", error);
     }
   };
   return (

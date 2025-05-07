@@ -64,7 +64,7 @@ export function AppBreadcrumb() {
             {breadcrumbItems.map((segment, index) => (
               <React.Fragment key={segment.href}>
                 {index > 0 && <BreadcrumbSeparator />}
-                <BreadcrumbItem>
+                <BreadcrumbItem style={{ fontSize: "13px" }}>
                   {index === breadcrumbItems.length - 1 ? (
                     <BreadcrumbPage>{segment.name}</BreadcrumbPage>
                   ) : (

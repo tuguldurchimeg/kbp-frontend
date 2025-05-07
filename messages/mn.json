@@ -159,5 +159,20 @@
     "browse": "Нийтлэлүүдийг үзэх",
     "whats_new": "Шинэ мэдээлэл",
     "search_placeholder": "Мэдлэгийн сангаас хайх..."
+  },
+  "Search": {
+    "title": "Ажлын орчноос хайх",
+    "inputPlaceholder": "Хайх...",
+    "tabs": {
+      "all": "Бүгд",
+      "documents": "Нийтлэл",
+      "categories": "Ангилал",
+      "files": "Файл"
+    },
+    "sections": {
+      "categories": "АНГИЛАЛ",
+      "documents": "НИЙТЛЭЛ",
+      "files": "ФАЙЛ"
+    }
   }
 }

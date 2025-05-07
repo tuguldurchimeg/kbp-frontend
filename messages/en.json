@@ -159,5 +159,20 @@
     "browse": "Browse articles",
     "whats_new": "See what’s new",
     "search_placeholder": "Search the knowledge base..."
+  },
+  "Search": {
+    "title": "Search from workspace",
+    "inputPlaceholder": "Search...",
+    "tabs": {
+      "all": "All",
+      "documents": "Documents",
+      "categories": "Categories",
+      "files": "Files"
+    },
+    "sections": {
+      "categories": "CATEGORIES",
+      "documents": "DOCUMENTS",
+      "files": "FILES"
+    }
   }
 }

@@ -29,6 +29,18 @@ export type CategoryItem = {
   };
 };
 
+export type FileItem = {
+  id: string;
+  type: "file";
+  attributes: {
+    name: string;
+    documents?: { data: DocumentItem[] };
+    size: string;
+    fileType: string;
+    url: string;
+  };
+};
+
 export type CategoryCreateParams = {
   name: string;
   parent_id?: string;

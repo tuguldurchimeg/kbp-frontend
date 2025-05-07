@@ -38,7 +38,6 @@ export default function UserDropdown() {
         align="end"
         sideOffset={4}
       >
-        <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <Sparkles />

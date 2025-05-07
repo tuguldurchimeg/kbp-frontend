@@ -1,12 +1,4 @@
-import { useState } from "react";
-import {
-  Building,
-  Building2,
-  ChevronsUpDown,
-  Pencil,
-  Search,
-} from "lucide-react";
-
+import { Building, Building2, ChevronsUpDown, Pencil } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,19 +13,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogClose,
-} from "@/components/ui/dialog";
+import { SearchDialog } from "../SearchDialog";
 
 export function NavHeader() {
   const { isMobile } = useSidebar();
-  const [isDialogOpen, setDialogOpen] = useState(false);
-
-  const openDialog = () => setDialogOpen(true);
-  const closeDialog = () => setDialogOpen(false);
 
   return (
     <SidebarMenu>
@@ -80,31 +63,7 @@ export function NavHeader() {
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
-      <SidebarMenuItem>
-        <SidebarMenuButton
-          variant="outline"
-          className="w-full justify-start shadow-sm text-xs text-muted-foreground text-zinc-400 font-normal"
-          onClick={openDialog}
-        >
-          <Search className=" w-4 h-4 text-muted-foreground" />
-          Search documents...
-        </SidebarMenuButton>
-      </SidebarMenuItem>
-
-      <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-        <DialogTrigger />
-        <DialogContent>
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">Search for documents</h3>
-            <DialogClose onClick={closeDialog}>Close</DialogClose>
-          </div>
-          <input
-            type="text"
-            placeholder="Type to search..."
-            className="w-full p-2 mt-4 border rounded"
-          />
-        </DialogContent>
-      </Dialog>
+      <SearchDialog />
     </SidebarMenu>
   );
 }
