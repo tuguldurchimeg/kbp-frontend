@@ -20,6 +20,7 @@ export const KB_CATEGORIES: CategoryItem[] = [
             id: "1",
             type: "document",
             attributes: {
+              workspace_id: "1",
               title: "Welcome to the Platform",
             },
           },
@@ -27,6 +28,7 @@ export const KB_CATEGORIES: CategoryItem[] = [
             id: "2",
             type: "document",
             attributes: {
+              workspace_id: "1",
               title: "User Roles Overview",
             },
           },
@@ -48,6 +50,7 @@ export const KB_CATEGORIES: CategoryItem[] = [
                     attributes: {
                       title: "Sign Up",
                       created_at: "2025-01-15T12:00:00Z",
+                      workspace_id: "1",
                       updated_at: "2025-02-25T10:00:00Z",
                     },
                   },
@@ -57,6 +60,7 @@ export const KB_CATEGORIES: CategoryItem[] = [
                     attributes: {
                       title: "Verify Email",
                       created_at: "2025-01-18T09:30:00Z",
+                      workspace_id: "1",
                       updated_at: "2025-03-01T14:15:00Z",
                     },
                   },
@@ -78,6 +82,7 @@ export const KB_CATEGORIES: CategoryItem[] = [
                             attributes: {
                               title: "Connect External Services",
                               created_at: "2025-01-22T15:45:00Z",
+                              workspace_id: "1",
                               updated_at: "2025-03-05T16:00:00Z",
                             },
                           },
@@ -87,6 +92,7 @@ export const KB_CATEGORIES: CategoryItem[] = [
                             attributes: {
                               title: "Two-Factor Authentication",
                               created_at: "2025-01-25T08:00:00Z",
+                              workspace_id: "1",
                               updated_at: "2025-03-10T17:30:00Z",
                             },
                           },
@@ -124,6 +130,7 @@ export const KB_CATEGORIES: CategoryItem[] = [
                     attributes: {
                       title: "Markdown Support",
                       created_at: "2025-02-01T09:00:00Z",
+                      workspace_id: "1",
                       updated_at: "2025-03-12T11:45:00Z",
                     },
                   },
@@ -134,6 +141,7 @@ export const KB_CATEGORIES: CategoryItem[] = [
                       title: "Embedding Media",
                       created_at: "2025-02-05T13:20:00Z",
                       updated_at: "2025-03-15T14:30:00Z",
+                      workspace_id: "1",
                     },
                   },
                 ],
@@ -164,6 +172,7 @@ export const KB_CATEGORIES: CategoryItem[] = [
                               title: "Managing Tags",
                               created_at: "2025-02-10T10:10:00Z",
                               updated_at: "2025-03-18T12:00:00Z",
+                              workspace_id: "1",
                             },
                           },
                         ],
@@ -197,9 +206,9 @@ export const TAG_PLACEHOLDERS: TagItem[] = [
     id: "1",
     type: "tag",
     attributes: {
-      name: "Intro",
-      description: "Introductory content",
-      color: "#C62828", // Red
+      name: "Танилцуулга",
+      description: "Танилцуулгын агуулга",
+      color: "#C62828",
       documents: { data: [] },
       created_at: "2025-03-18T12:00:00Z",
     },
@@ -208,18 +217,19 @@ export const TAG_PLACEHOLDERS: TagItem[] = [
     id: "2",
     type: "tag",
     attributes: {
-      name: "Tip",
-      description: "Helpful tip",
-      color: "#2E7D32", // Green
+      name: "Зөвлөгөө",
+      description: "Туслах зөвлөгөө",
+      color: "#2E7D32",
       documents: {
         data: [
           {
             id: "7",
             type: "document",
             attributes: {
-              title: "Markdown Support",
+              title: "Markdown дэмжлэг",
               created_at: "2025-02-01T09:00:00Z",
               updated_at: "2025-03-12T11:45:00Z",
+              workspace_id: "1",
             },
           },
         ],
@@ -231,18 +241,19 @@ export const TAG_PLACEHOLDERS: TagItem[] = [
     id: "3",
     type: "tag",
     attributes: {
-      name: "Warning",
-      description: "Use with caution",
-      color: "#F9A825", // Amber
+      name: "Анхааруулга",
+      description: "Анхааралтай хэрэглэнэ үү",
+      color: "#F9A825",
       documents: {
         data: [
           {
             id: "8",
             type: "document",
             attributes: {
-              title: "Embedding Media",
+              title: "Медиа оруулах",
               created_at: "2025-02-05T13:20:00Z",
               updated_at: "2025-03-15T14:30:00Z",
+              workspace_id: "1",
             },
           },
         ],
@@ -254,27 +265,29 @@ export const TAG_PLACEHOLDERS: TagItem[] = [
     id: "4",
     type: "tag",
     attributes: {
-      name: "Idea",
-      description: "Creative thought",
-      color: "#1565C0", // Blue
+      name: "Санаа",
+      description: "Бүтээлч бодол",
+      color: "#1565C0",
       documents: {
         data: [
           {
             id: "7",
             type: "document",
             attributes: {
-              title: "Markdown Support",
+              title: "Markdown дэмжлэг",
               created_at: "2025-02-01T09:00:00Z",
               updated_at: "2025-03-12T11:45:00Z",
+              workspace_id: "1",
             },
           },
           {
             id: "8",
             type: "document",
             attributes: {
-              title: "Embedding Media",
+              title: "Медиа оруулах",
               created_at: "2025-02-05T13:20:00Z",
               updated_at: "2025-03-15T14:30:00Z",
+              workspace_id: "1",
             },
           },
         ],
@@ -286,9 +299,9 @@ export const TAG_PLACEHOLDERS: TagItem[] = [
     id: "5",
     type: "tag",
     attributes: {
-      name: "Reference",
-      description: "For further reading",
-      color: "#6A1B9A", // Purple
+      name: "Лавлах",
+      description: "Дэлгэрэнгүй уншихад зориулав",
+      color: "#6A1B9A",
       documents: { data: [] },
       created_at: "2025-03-18T12:00:00Z",
     },
@@ -300,20 +313,22 @@ export const DOC_TEMPLATES: DocumentItem[] = [
     id: "1",
     type: "document",
     attributes: {
-      title: "How to Guides",
+      title: "Хэрхэн хийх зааврууд",
       updated_at: "2025-03-18T12:00:00Z",
       user: { data: CURRENT_USER },
       is_template: true,
+      workspace_id: "1",
     },
   },
   {
     id: "2",
     type: "document",
     attributes: {
-      title: "Getting Started Guides",
+      title: "Эхлэлийн зааврууд",
       updated_at: "2025-03-18T12:00:00Z",
       user: { data: CURRENT_USER },
       is_template: true,
+      workspace_id: "1",
     },
   },
 ];
@@ -323,10 +338,10 @@ export const ISSUEDATA: IssueItem[] = [
     id: "1",
     type: "issue",
     attributes: {
-      title: "Cover page",
+      title: "Нүүр хуудас",
       description: "",
-      status: "in_progress",
-      priority: "medium",
+      status: "in_progress", // in_progress
+      priority: "medium", // medium
       created_by: {
         data: {
           id: "1",
@@ -355,10 +370,10 @@ export const ISSUEDATA: IssueItem[] = [
     id: "2",
     type: "issue",
     attributes: {
-      title: "Table of contents",
+      title: "Агуулгын жагсаалт",
       description: "",
-      status: "open",
-      priority: "medium",
+      status: "open", // open
+      priority: "low",
       created_by: {
         data: {
           id: "1",
@@ -387,11 +402,11 @@ export const ISSUEDATA: IssueItem[] = [
     id: "3",
     type: "issue",
     attributes: {
-      title: "Improve search functionality",
+      title: "Хайлтын үйлдлийг сайжруулах",
       description:
-        "Users report inconsistent results when searching with filters.",
-      status: "closed",
-      priority: "high",
+        "Хэрэглэгчид шүүлтүүртэй хайлтаар зөрүүтэй үр дүн гарч байгааг мэдээлсэн.",
+      status: "closed", // closed
+      priority: "high", // high
       created_by: {
         data: {
           id: "1",
@@ -438,7 +453,7 @@ export const ISSUEDATA: IssueItem[] = [
             id: "doc-42",
             type: "document",
             attributes: {
-              title: "Search feature requirements",
+              title: "Хайлтын боломжийн шаардлагууд",
               created_at: "2024-04-01T10:00:00Z",
               updated_at: "2024-04-15T12:00:00Z",
               user: {
@@ -454,6 +469,7 @@ export const ISSUEDATA: IssueItem[] = [
                   },
                 },
               },
+              workspace_id: "1",
               is_template: false,
             },
           },
@@ -472,7 +488,7 @@ export const GLOSSARY_PLACEHOLDERS: GlossaryItem[] = [
     attributes: {
       name: "API",
       content:
-        "An API (Application Programming Interface) allows different software applications to communicate with each other.",
+        "API (Аппликейшн Програм Интерфэйс) нь програмууд хооронд харилцах боломжийг олгодог.",
       created_at: "2024-11-01T10:00:00Z",
     },
   },
@@ -480,9 +496,9 @@ export const GLOSSARY_PLACEHOLDERS: GlossaryItem[] = [
     id: "2",
     type: "glossary",
     attributes: {
-      name: "Frontend",
+      name: "Фронтенд",
       content:
-        "The frontend is the part of a website or application that users interact with directly.",
+        "Фронтенд бол хэрэглэгч шууд харьцдаг вэбсайт эсвэл аппликейшны хэсэг юм.",
       created_at: "2024-11-05T14:30:00Z",
     },
   },
@@ -490,9 +506,9 @@ export const GLOSSARY_PLACEHOLDERS: GlossaryItem[] = [
     id: "3",
     type: "glossary",
     attributes: {
-      name: "Backend",
+      name: "Бэкэнд",
       content:
-        "The backend is the server-side of an application responsible for business logic and database interactions.",
+        "Бэкэнд нь сервер талын бизнесийн логик, өгөгдлийн сангийн ажиллагааг хариуцдаг хэсэг юм.",
       created_at: "2024-11-10T08:45:00Z",
     },
   },

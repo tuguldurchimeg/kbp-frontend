@@ -29,10 +29,12 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { useTranslations } from "next-intl";
 
 export default function TemplateTable() {
   const [rowSelection, setRowSelection] = useState({});
   const columns = getColumns();
+  const t = useTranslations("Glossaries");
 
   const table = useReactTable({
     data: GLOSSARY_PLACEHOLDERS,
@@ -53,13 +55,13 @@ export default function TemplateTable() {
     <div className="p-6 space-y-6 max-w-screen-xl mx-auto">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-semibold">Glossaries</h2>
-          <p className="text-muted-foreground">Create and manage glossaries</p>
+          <h2 className="text-2xl font-semibold">{t("title")}</h2>
+          <p className="text-muted-foreground">{t("description")}</p>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              Columns <ChevronDownIcon className="ml-1 h-4 w-4" />
+              {t("columns")} <ChevronDownIcon className="ml-1 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -119,7 +121,7 @@ export default function TemplateTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  No templates found.
+                  {t("empty")}
                 </TableCell>
               </TableRow>
             )}

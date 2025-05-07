@@ -4,13 +4,14 @@ import * as React from "react";
 import { DataTable } from "@/components/@issue/data-table";
 import { useTranslations } from "next-intl";
 import { ISSUEDATA } from "@/constants/kb-placeholder-data";
-import { STATUS_MAP } from "@/constants/issue.constants";
 import { StatusChart } from "@/components/@issue/status-chart";
 import { PriorityChart } from "@/components/@issue/priority-chart";
 import { UserChart } from "@/components/@issue/user-chart";
+import { useStatusAndPriorityMaps } from "@/constants/issue.constants";
 
 export default function Page() {
   const t = useTranslations("Main");
+  const { STATUS_MAP } = useStatusAndPriorityMaps();
 
   // const totalIssues = ISSUEDATA.length;
   const totalPriorityHigh = ISSUEDATA.filter(

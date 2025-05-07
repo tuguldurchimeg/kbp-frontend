@@ -73,7 +73,6 @@
     "home": "Home",
     "order_by": "Order By",
     "created_date": "Created Date",
-    "status": "Status",
     "filter": "Filter",
     "order_asc": "Ascending",
     "order_desc": "Descending",
@@ -101,7 +100,18 @@
     "views": "views",
     "quick_access": "Quick Access",
     "workspaces": "Workspaces",
-    "documents": "Documents"
+    "documents": "Documents",
+    "status": {
+      "open": "Open",
+      "in_progress": "In progress",
+      "closed": "Closed",
+      "default": "Unknown"
+    },
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    }
   },
   "LOGIN": {
     "title": "Sign In",
@@ -174,5 +184,25 @@
       "documents": "DOCUMENTS",
       "files": "FILES"
     }
+  },
+  "Templates": {
+    "title": "Template documents",
+    "description": "Create and manage predefined templates",
+    "columns": "Columns",
+    "loading": "Loading templates...",
+    "empty": "No templates found.",
+    "new": "Create new template"
+  },
+  "Glossaries": {
+    "title": "Glossaries",
+    "description": "Create and manage glossaries",
+    "columns": "Columns",
+    "empty": "No glossaries found."
+  },
+  "Tags": {
+    "title": "Tags",
+    "description": "Create and manage employee access with tags",
+    "columns": "Columns",
+    "empty": "No tags found."
   }
 }

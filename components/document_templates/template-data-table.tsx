@@ -36,6 +36,7 @@ import {
 } from "@/src/app/lib/actions/document.actions";
 import { DocumentItem } from "@/types/document";
 import { DOC_TEMPLATES } from "@/constants/kb-placeholder-data";
+import { useTranslations } from "next-intl";
 
 export default function TemplateTable() {
   const [rowSelection, setRowSelection] = useState({});
@@ -45,6 +46,7 @@ export default function TemplateTable() {
   const pathname = usePathname();
   const router = useRouter();
   const columns = getColumns(pathname);
+  const t = useTranslations("Templates");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -93,15 +95,14 @@ export default function TemplateTable() {
     <div className="p-6 space-y-6 max-w-screen-xl mx-auto">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-semibold">Template documents</h2>
-          <p className="text-muted-foreground">
-            Create and manage predefined templates
-          </p>
+          <h2 className="text-2xl font-semibold">{t("title")}</h2>
+          <p className="text-muted-foreground">{t("description")}</p>
         </div>
 
         <Button
           className="fixed bottom-15 right-15 h-12 w-12 rounded-xl hover:bg-purple-700"
           onClick={handleCreateTemplate}
+          aria-label={t("new")}
         >
           <Plus />
         </Button>
@@ -109,7 +110,7 @@ export default function TemplateTable() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              Columns <ChevronDownIcon className="ml-1 h-4 w-4" />
+              {t("columns")} <ChevronDownIcon className="ml-1 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -153,7 +154,7 @@ export default function TemplateTable() {
             {loading ? (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  Loading templates...
+                  {t("loading")}
                 </TableCell>
               </TableRow>
             ) : table.getRowModel().rows.length ? (
@@ -175,7 +176,7 @@ export default function TemplateTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  No templates found.
+                  {t("empty")}
                 </TableCell>
               </TableRow>
             )}

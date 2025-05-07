@@ -14,6 +14,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { SearchDialog } from "../SearchDialog";
+import Link from "next/link";
+import { ROUTE } from "@/constants/route.constants";
 
 export function NavHeader() {
   const { isMobile } = useSidebar();
@@ -46,10 +48,12 @@ export function NavHeader() {
               Menu
             </DropdownMenuLabel>
             <DropdownMenuItem className="gap-2 p-2">
-              <div className="flex size-6 items-center justify-center rounded-sm border">
-                <Building2 className="size-4 shrink-0" />
-              </div>
-              Back to workspaces
+              <Link href={ROUTE.ROOT}>
+                <div className="flex size-6 items-center justify-center rounded-sm border">
+                  <Building2 className="size-4 shrink-0" />
+                </div>
+                Back to workspaces
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="gap-2 p-2">

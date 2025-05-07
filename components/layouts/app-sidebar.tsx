@@ -226,7 +226,7 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="gap-0.5">
-        <Link href={ROUTE.WORKSPACES.ROOT}>
+        <Link href={ROUTE.ROOT}>
           <SidebarMenuButton className="w-full justify-start gap-2">
             <Building2 className="h-4 w-4" />
             Back to Workspaces

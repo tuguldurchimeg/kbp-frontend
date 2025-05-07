@@ -52,9 +52,9 @@ import { formatDistanceToNow } from "date-fns";
 import { IssueItem } from "@/types/issue";
 import { ISSUEDATA } from "@/constants/kb-placeholder-data";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { PRIORITY_MAP, STATUS_MAP } from "@/constants/issue.constants";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useStatusAndPriorityMaps } from "@/constants/issue.constants";
 
 function DraggableRow({ row }: { row: Row<IssueItem> }) {
   const { setNodeRef, transform, transition } = useSortable({
@@ -94,6 +94,7 @@ export function DataTable() {
   );
 
   const dataIds = React.useMemo(() => data.map((d) => d.id.toString()), [data]);
+  const { STATUS_MAP, PRIORITY_MAP } = useStatusAndPriorityMaps();
 
   const columns: ColumnDef<IssueItem>[] = [
     {

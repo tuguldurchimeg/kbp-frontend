@@ -1,32 +1,48 @@
+"use client";
 import {
   CheckCircleIcon,
   FileIcon,
   LoaderIcon,
   HelpCircleIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
-export const STATUS_MAP = {
-  open: { label: "Open", color: "bg-blue-500", icon: FileIcon },
-  in_progress: {
-    label: "In progress",
-    color: "bg-yellow-500",
-    icon: LoaderIcon,
-  },
-  closed: { label: "Closed", color: "bg-green-600", icon: CheckCircleIcon },
-  default: { label: "Default", color: "bg-muted", icon: HelpCircleIcon }, // fallback
-};
+export function useStatusAndPriorityMaps() {
+  const t = useTranslations("SYSCOMMON");
 
-export const PRIORITY_MAP = {
-  low: {
-    label: "Low",
-    color: "bg-green-100 text-green-800",
-  },
-  medium: {
-    label: "Medium",
-    color: "bg-yellow-100 text-yellow-800",
-  },
-  high: {
-    label: "High",
-    color: "bg-red-100 text-red-800",
-  },
-};
+  const STATUS_MAP = {
+    open: { label: t("status.open"), color: "bg-blue-500", icon: FileIcon },
+    in_progress: {
+      label: t("status.in_progress"),
+      color: "bg-yellow-500",
+      icon: LoaderIcon,
+    },
+    closed: {
+      label: t("status.closed"),
+      color: "bg-green-600",
+      icon: CheckCircleIcon,
+    },
+    default: {
+      label: t("status.default"),
+      color: "bg-muted",
+      icon: HelpCircleIcon,
+    },
+  };
+
+  const PRIORITY_MAP = {
+    low: {
+      label: t("priority.low"),
+      color: "bg-green-100 text-green-800",
+    },
+    medium: {
+      label: t("priority.medium"),
+      color: "bg-yellow-100 text-yellow-800",
+    },
+    high: {
+      label: t("priority.high"),
+      color: "bg-red-100 text-red-800",
+    },
+  };
+
+  return { STATUS_MAP, PRIORITY_MAP };
+}
