@@ -12,34 +12,52 @@ import {
 } from "@/components/ui/dialog";
 import PrivateRoute from "@/components/PrivateRoute";
 import { Button } from "@/components/ui/button";
-import { Rocket, Zap } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Rocket, Search, Zap } from "lucide-react";
 import SiteLayout from "@/components/layouts/SiteLayout";
 import QuickAccessDocumentList from "@/components/@workspace/QuickAccessDocumentList";
 
 export default function Home() {
-  const t = useTranslations("SYSCOMMON");
+  const t = useTranslations();
   return (
     <PrivateRoute>
       <SiteLayout>
+        <section className="bg-gradient-to-r from-emerald-100 via-cyan-50 to-teal-100 rounded-xl px-6 py-10 text-center space-y-6 shadow-sm border">
+          <div className="space-y-2">
+            <h1 className="text-2xl md:text-3xl font-semibold">
+              {t("Home.title")}
+            </h1>
+            <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto">
+              {t("Home.subtitle")}
+            </p>
+          </div>
+          <div className="relative mt-4 mx-auto w-full max-w-md">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+              <Search className="w-4 h-4" />
+            </span>
+            <Input
+              placeholder={t("Home.search_placeholder")}
+              className="pl-10 pr-20 py-6 text-sm bg-white text-foreground placeholder:text-muted-foreground rounded-xl"
+            />
+          </div>
+        </section>
         <main className="flex flex-col gap-10 p-6 max-w-7xl mx-auto">
           {/* Workspaces */}
           <section className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold flex items-center gap-2">
                 <Rocket className="w-5 h-5" />
-                {t("workspaces")}
+                {t("SYSCOMMON.workspaces")}
               </h2>
 
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button className="bg-purple-600 hover:bg-purple-700 text-white">
-                    + {t("create")}
-                  </Button>
+                  <Button>+ {t("SYSCOMMON.create")}</Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>
-                      {t("create")} {t("documents")}
+                      {t("SYSCOMMON.create")} {t("SYSCOMMON.documents")}
                     </DialogTitle>
                   </DialogHeader>
                   <CreateWorkspaceForm />
@@ -54,7 +72,7 @@ export default function Home() {
           <section className="space-y-4">
             <h2 className="text-lg font-medium text-muted-foreground flex items-center gap-2">
               <Zap className="w-4 h-4" />
-              {t("quick_access")}
+              {t("SYSCOMMON.quick_access")}
             </h2>
             <QuickAccessDocumentList />
           </section>

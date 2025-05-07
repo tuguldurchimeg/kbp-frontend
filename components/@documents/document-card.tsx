@@ -46,7 +46,7 @@ export default function DocumentCard({ document }: DocumentCardProps) {
         <CardContent className="flex flex-col justify-between h-full p-0">
           {/* Top Section */}
           <div className="flex items-start gap-3">
-            <div className="p-2 bg-purple-100 text-purple-700 rounded-md">
+            <div className="p-2 bg-emerald-100 text-emerald-700 rounded-md">
               <FileText className="w-4 h-4" />
             </div>
 

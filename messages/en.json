@@ -137,5 +137,24 @@
     "summary_desc": "Quick overview of categories and documents",
     "total_categories": "Total Categories",
     "total_documents": "Total Documents"
+  },
+  "Main": {
+    "issues": "Issues",
+    "overview": "Overview",
+    "total_issues": "Total Issues",
+    "total_issues_desc": "Total number of issues",
+    "active_issues": "Active Issues",
+    "active_issues_desc": "Currently active issues",
+    "priority_breakdown": "Priority Breakdown",
+    "high_priority": "High Priority",
+    "low_priority": "Low Priority",
+    "status_breakdown": "Status Breakdown"
+  },
+  "Home": {
+    "title": "How can we help you?",
+    "subtitle": "Find support articles, setup guides, troubleshooting, FAQs and more.",
+    "browse": "Browse articles",
+    "whats_new": "See what’s new",
+    "search_placeholder": "Search the knowledge base..."
   }
 }

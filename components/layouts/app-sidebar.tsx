@@ -94,7 +94,7 @@ export function AppSidebar() {
                       className={clsx(
                         "flex items-center gap-2 px-3 py-2 rounded-lg transition-colors",
                         cleanPath.startsWith(item.uri || "")
-                          ? "bg-primary-light text-primary-foreground font-semibold pointer-events-none"
+                          ? "bg-primary text-primary-foreground font-semibold pointer-events-none"
                           : "text-muted-foreground hover:bg-muted"
                       )}
                     >

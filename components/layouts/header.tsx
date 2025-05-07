@@ -9,7 +9,7 @@ export default function Header() {
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center space-x-2 text-purple-700 font-bold text-xl"
+          className="flex items-center space-x-2 text-[var(--color-primary)] font-bold text-xl"
         >
           <Image
             src="/login.png"
