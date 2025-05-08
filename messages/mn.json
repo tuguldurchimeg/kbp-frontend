@@ -102,16 +102,30 @@
     "workspaces": "Ажлын орчин",
     "documents": "Нийтлэл",
     "status": {
-      "open": "Нээлттэй",
-      "in_progress": "Хийгдэж байна",
-      "closed": "Хаагдсан",
+      "title": "Статус",
+      "open": "Шинэ",
+      "in_progress": "Хийж байна",
+      "closed": "Дууссан",
       "default": "Тодорхойгүй"
     },
     "priority": {
+      "title": "Зэрэглэл",
       "low": "Бага",
       "medium": "Дунд",
       "high": "Өндөр"
-    }
+    },
+    "issue_type": {
+      "problem": "Асуудал",
+      "question": "Асуулт"
+    },
+    "account": "Аккаунт",
+    "saved": "Хадгалсан",
+    "logout": "Гарах",
+    "type": "Төрөл",
+    "workspace": "АЖЛЫН ТАЛБАР",
+    "menu": "Цэс",
+    "backToWorkspaces": "Буцах",
+    "editWorkspace": "Засах"
   },
   "LOGIN": {
     "title": "Нэвтрэх",
@@ -220,5 +234,6 @@
     "toggle_header_column": "Багана тодруулах",
     "merge_cells": "Нэгтгэх",
     "split-cells": "Салгах"
-  }
+  },
+  "Issue": {}
 }

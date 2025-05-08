@@ -342,6 +342,7 @@ export const ISSUEDATA: IssueItem[] = [
       description: "",
       status: "in_progress", // in_progress
       priority: "medium", // medium
+      type: "problem",
       created_by: {
         data: {
           id: "1",
@@ -374,6 +375,7 @@ export const ISSUEDATA: IssueItem[] = [
       description: "",
       status: "open", // open
       priority: "low",
+      type: "question",
       created_by: {
         data: {
           id: "1",
@@ -407,6 +409,7 @@ export const ISSUEDATA: IssueItem[] = [
         "Хэрэглэгчид шүүлтүүртэй хайлтаар зөрүүтэй үр дүн гарч байгааг мэдээлсэн.",
       status: "closed", // closed
       priority: "high", // high
+      type: "problem",
       created_by: {
         data: {
           id: "1",

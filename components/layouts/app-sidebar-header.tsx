@@ -1,4 +1,9 @@
-import { Building, Building2, ChevronsUpDown, Pencil } from "lucide-react";
+import {
+  ArrowLeftFromLine,
+  Building,
+  ChevronsUpDown,
+  Pencil,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,9 +21,11 @@ import {
 import { SearchDialog } from "../SearchDialog";
 import Link from "next/link";
 import { ROUTE } from "@/constants/route.constants";
+import { useTranslations } from "next-intl";
 
 export function NavHeader() {
   const { isMobile } = useSidebar();
+  const t = useTranslations("SYSCOMMON");
 
   return (
     <SidebarMenu>
@@ -33,36 +40,30 @@ export function NavHeader() {
                 <Building className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">WORKSPACE</span>
+                <span className="truncate font-semibold">{t("workspace")}</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+            className="w-[--radix-dropdown-menu-trigger-width] min-w-60 rounded-lg"
             align="start"
             side={isMobile ? "bottom" : "right"}
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-xs text-muted-foreground">
-              Menu
+              {t("menu")}
             </DropdownMenuLabel>
             <DropdownMenuItem className="gap-2 p-2">
-              <Link href={ROUTE.ROOT}>
-                <div className="flex size-6 items-center justify-center rounded-sm border">
-                  <Building2 className="size-4 shrink-0" />
-                </div>
-                Back to workspaces
+              <Link href={ROUTE.ROOT} className="flex gap-2 items-center">
+                <ArrowLeftFromLine className="size-4 shrink-0" />
+                {t("backToWorkspaces")}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="gap-2 p-2">
-              <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                <Pencil className="size-4" />
-              </div>
-              <div className="font-medium text-muted-foreground">
-                Edit Workspace
-              </div>
+              <Pencil className="size-4" />
+              {t("editWorkspace")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

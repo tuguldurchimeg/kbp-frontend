@@ -102,16 +102,30 @@
     "workspaces": "Workspaces",
     "documents": "Documents",
     "status": {
+      "title": "Status",
       "open": "Open",
       "in_progress": "In progress",
       "closed": "Closed",
       "default": "Unknown"
     },
     "priority": {
+      "title": "Priority",
       "low": "Low",
       "medium": "Medium",
       "high": "High"
-    }
+    },
+    "issue_type": {
+      "problem": "Problem",
+      "question": "Question"
+    },
+    "account": "Account",
+    "saved": "Saved",
+    "logout": "Log out",
+    "type": "Type",
+    "workspace": "WORKSPACE",
+    "menu": "Menu",
+    "backToWorkspaces": "Back to workspaces",
+    "editWorkspace": "Edit workspace"
   },
   "LOGIN": {
     "title": "Sign In",

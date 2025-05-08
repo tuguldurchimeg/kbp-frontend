@@ -118,7 +118,7 @@ import { TAG_COLORS } from "@/constants/color.constants";
 import clsx from "clsx";
 import InsertTableButton from "@/components/tiptap-ui/table";
 import TableBubbleMenu from "@/components/tiptap-ui/table/table-bubble-menu";
-
+import { ResizableImage } from "tiptap-extension-resizable-image";
 type Props = {
   document: DocumentItem;
 };
@@ -332,6 +332,7 @@ export function SimpleEditor({ document }: Props) {
         upload: handleImageUpload,
         onError: (error) => console.error("Upload failed:", error),
       }),
+      ResizableImage,
       TrailingNode,
       Link.configure({ openOnClick: false }),
       Table.configure({
@@ -579,9 +580,12 @@ export function SimpleEditor({ document }: Props) {
             <span className="text-xs text-gray-500">
               •{" "}
               {document.attributes?.created_at &&
-                formatDistanceToNow(new Date(document.attributes?.created_at), {
-                  addSuffix: true,
-                })}
+                formatDistanceToNow(
+                  new Date(document.attributes?.updated_at || Date.now()),
+                  {
+                    addSuffix: true,
+                  }
+                )}
             </span>
           </div>
         )}
@@ -695,7 +699,7 @@ export function SimpleEditor({ document }: Props) {
               <MarkButton type="underline" />
               <HighlightPopover editor={editor} />
               <TextColorPopover editor={editor} />
-              <LinkButton onClick={() => setMobileView("link")} />
+              <LinkPopover />
               <TextAlignPopover editor={editor} />
             </div>
           </BubbleMenu>

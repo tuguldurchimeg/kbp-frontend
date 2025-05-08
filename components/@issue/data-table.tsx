@@ -55,6 +55,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useStatusAndPriorityMaps } from "@/constants/issue.constants";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { CreateIssueDialog } from "./create-edit-dialog";
 
 function DraggableRow({ row }: { row: Row<IssueItem> }) {
   const { setNodeRef, transform, transition } = useSortable({
@@ -94,7 +101,11 @@ export function DataTable() {
   );
 
   const dataIds = React.useMemo(() => data.map((d) => d.id.toString()), [data]);
-  const { STATUS_MAP, PRIORITY_MAP } = useStatusAndPriorityMaps();
+  const { STATUS_MAP, PRIORITY_MAP, TYPE_MAP } = useStatusAndPriorityMaps();
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const handleOpenDialog = () => {
+    setIsDialogOpen(true);
+  };
 
   const columns: ColumnDef<IssueItem>[] = [
     {
@@ -159,6 +170,26 @@ export function DataTable() {
           <Badge className={`capitalize ${priorityInfo.color}`}>
             {priorityInfo.label}
           </Badge>
+        );
+      },
+    },
+    {
+      accessorKey: "attributes.type",
+      header: "Type",
+      cell: ({ getValue }) => {
+        const type = getValue<string>();
+        const typeInfo = TYPE_MAP[type as keyof typeof TYPE_MAP];
+        const Icon = typeInfo.icon;
+
+        return (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Icon className={`h-4 w-4 text-${typeInfo.color}`} />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">{typeInfo.label}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         );
       },
     },
@@ -243,7 +274,6 @@ export function DataTable() {
             <Link href={`${pathname}/${row.original.id}`}>
               <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
-            <DropdownMenuItem>Duplicate</DropdownMenuItem>
             <DropdownMenuItem>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -282,9 +312,16 @@ export function DataTable() {
 
   return (
     <div className="w-full space-y-4">
-      <Button className="fixed bottom-15 right-15 h-12 w-12 rounded-xl hover:bg-emerald-600 z-99">
+      <Button
+        onClick={() => handleOpenDialog()}
+        className="fixed bottom-15 right-15 h-12 w-12 rounded-xl hover:bg-emerald-600 z-99"
+      >
         <Plus />
       </Button>
+      <CreateIssueDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+      />
       <div className="w-full overflow-x-auto rounded-md border p-4">
         <DndContext
           sensors={sensors}

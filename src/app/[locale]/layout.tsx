@@ -4,6 +4,8 @@ import "../../../styles/globals.css";
 import { AuthProvider } from "@/hooks/useAuth";
 import { notoSans, roboto } from "@/styles/fonts";
 import { ReactNode } from "react";
+import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 export const metadata: Metadata = {
   title: "KBP",
@@ -22,7 +24,17 @@ export default function LocaleLayout({ children, params: { locale } }: Props) {
         className={`h-full ${notoSans.variable} ${roboto.variable} antialiased`}
       >
         <NextIntlClientProvider locale={locale}>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          </AuthProvider>
+          <Toaster />
         </NextIntlClientProvider>
       </body>
     </html>

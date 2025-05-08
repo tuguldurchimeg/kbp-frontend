@@ -4,6 +4,8 @@ import {
   FileIcon,
   LoaderIcon,
   HelpCircleIcon,
+  CircleHelp,
+  Flame,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -44,5 +46,18 @@ export function useStatusAndPriorityMaps() {
     },
   };
 
-  return { STATUS_MAP, PRIORITY_MAP };
+  const TYPE_MAP = {
+    problem: {
+      label: t("issue_type.problem"),
+      color: "red-500",
+      icon: Flame,
+    },
+    question: {
+      label: t("issue_type.question"),
+      color: "amber-400",
+      icon: CircleHelp,
+    },
+  };
+
+  return { STATUS_MAP, PRIORITY_MAP, TYPE_MAP };
 }

@@ -6,7 +6,7 @@ import { FolderOpen } from "lucide-react";
 import DocumentCard from "@/components/@documents/document-card";
 import { getWorkspace } from "@/src/app/lib/actions/workspace.actions";
 import { WorkspaceItem } from "@/types/workspace";
-import WorkspaceSummary from "@/components/@workspace/SummaryChart";
+import WorkspaceSummary from "@/components/@workspace/summary-chart";
 
 export default function WorkspaceDetailPage() {
   const params = useParams();

@@ -9,48 +9,26 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useTranslations } from "next-intl";
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 90, fill: "var(--color-other)" },
-];
+import { ReportResponse } from "@/types/issue";
+import { useStatusAndPriorityMaps } from "@/constants/issue.constants";
 
-const chartConfig = {
-  visitors: {
-    label: "High",
-  },
-  chrome: {
-    label: "Low",
-    color: "var(--color-chart-1)",
-  },
-  safari: {
-    label: "Medium",
-    color: "var(--color-chart-2)",
-  },
-  firefox: {
-    label: "Very High",
-    color: "var(--color-chart-3)",
-  },
-  edge: {
-    label: "Edge",
-    color: "var(--color-chart-4)",
-  },
-  other: {
-    label: "Other",
-    color: "var(--color-chart-5)",
-  },
-} satisfies ChartConfig;
-interface PriorityData {
-  [key: string]: string | number;
-  priority: string;
-  count: number;
-}
-
-export function PriorityChart({ data }: { data: PriorityData[] }) {
-  console.log("priority data ", data);
+export function PriorityChart({ data }: { data: ReportResponse }) {
   const t = useTranslations("Main");
+  const { PRIORITY_MAP } = useStatusAndPriorityMaps();
+
+  const chartData = data.by_priority.map((item) => ({
+    priority: item.priority,
+    count: item.count,
+  }));
+
+  const chartConfig = data.by_priority.reduce((acc, item) => {
+    const priority = PRIORITY_MAP[item.priority as keyof typeof PRIORITY_MAP];
+    acc[item.priority] = {
+      label: priority.label,
+      color: priority.color,
+    };
+    return acc;
+  }, {} as ChartConfig);
   return (
     <Card className="gap-3">
       <CardHeader>
@@ -69,7 +47,7 @@ export function PriorityChart({ data }: { data: PriorityData[] }) {
             }}
           >
             <YAxis
-              dataKey="browser"
+              dataKey="priority"
               type="category"
               tickLine={false}
               tickMargin={10}
@@ -78,12 +56,12 @@ export function PriorityChart({ data }: { data: PriorityData[] }) {
                 chartConfig[value as keyof typeof chartConfig]?.label
               }
             />
-            <XAxis dataKey="visitors" type="number" hide />
+            <XAxis dataKey="count" type="number" hide />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="visitors" layout="vertical" radius={5} />
+            <Bar dataKey="count" layout="vertical" radius={5} />
           </BarChart>
         </ChartContainer>
       </CardContent>

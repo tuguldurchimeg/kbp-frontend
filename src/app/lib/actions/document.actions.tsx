@@ -51,7 +51,6 @@ export const createDocumentFromTemplate = async (
   const payload: DocumentCreateParams = {
     title: overrides?.title || `${template.attributes.title} (Copy)`,
     content: template.attributes.content,
-    // you can spread more fields if needed
     ...overrides,
   };
 

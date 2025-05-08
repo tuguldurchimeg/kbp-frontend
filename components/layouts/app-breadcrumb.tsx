@@ -20,7 +20,6 @@ export function AppBreadcrumb() {
   const locale = useLocale();
   const t = useTranslations("MENUS");
 
-  // Translations for known segments
   const labelMap: Record<string, string> = {
     workspaces: t("workspaces"),
     documents: t("documents"),
@@ -49,7 +48,7 @@ export function AppBreadcrumb() {
 
   return (
     <header className="bg-background/80 flex shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 justify-between">
-      <div className="flex items-center gap-2 px-4">
+      <div className="flex items-center gap-0.5 px-4">
         <Tooltip>
           <TooltipTrigger asChild>
             <SidebarTrigger className="-ml-1" />
@@ -59,7 +58,7 @@ export function AppBreadcrumb() {
           </TooltipContent>
         </Tooltip>
         <Separator orientation="vertical" className="mr-2 h-4" />
-        <Breadcrumb>
+        <Breadcrumb className="mt-0.5">
           <BreadcrumbList>
             {breadcrumbItems.map((segment, index) => (
               <React.Fragment key={segment.href}>
@@ -68,7 +67,10 @@ export function AppBreadcrumb() {
                   {index === breadcrumbItems.length - 1 ? (
                     <BreadcrumbPage>{segment.name}</BreadcrumbPage>
                   ) : (
-                    <BreadcrumbLink href={segment.href}>
+                    <BreadcrumbLink
+                      href={segment.href}
+                      className="hidden md:block"
+                    >
                       {segment.name}
                     </BreadcrumbLink>
                   )}

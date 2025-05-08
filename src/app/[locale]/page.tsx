@@ -1,8 +1,8 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import CreateWorkspaceForm from "@/components/@workspace/WorkspaceCreateForm";
-import WorkspaceCardList from "@/components/@workspace/WorkspaceCardList";
+import CreateWorkspaceForm from "@/components/@workspace/workspace-create-form";
+import WorkspaceCardList from "@/components/@workspace/workspace-card-list";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Rocket, Search, Zap } from "lucide-react";
 import SiteLayout from "@/components/layouts/SiteLayout";
-import QuickAccessDocumentList from "@/components/@workspace/QuickAccessDocumentList";
+import QuickAccessDocumentList from "@/components/@workspace/quick-access-document-list";
 import { SearchResults } from "@/components/SearchResult";
 import { useState } from "react";
 import {
@@ -47,7 +47,7 @@ export default function Home() {
             open={open}
             onOpenChange={(isOpen) => {
               setOpen(isOpen);
-              if (!isOpen) setQuery(""); // Reset query when closing
+              if (!isOpen) setQuery("");
             }}
           >
             <PopoverTrigger asChild>
