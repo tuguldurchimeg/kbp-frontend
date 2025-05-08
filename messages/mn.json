@@ -204,5 +204,21 @@
     "description": "Ажилчдын хандалтыг удирдахын тулд түлхүүр үг үүсгэнэ үү",
     "columns": "Баганууд",
     "empty": "Түлхүүр үг олдсонгүй."
+  },
+  "Editor": {
+    "add_image": "Зураг нэмэх",
+    "add_table": "Хүснэгт нэмэх",
+    "table_actions": "Хүснэгтийн үйлдлүүд",
+    "add_column_before": "Багана зүүн нэмэх",
+    "add_column_after": "Багана баруун нэмэх",
+    "delete_column": "Багана устгах",
+    "add_row_before": "Мөр дээр нэмэх",
+    "add_row_after": "Мөр доор нэмэх",
+    "delete_row": "Мөр устгах",
+    "delete_table": "Хүснэгтийг устгах",
+    "toggle_header_row": "Мөр тодруулах",
+    "toggle_header_column": "Багана тодруулах",
+    "merge_cells": "Нэгтгэх",
+    "split-cells": "Салгах"
   }
 }

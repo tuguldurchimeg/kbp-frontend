@@ -19,18 +19,18 @@ const chartData = [
 
 const chartConfig = {
   visitors: {
-    label: "Visitors",
+    label: "High",
   },
   chrome: {
-    label: "Chrome",
+    label: "Low",
     color: "var(--color-chart-1)",
   },
   safari: {
-    label: "Safari",
+    label: "Medium",
     color: "var(--color-chart-2)",
   },
   firefox: {
-    label: "Firefox",
+    label: "Very High",
     color: "var(--color-chart-3)",
   },
   edge: {

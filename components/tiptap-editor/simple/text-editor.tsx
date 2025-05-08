@@ -63,6 +63,14 @@ import { MarkButton } from "@/components/tiptap-ui/mark-button";
 import { TextAlignButton } from "@/components/tiptap-ui/text-align-button";
 import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button";
 import { TextAlignPopover } from "@/components/tiptap-ui/text-align-button/text-align-popover";
+import Table from "@tiptap/extension-table";
+import TableRow from "@tiptap/extension-table-row";
+import TableHeader from "@tiptap/extension-table-header";
+import TableCell from "@tiptap/extension-table-cell";
+import Document from "@tiptap/extension-document";
+import Gapcursor from "@tiptap/extension-gapcursor";
+import Paragraph from "@tiptap/extension-paragraph";
+import Text from "@tiptap/extension-text";
 
 // --- Icons ---
 import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon";
@@ -108,6 +116,8 @@ import {
 import { TAG_PLACEHOLDERS } from "@/constants/kb-placeholder-data";
 import { TAG_COLORS } from "@/constants/color.constants";
 import clsx from "clsx";
+import InsertTableButton from "@/components/tiptap-ui/table";
+import TableBubbleMenu from "@/components/tiptap-ui/table/table-bubble-menu";
 
 type Props = {
   document: DocumentItem;
@@ -178,7 +188,11 @@ const MainToolbarContent = ({
       <ToolbarSeparator />
 
       <ToolbarGroup>
-        <ImageUploadButton text="Add" />
+        <ImageUploadButton text="" />
+      </ToolbarGroup>
+
+      <ToolbarGroup>
+        <InsertTableButton />
       </ToolbarGroup>
 
       <Spacer />
@@ -320,6 +334,19 @@ export function SimpleEditor({ document }: Props) {
       }),
       TrailingNode,
       Link.configure({ openOnClick: false }),
+      Table.configure({
+        resizable: true,
+        HTMLAttributes: {
+          class: "tiptap-table",
+        },
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
+      Document,
+      Text,
+      Gapcursor,
+      Paragraph,
     ],
     content: "",
   });
@@ -673,6 +700,8 @@ export function SimpleEditor({ document }: Props) {
             </div>
           </BubbleMenu>
         )}
+
+        {editor && <TableBubbleMenu editor={editor} />}
 
         <EditorContent
           editor={editor}

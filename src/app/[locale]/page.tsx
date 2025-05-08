@@ -16,9 +16,21 @@ import { Input } from "@/components/ui/input";
 import { Rocket, Search, Zap } from "lucide-react";
 import SiteLayout from "@/components/layouts/SiteLayout";
 import QuickAccessDocumentList from "@/components/@workspace/QuickAccessDocumentList";
+import { SearchResults } from "@/components/SearchResult";
+import { useState } from "react";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import clsx from "clsx";
 
 export default function Home() {
   const t = useTranslations();
+  const [query, setQuery] = useState("");
+  const hasQuery = query.trim().length > 0;
+  const [open, setOpen] = useState(false);
+
   return (
     <PrivateRoute>
       <SiteLayout>
@@ -31,15 +43,46 @@ export default function Home() {
               {t("Home.subtitle")}
             </p>
           </div>
-          <div className="relative mt-4 mx-auto w-full max-w-md">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-              <Search className="w-4 h-4" />
-            </span>
-            <Input
-              placeholder={t("Home.search_placeholder")}
-              className="pl-10 pr-20 py-6 text-sm bg-background text-foreground placeholder:text-muted-foreground rounded-xl"
-            />
-          </div>
+          <Popover
+            open={open}
+            onOpenChange={(isOpen) => {
+              setOpen(isOpen);
+              if (!isOpen) setQuery(""); // Reset query when closing
+            }}
+          >
+            <PopoverTrigger asChild>
+              <div
+                className={clsx(
+                  "relative mt-4 mx-auto w-full",
+                  hasQuery ? "max-w-4xl z-30" : "max-w-md"
+                )}
+              >
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                  <Search className="w-4 h-4" />
+                </span>
+                <Input
+                  placeholder={t("Home.search_placeholder")}
+                  className="pl-10 pr-20 py-6 text-sm bg-background text-foreground placeholder:text-muted-foreground rounded-xl"
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setQuery(value);
+                    setOpen(value.trim().length > 0);
+                  }}
+                  value={query}
+                />
+              </div>
+            </PopoverTrigger>
+            {hasQuery && (
+              <div className="fixed inset-0 z-10 backdrop-blur-sm bg-black/10" />
+            )}
+
+            <PopoverContent
+              align="center"
+              className="w-550 max-w-4xl mt-2 p-2 rounded-xl backdrop-blur-sm  border bg-background shadow-lg max-h-100 overflow-auto"
+            >
+              <SearchResults />
+            </PopoverContent>
+          </Popover>
         </section>
         <main className="flex flex-col gap-10 p-6 max-w-7xl mx-auto">
           {/* Workspaces */}

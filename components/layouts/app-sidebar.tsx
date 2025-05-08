@@ -29,7 +29,6 @@ import {
 import { Plus, FolderPlus, FileText, Building2 } from "lucide-react";
 import Link from "next/link";
 import CategoryDocuments from "./category-documents-tree";
-import { Separator } from "@/components/ui/separator";
 import { NavHeader } from "./app-sidebar-header";
 import { useParams, usePathname } from "next/navigation";
 import {
@@ -76,7 +75,6 @@ export function AppSidebar() {
       <SidebarHeader>
         <NavHeader />
       </SidebarHeader>
-      <Separator />
       <SidebarContent>
         {/* Static Menus */}
         {staticMenus.map((section) => (
