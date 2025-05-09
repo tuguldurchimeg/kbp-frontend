@@ -258,5 +258,16 @@
     "description": "Ажилчдын хандалтыг удирдах",
     "columns": "Баганууд",
     "noData": "Хоосон"
+  },
+  "NewDocumentDialog": {
+    "title": "Шинэ нийтлэл үүсгэх",
+    "field_title": "Гарчиг",
+    "field_title_placeholder": "Баримтын гарчиг",
+    "field_template": "Загвараас эхлэх",
+    "template_placeholder": "Загвар сонгох",
+    "blank_option": "Хоосон үүсгэх",
+    "cancel": "Болих",
+    "create": "Үүсгэх",
+    "creating": "Үүсгэж байна..."
   }
 }

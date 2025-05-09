@@ -257,5 +257,16 @@
     "description": "Manage employee accesses",
     "columns": "Columns",
     "noData": "No data"
+  },
+  "NewDocumentDialog": {
+    "title": "Create New Document",
+    "field_title": "Title",
+    "field_title_placeholder": "Document title",
+    "field_template": "Start from Template",
+    "template_placeholder": "Select Template",
+    "blank_option": "Blank Document",
+    "cancel": "Cancel",
+    "create": "Create",
+    "creating": "Creating..."
   }
 }

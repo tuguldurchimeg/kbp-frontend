@@ -25,6 +25,7 @@ import {
 import { useParams, useRouter } from "next/navigation";
 import { DocumentItem } from "@/types/document";
 import { ROUTE } from "@/constants/route.constants";
+import { useTranslations } from "next-intl";
 
 export default function NewDocumentDialog({
   open,
@@ -35,6 +36,8 @@ export default function NewDocumentDialog({
   onOpenChange: (value: boolean) => void;
   categoryId: string;
 }) {
+  const t = useTranslations("NewDocumentDialog");
+
   const [title, setTitle] = useState("");
   const [templates, setTemplates] = useState<DocumentItem[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
@@ -69,7 +72,6 @@ export default function NewDocumentDialog({
           });
 
       onOpenChange(false);
-      console.log("doc ", res);
       router.push(ROUTE.BASE.DOCUMENT.DETAIL(workspaceId, res.id));
     } catch (err) {
       console.error("Failed to create document", err);
@@ -82,16 +84,16 @@ export default function NewDocumentDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New Document</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="title">Title</Label>
+            <Label htmlFor="title">{t("field_title")}</Label>
             <Input
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Document title"
+              placeholder={t("field_title_placeholder")}
               required
               className="mt-1"
             />
@@ -99,7 +101,7 @@ export default function NewDocumentDialog({
 
           <div>
             <Label htmlFor="template" className="mb-1">
-              Start from Template
+              {t("field_template")}
             </Label>
             <Select
               value={selectedTemplate || "blank"}
@@ -108,11 +110,10 @@ export default function NewDocumentDialog({
               }
             >
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select Template" />
+                <SelectValue placeholder={t("template_placeholder")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="blank">Blank Document</SelectItem>{" "}
-                {/* Using "blank" as the value */}
+                <SelectItem value="blank">{t("blank_option")}</SelectItem>
                 {templates.map((template) => (
                   <SelectItem key={template.id} value={template.id}>
                     {template.attributes.title}
@@ -129,10 +130,10 @@ export default function NewDocumentDialog({
               onClick={() => onOpenChange(false)}
               disabled={loading}
             >
-              Cancel
+              {t("cancel")}
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Creating..." : "Create"}
+              {loading ? t("creating") : t("create")}
             </Button>
           </div>
         </form>
