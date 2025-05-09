@@ -22,30 +22,31 @@ import {
   createDocumentFromTemplate,
   createDocument,
 } from "@/src/app/lib/actions/document.actions";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { DocumentItem } from "@/types/document";
+import { ROUTE } from "@/constants/route.constants";
 
 export default function NewDocumentDialog({
   open,
   onOpenChange,
-  categoryId, // Added categoryId prop
+  categoryId,
 }: {
   open: boolean;
   onOpenChange: (value: boolean) => void;
-  categoryId: string; // Category ID for the document creation
+  categoryId: string;
 }) {
   const [title, setTitle] = useState("");
   const [templates, setTemplates] = useState<DocumentItem[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
+  const params = useParams();
   const router = useRouter();
+  const workspaceId = params.workspaceId as string;
 
   useEffect(() => {
     if (open) {
       getTemplateDocuments().then(setTemplates).catch(console.error);
     } else {
-      // Reset form when dialog is closed
       setTitle("");
       setSelectedTemplate(null);
     }
@@ -55,15 +56,21 @@ export default function NewDocumentDialog({
     e.preventDefault();
     setLoading(true);
     try {
-      const doc = selectedTemplate
+      const res = selectedTemplate
         ? await createDocumentFromTemplate(selectedTemplate, {
             title,
             category_id: categoryId,
+            workspace_id: workspaceId,
           })
-        : await createDocument({ title, category_id: categoryId });
+        : await createDocument({
+            title,
+            category_id: categoryId,
+            workspace_id: workspaceId,
+          });
 
-      onOpenChange(false); // Close on success
-      router.push(`/documents/${doc.id}`);
+      onOpenChange(false);
+      console.log("doc ", res);
+      router.push(ROUTE.BASE.DOCUMENT.DETAIL(workspaceId, res.id));
     } catch (err) {
       console.error("Failed to create document", err);
     } finally {

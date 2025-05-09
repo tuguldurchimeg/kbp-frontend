@@ -9,9 +9,10 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { getColumns } from "./table-columns";
-import { TAG_PLACEHOLDERS } from "@/constants/kb-placeholder-data";
+import { ACCESS_PLACEHOLDERS } from "@/constants/kb-placeholder-data";
 
 import {
   Table,
@@ -22,7 +23,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { usePathname } from "next/navigation";
 import { ChevronDownIcon } from "lucide-react";
 import {
   DropdownMenu,
@@ -32,12 +32,13 @@ import {
 } from "../ui/dropdown-menu";
 
 export default function TemplateTable() {
+  const t = useTranslations("UserAccess");
+
   const [rowSelection, setRowSelection] = useState({});
-  const pathname = usePathname();
-  const columns = getColumns(pathname);
+  const columns = getColumns();
 
   const table = useReactTable({
-    data: TAG_PLACEHOLDERS,
+    data: ACCESS_PLACEHOLDERS,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -55,13 +56,13 @@ export default function TemplateTable() {
     <div className="p-6 space-y-6 max-w-screen-xl mx-auto">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-semibold">Tags</h2>
-          <p className="text-muted-foreground">Create and manage tags</p>
+          <h2 className="text-2xl font-semibold">{t("title")}</h2>
+          <p className="text-muted-foreground">{t("description")}</p>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              Columns <ChevronDownIcon className="ml-1 h-4 w-4" />
+              {t("columns")} <ChevronDownIcon className="ml-1 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -121,7 +122,7 @@ export default function TemplateTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  No templates found.
+                  {t("noTemplates")}
                 </TableCell>
               </TableRow>
             )}

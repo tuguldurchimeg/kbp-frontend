@@ -13,7 +13,7 @@ export const ROUTE = {
       DETAIL: (workspaceId: string, id: string) =>
         `${workspaceBase(id)}/issues/${id}`,
     },
-
+    FILES: (workspaceId: string) => `${workspaceBase(workspaceId)}/files`,
     DOCUMENT: {
       DETAIL: (workspaceId: string, id: string) =>
         `${workspaceBase(workspaceId)}/documents/${id}`,

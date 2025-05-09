@@ -12,16 +12,21 @@ import { useTranslations } from "next-intl";
 import { ReportResponse } from "@/types/issue";
 import { useStatusAndPriorityMaps } from "@/constants/issue.constants";
 
-export function PriorityChart({ data }: { data: ReportResponse }) {
+type PriorityData = {
+  priority: string;
+  count: number;
+};
+
+export function PriorityChart({ data }: { data: PriorityData[] }) {
   const t = useTranslations("Main");
   const { PRIORITY_MAP } = useStatusAndPriorityMaps();
 
-  const chartData = data.by_priority.map((item) => ({
+  const chartData = data.map((item) => ({
     priority: item.priority,
     count: item.count,
   }));
 
-  const chartConfig = data.by_priority.reduce((acc, item) => {
+  const chartConfig = data.reduce((acc, item) => {
     const priority = PRIORITY_MAP[item.priority as keyof typeof PRIORITY_MAP];
     acc[item.priority] = {
       label: priority.label,

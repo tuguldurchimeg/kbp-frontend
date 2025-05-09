@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState } from "react";
@@ -7,36 +6,35 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { createGlossary } from "@/src/app/lib/actions/glossary.actions";
+import { useParams } from "next/navigation";
 
-export default function TagCreateForm() {
+export default function GlossaryCreateForm() {
   const [name, setName] = useState("");
-  const [content, setDescription] = useState("");
+  const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const params = useParams();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // try {
-    //   const res = await fetch("/api/tags", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ name, description }),
-    //   });
+    try {
+      await createGlossary({
+        name,
+        content,
+        workspace_id: params.workspaceId as string,
+      });
 
-    //   if (!res.ok) throw new Error("Failed to create tag");
-
-    //   const data = await res.json();
-    //   toast.success("Tag created successfully!");
-    //   setName("");
-    //   setDescription("");
-    //   // You can emit an event or refresh data here if needed
-    // } catch () {
-    // } finally {
-    //   setLoading(false);
-    // }
+      toast.success("Glossary created successfully!");
+      setName("");
+      setContent("");
+    } catch (error) {
+      toast.error("Failed to create glossary.");
+      console.error("Glossary creation error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -47,7 +45,7 @@ export default function TagCreateForm() {
           id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="name"
+          placeholder="Name"
           required
           className="mt-1"
         />
@@ -58,8 +56,8 @@ export default function TagCreateForm() {
         <Textarea
           id="content"
           value={content}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="content"
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="Content"
           className="mt-1"
         />
       </div>

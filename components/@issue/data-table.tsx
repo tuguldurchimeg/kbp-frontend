@@ -28,6 +28,7 @@ import {
   VisibilityState,
   SortingState,
   Row,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -47,10 +48,17 @@ import {
   DropdownMenuItem,
   DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDownIcon, MoreVerticalIcon, Plus } from "lucide-react";
+import {
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronsLeftIcon,
+  ChevronsRightIcon,
+  MoreVerticalIcon,
+  Plus,
+} from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { IssueItem } from "@/types/issue";
-import { ISSUEDATA } from "@/constants/kb-placeholder-data";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -62,6 +70,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { CreateIssueDialog } from "./create-edit-dialog";
+import { getIssues } from "@/src/app/lib/actions/issue.actions";
 
 function DraggableRow({ row }: { row: Row<IssueItem> }) {
   const { setNodeRef, transform, transition } = useSortable({
@@ -93,7 +102,21 @@ export function DataTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const pathname = usePathname();
 
-  const data = ISSUEDATA;
+  const [data, setData] = React.useState<IssueItem[]>([]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getIssues();
+        setData(res);
+      } catch (error) {
+        console.error("Failed to fetch issues:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const sensors = useSensors(
     useSensor(MouseSensor),
     useSensor(TouchSensor),
@@ -106,6 +129,11 @@ export function DataTable() {
   const handleOpenDialog = () => {
     setIsDialogOpen(true);
   };
+  const t = useTranslations("Main");
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
 
   const columns: ColumnDef<IssueItem>[] = [
     {
@@ -127,7 +155,7 @@ export function DataTable() {
     },
     {
       accessorKey: "attributes.title",
-      header: "Title",
+      header: t("table.name"),
       cell: ({ row }) => (
         <Link
           href={`${pathname}/${row.original.id}`}
@@ -139,7 +167,7 @@ export function DataTable() {
     },
     {
       accessorKey: "attributes.status",
-      header: "Status",
+      header: t("table.status"),
       cell: ({ getValue }) => {
         const status = getValue<string>();
         const statusInfo = STATUS_MAP[status as keyof typeof STATUS_MAP];
@@ -161,7 +189,7 @@ export function DataTable() {
     },
     {
       accessorKey: "attributes.priority",
-      header: "Priority",
+      header: t("table.priority"),
       cell: ({ getValue }) => {
         const priority = getValue<string>();
         const priorityInfo =
@@ -174,8 +202,8 @@ export function DataTable() {
       },
     },
     {
-      accessorKey: "attributes.type",
-      header: "Type",
+      accessorKey: "attributes.issue_type",
+      header: t("table.type"),
       cell: ({ getValue }) => {
         const type = getValue<string>();
         const typeInfo = TYPE_MAP[type as keyof typeof TYPE_MAP];
@@ -195,7 +223,7 @@ export function DataTable() {
     },
     {
       accessorKey: "attributes.created_by",
-      header: "Created By",
+      header: t("table.created_by"),
       cell: ({ row }) => {
         const user = row.original.attributes.created_by.data.attributes;
         return (
@@ -215,13 +243,15 @@ export function DataTable() {
     },
     {
       accessorKey: "attributes.assignees",
-      header: "Assignees",
+      header: t("table.assignees"),
       cell: ({ row }) => {
         const assignees = row.original.attributes.assignees.data;
+        const visible = assignees.slice(0, 1);
+        const remaining = assignees.length - visible.length;
 
         return (
-          <div className="flex items-center gap-1">
-            {assignees.map((a) => (
+          <div className="flex items-center gap-0.5">
+            {visible.map((a) => (
               <Avatar
                 key={a.id}
                 className="h-6 w-6 rounded-full"
@@ -238,21 +268,29 @@ export function DataTable() {
                 </AvatarFallback>
               </Avatar>
             ))}
+
+            {remaining > 0 && (
+              <div
+                className="h-6 w-6 rounded-full bg-muted text-xs flex items-center justify-center"
+                title={`${remaining} more`}
+              >
+                +{remaining}
+              </div>
+            )}
           </div>
         );
       },
     },
-
     {
       accessorKey: "attributes.documents_count",
-      header: "Docs",
+      header: t("table.docs"),
       cell: ({ getValue }) => (
         <Badge variant="outline">{getValue<number>()}</Badge>
       ),
     },
     {
       accessorKey: "attributes.updated_at",
-      header: "Last Updated",
+      header: t("table.updated_at"),
       cell: ({ getValue }) => {
         const date = getValue<string>();
         return date
@@ -288,13 +326,16 @@ export function DataTable() {
       rowSelection,
       columnVisibility,
       sorting,
+      pagination,
     },
     onRowSelectionChange: setRowSelection,
     onColumnVisibilityChange: setColumnVisibility,
     onSortingChange: setSorting,
+    onPaginationChange: setPagination,
     getRowId: (row) => row.id.toString(),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     enableRowSelection: true,
   });
 
@@ -307,8 +348,6 @@ export function DataTable() {
       console.log("Reordered data:", newData);
     }
   };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const t = useTranslations("Main");
 
   return (
     <div className="w-full space-y-4">
@@ -354,6 +393,53 @@ export function DataTable() {
               </TableBody>
             </Table>
           </SortableContext>
+          {/* pagination */}
+          <div className="flex items-center justify-end pt-4">
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-muted-foreground">
+                {t("page")} {table.getState().pagination.pageIndex + 1} {" / "}
+                {table.getPageCount()}
+              </span>
+              <div className="flex gap-1">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={() => table.setPageIndex(0)}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  <ChevronsLeftIcon className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  <ChevronLeftIcon className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                >
+                  <ChevronRightIcon className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                  disabled={!table.getCanNextPage()}
+                >
+                  <ChevronsRightIcon className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
         </DndContext>
       </div>
       <div className="flex items-center justify-end">

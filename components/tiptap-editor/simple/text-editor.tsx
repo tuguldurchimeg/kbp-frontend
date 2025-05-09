@@ -93,7 +93,7 @@ import {
 } from "@/components/tiptap-ui/textcolor-popover/textcolor-popover";
 import { FileCheck, Palette, Pencil, Plus } from "lucide-react";
 import { DocumentItem, TagCreateParams, TagItem } from "@/types/document";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"; // adjust the path if needed
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import { Button as CNButton } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -119,6 +119,7 @@ import clsx from "clsx";
 import InsertTableButton from "@/components/tiptap-ui/table";
 import TableBubbleMenu from "@/components/tiptap-ui/table/table-bubble-menu";
 import { ResizableImage } from "tiptap-extension-resizable-image";
+import { createTag } from "@/src/app/lib/actions/tag.actions";
 type Props = {
   document: DocumentItem;
 };
@@ -369,7 +370,6 @@ export function SimpleEditor({ document }: Props) {
           const isEnoughSpace =
             windowSize.height - cursorCoords.top - toolbarHeight > 0;
 
-          // If not enough space, scroll until the cursor is the middle of the screen
           if (!isEnoughSpace) {
             const scrollY =
               cursorCoords.top - windowSize.height / 2 + toolbarHeight;
@@ -451,12 +451,12 @@ export function SimpleEditor({ document }: Props) {
   };
 
   const handleCreateTag = (name: string) => {
-    // const newTag: TagCreateParams = {
-    //   name,
-    //   description: "",
-    //   color: "bg-purple-100 text-purple-800",
-    // };
-    // createTag(newTag);
+    const newTag: TagCreateParams = {
+      name,
+      description: "",
+      color: "bg-purple-100 text-purple-800",
+    };
+    createTag(newTag);
     console.log(" Creating tag:", name);
   };
 

@@ -95,7 +95,7 @@ export const placeholderData = {
       id: "file-1",
       type: "file",
       attributes: {
-        name: "UI-Заавар.pdf",
+        name: "UI-Заавар",
         url: "https://s3.amazonaws.com/bucket-name/UI-Guide.pdf",
         size: "1.2 MB",
         fileType: "pdf",
@@ -125,7 +125,7 @@ export const placeholderData = {
       id: "file-2",
       type: "file",
       attributes: {
-        name: "Брендийн хөрөнгүүд.zip",
+        name: "Брендийн хөрөнгүүд",
         url: "https://s3.amazonaws.com/bucket-name/BrandAssets.zip",
         size: "8.4 MB",
         fileType: "xls",
@@ -155,7 +155,7 @@ export const placeholderData = {
       id: "file-3",
       type: "file",
       attributes: {
-        name: "Баримт бичгийн тойм.md",
+        name: "Баримт бичгийн тойм",
         url: "https://s3.amazonaws.com/bucket-name/DocsOverview.md",
         size: "350 KB",
         fileType: "pdf",
@@ -185,7 +185,7 @@ export const placeholderData = {
       id: "file-4",
       type: "file",
       attributes: {
-        name: "Судалгааны тэмдэглэл.docx",
+        name: "Судалгааны тэмдэглэл",
         url: "https://s3.amazonaws.com/bucket-name/ResearchNotes.docx",
         size: "2.7 MB",
         fileType: "docx",

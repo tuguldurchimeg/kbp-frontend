@@ -28,6 +28,7 @@ export function AppBreadcrumb() {
     tags: t("tags"),
     glossaries: t("glossary"),
     issues: t("issues"),
+    files: t("files"),
     account: t("user_access"),
     profile: t("user_access"),
   };

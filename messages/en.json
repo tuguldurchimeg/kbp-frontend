@@ -125,7 +125,10 @@
     "workspace": "WORKSPACE",
     "menu": "Menu",
     "backToWorkspaces": "Back to workspaces",
-    "editWorkspace": "Edit workspace"
+    "editWorkspace": "Edit workspace",
+    "loading": "Loading...",
+    "empty": "Not found.",
+    "title": "Title"
   },
   "LOGIN": {
     "title": "Sign In",
@@ -152,7 +155,8 @@
     "knowledge_base": "Knowledge Base",
     "issues": "Issues",
     "documents": "Documents",
-    "workspaces": "Workspaces"
+    "workspaces": "Workspaces",
+    "files": "Files"
   },
   "Workspace": {
     "documents": "Documents",
@@ -175,11 +179,27 @@
     "status_breakdown": "Status Breakdown",
     "by_assignee": "By assignee",
     "by_status": "By status",
-    "by_priority": "by priority"
+    "by_priority": "By priority",
+    "issue": "Issue",
+    "table": {
+      "name": "Title",
+      "status": "Status",
+      "priority": "Priority",
+      "type": "Category",
+      "created_by": "Created by",
+      "assignees": "Assignees",
+      "docs": "Documents",
+      "created_at": "Created at",
+      "updated_at": "Updated at",
+      "description": "Description"
+    },
+    "columns": "Columns",
+    "empty": "No data.",
+    "page": "Page"
   },
   "Home": {
     "title": "How can we help you?",
-    "subtitle": "Find support articles, setup guides, troubleshooting, FAQs and more.",
+    "subtitle": "Search for help, guides, and solutions here",
     "browse": "Browse articles",
     "whats_new": "See what’s new",
     "search_placeholder": "Search the knowledge base..."
@@ -203,15 +223,11 @@
     "title": "Template documents",
     "description": "Create and manage predefined templates",
     "columns": "Columns",
-    "loading": "Loading templates...",
-    "empty": "No templates found.",
     "new": "Create new template"
   },
   "Glossaries": {
     "title": "Glossaries",
-    "description": "Create and manage glossaries",
-    "columns": "Columns",
-    "empty": "No glossaries found."
+    "description": "Create and manage glossaries"
   },
   "Tags": {
     "title": "Tags",
@@ -234,5 +250,11 @@
     "toggle_header_column": "Toggle header column",
     "merge_cells": "Merge cells",
     "split_cells": "Split cells"
+  },
+  "UserAccess": {
+    "title": "User access",
+    "description": "Manage employee accesses",
+    "columns": "Columns",
+    "noData": "No data"
   }
 }

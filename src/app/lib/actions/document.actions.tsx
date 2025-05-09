@@ -16,7 +16,7 @@ export const createDocument = async (
   params: DocumentCreateParams
 ): Promise<DocumentItem> => {
   const res = await api.post(URI.DOCUMENTS, params);
-  return res.data;
+  return res.data.data;
 };
 
 export const updateDocument = async (
@@ -39,7 +39,7 @@ export const getQuickAccessDocuments = async (): Promise<DocumentItem[]> => {
 // Get only template documents
 export const getTemplateDocuments = async (): Promise<DocumentItem[]> => {
   const res = await api.get(`${URI.DOCUMENTS}?is_template=true`);
-  return res.data;
+  return res.data.data;
 };
 
 export const createDocumentFromTemplate = async (
@@ -51,9 +51,10 @@ export const createDocumentFromTemplate = async (
   const payload: DocumentCreateParams = {
     title: overrides?.title || `${template.attributes.title} (Copy)`,
     content: template.attributes.content,
+    workspace_id: template.attributes.workspace_id,
     ...overrides,
   };
 
   const res = await api.post(URI.DOCUMENTS, payload);
-  return res.data;
+  return res.data.data;
 };

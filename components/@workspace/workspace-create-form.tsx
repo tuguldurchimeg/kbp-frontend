@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createWorkspace } from "@/src/app/lib/actions/workspace.actions"; // Import the createWorkspace API action
+import { createWorkspace } from "@/src/app/lib/actions/workspace.actions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
+import { ROUTE } from "@/constants/route.constants";
 
 const schema = z.object({
   name: z.string().min(1, "Workspace name is required"),
@@ -35,17 +36,15 @@ export default function CreateWorkspaceForm() {
   });
 
   const handleSubmit = async (values: FormValues) => {
-    try {
-      await createWorkspace({
-        ...values,
-        description: values.description || "",
-      });
-
-      form.reset();
-      router.push("/workspaces");
-    } catch (err) {
-      console.error("Failed to create workspace:", err);
-    }
+    createWorkspace({
+      ...values,
+      description: values.description || "",
+    })
+      .then((res) => {
+        form.reset();
+        router.push(ROUTE.WORKSPACES.WORKSPACE(res.id));
+      })
+      .catch();
   };
 
   return (

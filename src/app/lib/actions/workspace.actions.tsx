@@ -11,7 +11,7 @@ export const createWorkspace = async (
   params: WorkspaceCreateParams
 ): Promise<WorkspaceItem> => {
   const res = await api.post(URI.WORKSPACES, params);
-  return res.data;
+  return res.data.data;
 };
 
 export const updateWorkspace = async (
@@ -19,7 +19,7 @@ export const updateWorkspace = async (
   params: Partial<WorkspaceCreateParams>
 ): Promise<WorkspaceItem> => {
   const res = await api.put(`${URI.WORKSPACES}/${id}`, params);
-  return res.data;
+  return res.data.data;
 };
 
 export const deleteWorkspace = async (id: string): Promise<void> => {

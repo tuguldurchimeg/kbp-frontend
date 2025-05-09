@@ -11,7 +11,7 @@ import {
 } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 import { getColumns } from "./table-column";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 import {
   Table,
@@ -35,24 +35,24 @@ import {
   createDocument,
 } from "@/src/app/lib/actions/document.actions";
 import { DocumentItem } from "@/types/document";
-import { DOC_TEMPLATES } from "@/constants/kb-placeholder-data";
 import { useTranslations } from "next-intl";
 
 export default function TemplateTable() {
   const [rowSelection, setRowSelection] = useState({});
-  const [data, setData] = useState<DocumentItem[]>(DOC_TEMPLATES);
+  const [data, setData] = useState<DocumentItem[]>();
   const [loading, setLoading] = useState(true);
 
   const pathname = usePathname();
   const router = useRouter();
   const columns = getColumns(pathname);
-  const t = useTranslations("Templates");
+  const t = useTranslations("SYSCOMMON");
+  const params = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const docs = await getTemplateDocuments();
-        // setData(docs);
+        const docs = await getTemplateDocuments();
+        setData(docs);
       } catch (err) {
         console.error("Failed to fetch templates:", err);
       } finally {
@@ -68,6 +68,7 @@ export default function TemplateTable() {
       const newDoc = await createDocument({
         title: "Untitled Template",
         is_template: true,
+        workspace_id: params.workspaceId as string,
       });
 
       router.push(`${pathname}/${newDoc.id}`);
@@ -77,7 +78,7 @@ export default function TemplateTable() {
   };
 
   const table = useReactTable({
-    data,
+    data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -95,7 +96,7 @@ export default function TemplateTable() {
     <div className="p-6 space-y-6 max-w-screen-xl mx-auto">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-semibold">{t("title")}</h2>
+          <h2 className="text-2xl font-semibold">{t("name")}</h2>
           <p className="text-muted-foreground">{t("description")}</p>
         </div>
 

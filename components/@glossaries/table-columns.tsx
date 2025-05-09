@@ -5,8 +5,11 @@ import { GlossaryItem } from "@/types/document";
 import { formatDistanceToNow } from "date-fns";
 import { Checkbox } from "@/components/ui/checkbox";
 import GlossaryRowActions from "./glossary-row-actions";
+import { useTranslations } from "next-intl";
 
-export function getColumns(): ColumnDef<GlossaryItem>[] {
+export function getColumns(
+  t: ReturnType<typeof useTranslations>
+): ColumnDef<GlossaryItem>[] {
   return [
     {
       id: "select",
@@ -35,15 +38,15 @@ export function getColumns(): ColumnDef<GlossaryItem>[] {
     },
     {
       accessorKey: "attributes.name",
-      header: "Name",
+      header: t("Main.table.name"),
       cell: ({ row }) => {
         const title = row.original.attributes.name;
         return <span className="font-medium">{title}</span>;
       },
     },
     {
-      accessorKey: "attributes.content",
-      header: "Content",
+      accessorKey: "attributes.description",
+      header: t("Main.table.description"),
       cell: ({ row }) => {
         const content = row.original.attributes.content;
         return (
@@ -56,7 +59,7 @@ export function getColumns(): ColumnDef<GlossaryItem>[] {
     {
       id: "createdAt",
       accessorFn: (row) => row.attributes.created_at,
-      header: "Created at",
+      header: t("Main.table.created_at"),
       cell: ({ getValue }) => {
         const updatedAt = getValue<string>();
         return updatedAt

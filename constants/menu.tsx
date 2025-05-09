@@ -1,6 +1,5 @@
 "use client";
 
-import { getCategories } from "@/src/app/lib/actions/category.actions";
 import { ROUTE } from "./route.constants";
 import {
   User,
@@ -11,9 +10,11 @@ import {
   Folder,
   FileQuestion,
   LucideIcon,
+  Paperclip,
 } from "lucide-react";
 import { CategoryItem } from "@/types/document";
 import { useTranslations } from "next-intl";
+import { getWorkspace } from "@/src/app/lib/actions/workspace.actions";
 
 export type MenuItemChildren = {
   id?: string;
@@ -41,7 +42,6 @@ export type MenuSection = {
 //   documents: "text-indigo-600",
 // };
 
-// This function is now dynamic so should be called inside a React component
 export function useSidebarMenus(workspaceId: string) {
   const t = useTranslations("MENUS");
 
@@ -82,6 +82,11 @@ export function useSidebarMenus(workspaceId: string) {
         icon: FileQuestion,
       },
       {
+        label: t("files"),
+        uri: ROUTE.BASE.FILES(workspaceId),
+        icon: Paperclip,
+      },
+      {
         label: t("documents"),
         icon: Folder,
         collapsible: true,
@@ -93,25 +98,14 @@ export function useSidebarMenus(workspaceId: string) {
   return { staticMenus, dynamicMenu };
 }
 
-// Recursive category → menu transformation
 const buildCategoryTree = (
   categories: CategoryItem[],
-  workspaceId: string,
-  depth = 0,
-  maxDepth = 2
+  workspaceId: string
 ): MenuItemChildren[] => {
-  if (depth > maxDepth) return [];
-
-  return categories.map((category) => {
-    const subcategories =
-      category.attributes?.subcategories?.data && depth < maxDepth
-        ? buildCategoryTree(
-            category.attributes.subcategories.data,
-            workspaceId,
-            depth + 1,
-            maxDepth
-          )
-        : [];
+  return categories?.map((category) => {
+    const subcategories = category.attributes?.subcategories?.data
+      ? buildCategoryTree(category.attributes.subcategories?.data, workspaceId)
+      : [];
 
     const documents =
       category.attributes?.documents?.data.map((doc) => ({
@@ -131,10 +125,25 @@ const buildCategoryTree = (
   });
 };
 
-// Fetch and build document-related menu items (used by AppSidebar)
 export const generateDocumentMenus = async (
   workspaceId: string
 ): Promise<MenuItemChildren[]> => {
-  const categories = await getCategories(workspaceId);
-  return buildCategoryTree(categories, workspaceId);
+  const workspace = await getWorkspace(workspaceId);
+
+  // Documents not assigned to a category
+  const uncategorizedDocuments =
+    workspace.attributes?.documents?.data?.map((doc) => ({
+      label: doc.attributes.title,
+      uri: ROUTE.BASE.DOCUMENT.DETAIL(workspaceId, doc.id),
+      icon: Dot,
+      id: doc.id,
+    })) || [];
+
+  // Categorized documents
+  const categorizedTree = buildCategoryTree(
+    workspace.attributes.categories?.data || [],
+    workspaceId
+  );
+
+  return [...categorizedTree, ...uncategorizedDocuments];
 };

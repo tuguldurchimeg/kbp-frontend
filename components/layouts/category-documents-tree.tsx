@@ -53,9 +53,6 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
     item.id?.toString() === documentIdFromUrl &&
     !item.collapsible;
 
-  console.log("item id: ", item);
-  console.log("documentIdFromUrl: ", documentIdFromUrl);
-
   const handleRename = async () => {
     if (!newName || newName === item.label) return;
     try {

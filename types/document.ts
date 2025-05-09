@@ -51,6 +51,7 @@ export type DocumentCreateParams = {
   title: string;
   content?: JSONContent;
   category_id?: string;
+  workspace_id: string;
   is_template?: boolean;
 };
 
@@ -88,13 +89,16 @@ export type GlossaryItem = {
   attributes: {
     name: string;
     content: string;
+    workspace_id: string;
     created_at: string;
+    updated_at: string;
   };
 };
 
 export type GlossaryCreateParams = {
   name: string;
   content: string;
+  workspace_id: string;
 };
 
 export type GlossaryUpdateParams = {
@@ -141,4 +145,8 @@ export type AccessCreateParams = {
 export type AccessUpdateParams = {
   id: string;
   params: AccessCreateParams;
+};
+
+export type ListParams = {
+  workspace_id: string;
 };

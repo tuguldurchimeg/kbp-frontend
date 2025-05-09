@@ -25,7 +25,7 @@ export function FileResults({ data }: { data: FileItem[] }) {
   );
 }
 
-function FileCard({ file }: { file: FileItem }) {
+export function FileCard({ file }: { file: FileItem }) {
   const documents = file.attributes.documents?.data ?? [];
   const firstDoc = documents[0];
   const restDocs = documents.slice(1);
@@ -75,7 +75,10 @@ function FileCard({ file }: { file: FileItem }) {
                   +{restDocs.length}
                 </span>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-45 px-2 space-y-1 text-xs text-muted-foreground">
+              <DropdownMenuContent
+                className="w-45 px-2 space-y-1 text-xs text-muted-foreground"
+                align="start"
+              >
                 {restDocs.map((doc) => (
                   <DropdownMenuItem
                     key={doc.id}

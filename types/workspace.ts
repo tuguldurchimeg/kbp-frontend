@@ -1,4 +1,4 @@
-import { CategoryItem } from "./document";
+import { CategoryItem, DocumentItem } from "./document";
 
 export type WorkspaceItem = {
   id: string;
@@ -8,6 +8,7 @@ export type WorkspaceItem = {
     description: string;
     imageUrl?: string;
     categories?: { data: CategoryItem[] };
+    documents?: { data: DocumentItem[] };
   };
 };
 

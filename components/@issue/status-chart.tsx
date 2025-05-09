@@ -10,23 +10,28 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useTranslations } from "next-intl";
-import { ReportResponse } from "@/types/issue";
 import { useStatusAndPriorityMaps } from "@/constants/issue.constants";
+import { Cell } from "recharts";
 
-export function StatusChart({ data }: { data: ReportResponse }) {
+type StatusData = {
+  status: string;
+  count: number;
+};
+
+export function StatusChart({ data }: { data: StatusData[] }) {
   const t = useTranslations("Main");
   const { STATUS_MAP } = useStatusAndPriorityMaps();
 
-  const chartData = data.by_status.map((item) => ({
+  const chartData = data.map((item) => ({
     status: item.status,
     count: item.count,
   }));
 
-  const chartConfig = data.by_status.reduce((acc, item) => {
+  const chartConfig = data.reduce((acc, item, index) => {
     const status = STATUS_MAP[item.status as keyof typeof STATUS_MAP];
     acc[item.status] = {
       label: status.label,
-      color: status.color,
+      color: `hsl(var(--chart-${index + 1}))`,
     };
     return acc;
   }, {} as ChartConfig);
@@ -54,7 +59,17 @@ export function StatusChart({ data }: { data: ReportResponse }) {
               innerRadius={40}
               outerRadius={65}
               strokeWidth={5}
-            />
+            >
+              {chartData.map((entry, index) => (
+                <Cell
+                  key={`slice-${entry.status}`}
+                  fill={
+                    chartConfig[entry.status]?.color
+                    // `hsl(var(--chart-${index}))`
+                  }
+                />
+              ))}
+            </Pie>
           </PieChart>
         </ChartContainer>
       </CardContent>

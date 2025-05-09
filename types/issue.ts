@@ -35,5 +35,5 @@ export type ReportResponse = {
   by_status: { status: string; count: number }[];
   by_priority: { priority: string; count: number }[];
   by_type: { type: string; count: number }[];
-  by_assignee: { user: UserItem; count: number }[];
+  by_issue_assignee: { user: { data: UserItem }; count: number }[];
 };

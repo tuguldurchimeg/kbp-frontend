@@ -60,10 +60,11 @@ export function AppSidebar() {
       toast.error("Failed to load documents");
     }
   };
-  const cleanPath = pathname.replace(/^\/(en|mn)/, ""); // adjust locale codes as needed
+  const cleanPath = pathname.replace(/^\/(en|mn)/, "");
 
   useEffect(() => {
     fetchDocumentMenus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceId]);
 
   return (

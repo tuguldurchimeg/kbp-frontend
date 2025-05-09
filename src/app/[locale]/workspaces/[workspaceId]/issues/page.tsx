@@ -12,10 +12,6 @@ import { ReportResponse } from "@/types/issue";
 
 export default function Page() {
   const t = useTranslations("Main");
-  const userData = [
-    { id: "1", firstname: "Dorj", lastname: "Tugulgur" },
-    { id: "2", firstname: "Bat", lastname: "Bayr" },
-  ];
   const params = useParams();
   const [data, setData] = React.useState<ReportResponse>();
   const [isLoading, setIsLoading] = React.useState(true);
@@ -24,6 +20,7 @@ export default function Page() {
       .then((result) => {
         setData(result);
         setIsLoading(false);
+        console.log("data ", result);
       })
       .catch();
   }, [params.workspaceId]);
@@ -35,16 +32,16 @@ export default function Page() {
   return (
     <main className="w-full px-6 space-y-8">
       <h2 className="text-xl font-semibold">{t("issues")}</h2>
-      <DataTable />
       <section className="space-y-6">
         {data && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <UserChart data={userData} />
-            <StatusChart data={data} />
-            <PriorityChart data={data} />
+            <UserChart data={data.by_issue_assignee} />
+            <StatusChart data={data.by_status} />
+            <PriorityChart data={data.by_priority} />
           </div>
         )}
       </section>
+      <DataTable />
     </main>
   );
 }

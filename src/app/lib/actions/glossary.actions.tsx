@@ -1,17 +1,23 @@
 import api from "../../../../utils/api";
 import { URI } from "@/constants/uri.constants";
-import { GlossaryCreateParams, GlossaryItem } from "@/types/document";
+import {
+  GlossaryCreateParams,
+  GlossaryItem,
+  ListParams,
+} from "@/types/document";
 
-export const getGlossaries = async (): Promise<GlossaryItem[]> => {
-  const res = await api.get(URI.GLOSSARIES);
-  return res.data;
+export const getGlossaries = async (
+  params: ListParams
+): Promise<GlossaryItem[]> => {
+  const res = await api.get(URI.GLOSSARIES, { params: params });
+  return res.data.data;
 };
 
 export const createGlossary = async (
   params: GlossaryCreateParams
 ): Promise<GlossaryItem> => {
   const res = await api.post(URI.GLOSSARIES, params);
-  return res.data;
+  return res.data.data;
 };
 
 export const updateGlossary = async (
@@ -19,7 +25,7 @@ export const updateGlossary = async (
   params: Partial<GlossaryCreateParams>
 ): Promise<GlossaryItem> => {
   const res = await api.put(`${URI.GLOSSARIES}/${id}`, params);
-  return res.data;
+  return res.data.data;
 };
 
 export const deleteGlossary = async (id: string): Promise<void> => {

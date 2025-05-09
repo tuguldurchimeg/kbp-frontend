@@ -8,10 +8,8 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { useState } from "react";
-
-import { getColumns } from "./table-columns";
-import { GLOSSARY_PLACEHOLDERS } from "@/constants/kb-placeholder-data";
+import { useEffect, useState } from "react";
+import { getGlossaries } from "@/src/app/lib/actions/glossary.actions";
 
 import {
   Table,
@@ -28,16 +26,36 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import { useTranslations } from "next-intl";
+import { GlossaryItem } from "@/types/document";
+import { getColumns } from "./table-columns";
+import { useParams } from "next/navigation";
 
 export default function TemplateTable() {
+  const [data, setData] = useState<GlossaryItem[]>([]);
   const [rowSelection, setRowSelection] = useState({});
-  const columns = getColumns();
-  const t = useTranslations("Glossaries");
+  const t = useTranslations();
+  const params = useParams();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const glossaries = await getGlossaries({
+          workspace_id: params.workspaceId as string,
+        });
+        setData(glossaries);
+      } catch (error) {
+        console.error("Failed to fetch glossaries", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const columns = getColumns(t);
 
   const table = useReactTable({
-    data: GLOSSARY_PLACEHOLDERS,
+    data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -55,13 +73,13 @@ export default function TemplateTable() {
     <div className="p-6 space-y-6 max-w-screen-xl mx-auto">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-semibold">{t("title")}</h2>
-          <p className="text-muted-foreground">{t("description")}</p>
+          <h2 className="text-2xl font-semibold">{t("Glossaries.title")}</h2>
+          <p className="text-muted-foreground">{t("Glossaries.description")}</p>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              {t("columns")} <ChevronDownIcon className="ml-1 h-4 w-4" />
+              {t("Main.columns")} <ChevronDownIcon className="ml-1 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -121,7 +139,7 @@ export default function TemplateTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  {t("empty")}
+                  {t("Main.empty")}
                 </TableCell>
               </TableRow>
             )}

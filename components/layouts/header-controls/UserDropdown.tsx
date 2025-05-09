@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -13,10 +14,22 @@ import {
 import { BadgeCheck, Bookmark, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CURRENT_USER } from "@/constants/kb-placeholder-data";
+import { logoutService } from "@/src/app/lib/actions/auth.actions";
+import { ROUTE } from "@/constants/route.constants";
 
 export default function UserDropdown() {
-  const user = CURRENT_USER;
   const t = useTranslations("SYSCOMMON");
+  const router = useRouter();
+  const user = CURRENT_USER;
+
+  const handleLogout = async () => {
+    try {
+      await logoutService();
+      router.push(ROUTE.LOGIN);
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
 
   return (
     <DropdownMenu>
@@ -42,19 +55,22 @@ export default function UserDropdown() {
       >
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <BadgeCheck />
+            <BadgeCheck className="mr-2 h-4 w-4" />
             {t("account")}
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <Bookmark />
+            <Bookmark className="mr-2 h-4 w-4" />
             {t("saved")}
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-red-700">
-          <LogOut className="text-red-700" />
+        <DropdownMenuItem
+          onSelect={handleLogout}
+          className="text-red-700 focus:bg-red-50"
+        >
+          <LogOut className="mr-2 h-4 w-4 text-red-700" />
           {t("logout")}
         </DropdownMenuItem>
       </DropdownMenuContent>

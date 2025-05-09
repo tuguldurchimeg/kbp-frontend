@@ -32,15 +32,25 @@ export default function WorkspaceDetailPage() {
     return <p className="p-6">Ачааллаж байна...</p>;
   }
 
-  return (
-    <main className="flex flex-col gap-10 px-4 w-full mx-10">
-      <WorkspaceSummary
-        categories={workspace.attributes.categories?.data || []}
-      />
+  const uncategorizedDocuments = workspace.attributes.documents?.data || [];
+  const categories = workspace.attributes.categories?.data || [];
 
-      {/* Full-width section for categories */}
-      <section className="w-full space-y-12 max-w-6xl mx-auto">
-        {workspace.attributes.categories?.data.map((category) => (
+  return (
+    <main className="flex flex-col gap-10 px-4 w-full mx-auto max-w-7xl">
+      <WorkspaceSummary categories={categories} />
+
+      <section className="space-y-12">
+        {uncategorizedDocuments.length > 0 && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {uncategorizedDocuments.map((doc) => (
+                <DocumentCard key={doc.id} document={doc} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {categories.map((category) => (
           <div key={category.id} className="space-y-4">
             <h3 className="text-lg font-semibold text-muted-foreground flex items-center gap-2">
               <FolderOpen className="w-4 h-4" />

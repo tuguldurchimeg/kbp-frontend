@@ -1,4 +1,5 @@
 import {
+  AccessItem,
   CategoryItem,
   DocumentItem,
   GlossaryItem,
@@ -342,7 +343,8 @@ export const ISSUEDATA: IssueItem[] = [
       description: "",
       status: "in_progress", // in_progress
       priority: "medium", // medium
-      type: "problem",
+      issue_type: "problem",
+      workspace_id: "2",
       created_by: {
         data: {
           id: "1",
@@ -375,7 +377,8 @@ export const ISSUEDATA: IssueItem[] = [
       description: "",
       status: "open", // open
       priority: "low",
-      type: "question",
+      issue_type: "question",
+      workspace_id: "2",
       created_by: {
         data: {
           id: "1",
@@ -409,7 +412,8 @@ export const ISSUEDATA: IssueItem[] = [
         "Хэрэглэгчид шүүлтүүртэй хайлтаар зөрүүтэй үр дүн гарч байгааг мэдээлсэн.",
       status: "closed", // closed
       priority: "high", // high
-      type: "problem",
+      issue_type: "problem",
+      workspace_id: "2",
       created_by: {
         data: {
           id: "1",
@@ -492,6 +496,8 @@ export const GLOSSARY_PLACEHOLDERS: GlossaryItem[] = [
       name: "API",
       content:
         "API (Аппликейшн Програм Интерфэйс) нь програмууд хооронд харилцах боломжийг олгодог.",
+      workspace_id: "2",
+      updated_at: "2024-11-05T14:30:00Z",
       created_at: "2024-11-01T10:00:00Z",
     },
   },
@@ -502,7 +508,9 @@ export const GLOSSARY_PLACEHOLDERS: GlossaryItem[] = [
       name: "Фронтенд",
       content:
         "Фронтенд бол хэрэглэгч шууд харьцдаг вэбсайт эсвэл аппликейшны хэсэг юм.",
+      workspace_id: "2",
       created_at: "2024-11-05T14:30:00Z",
+      updated_at: "2024-11-05T14:30:00Z",
     },
   },
   {
@@ -512,7 +520,72 @@ export const GLOSSARY_PLACEHOLDERS: GlossaryItem[] = [
       name: "Бэкэнд",
       content:
         "Бэкэнд нь сервер талын бизнесийн логик, өгөгдлийн сангийн ажиллагааг хариуцдаг хэсэг юм.",
+      workspace_id: "2",
+      updated_at: "2024-11-05T14:30:00Z",
       created_at: "2024-11-10T08:45:00Z",
+    },
+  },
+];
+
+export const ACCESS_PLACEHOLDERS: AccessItem[] = [
+  {
+    id: "access-1",
+    type: "access",
+    attributes: {
+      role: "admin",
+      user: {
+        data: {
+          id: "user-1",
+          type: "user",
+          attributes: {
+            uid: "uid-001",
+            email: "alice@example.com",
+            firstname: "Alice",
+            lastname: "Smith",
+            avatar: "https://example.com/avatar1.png",
+          },
+        },
+      },
+    },
+  },
+  {
+    id: "access-2",
+    type: "access",
+    attributes: {
+      role: "editor",
+      user: {
+        data: {
+          id: "user-2",
+          type: "user",
+          attributes: {
+            uid: "uid-002",
+            email: "bob@example.com",
+            firstname: "Bob",
+            lastname: "Johnson",
+            avatar: "https://example.com/avatar2.png",
+          },
+        },
+      },
+    },
+  },
+  {
+    id: "access-3",
+    type: "access",
+    attributes: {
+      role: "viewer",
+      user: {
+        data: {
+          id: "user-3",
+          type: "user",
+          attributes: {
+            uid: "uid-003",
+            email: "carol@example.com",
+            firstname: "Carol",
+            lastname: "Davis",
+            avatar: "https://example.com/avatar3.png",
+          },
+        },
+      },
     },
   },
 ];

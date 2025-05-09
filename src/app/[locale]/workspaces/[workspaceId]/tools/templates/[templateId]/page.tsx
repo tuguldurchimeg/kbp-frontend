@@ -4,71 +4,43 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { SimpleEditor } from "@/components/tiptap-editor/simple/text-editor";
 import { DocumentItem } from "@/types/document";
-import content from "@/components/tiptap-editor/simple/data/content.json";
-import { CURRENT_USER } from "@/constants/kb-placeholder-data";
+import { getDocument } from "@/src/app/lib/actions/document.actions";
 
 export default function Page() {
   const params = useParams();
   const id = params?.templateId as string;
 
   const [document, setDocument] = useState<DocumentItem | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDocument = async () => {
-      // Replace this with real API call later
-      const mockDatabase: DocumentItem[] = [
-        {
-          id: "1",
-          type: "document",
-          attributes: {
-            title: "Sample Doc",
-            content: content,
-            tags: {
-              data: [
-                {
-                  id: "1",
-                  type: "tag",
-                  attributes: {
-                    name: "Intro",
-                    description: "Introductory content",
-                    color: "#C62828", // Red
-                  },
-                },
-                {
-                  id: "2",
-                  type: "tag",
-                  attributes: {
-                    name: "Tip",
-                    description: "Helpful tip",
-                    color: "#2E7D32", // Green}
-                  },
-                },
-              ],
-            },
-            created_at: "2025-01-01T08:00:00Z",
-            updated_at: "2025-02-21T10:00:00Z",
-            user: { data: CURRENT_USER },
-            category: {
-              data: {
-                id: "1",
-                type: "category",
-                attributes: { name: "Category 1" },
-              },
-            },
-          },
-        },
-      ];
-
-      const found = mockDatabase.find((doc) => doc.id === id);
-      setDocument(found || null);
+      try {
+        if (!id) return;
+        const doc = await getDocument(id);
+        setDocument(doc);
+      } catch (err) {
+        console.error("Failed to fetch document:", err);
+        setDocument(null);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    if (id) fetchDocument();
+    fetchDocument();
   }, [id]);
+
+  if (loading) {
+    return <div className="text-muted-foreground">Loading...</div>;
+  }
+
+  if (!document) {
+    return <div className="text-destructive">Document not found.</div>;
+  }
 
   return (
     <div className="w-full max-w-3xl">
-      {document && <SimpleEditor document={document} />}
+      <SimpleEditor document={document} />
     </div>
   );
 }

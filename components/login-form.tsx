@@ -10,8 +10,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ROUTE } from "@/constants/route.constants";
-import { CircularProgress } from "@mui/material";
 import { useTranslations } from "next-intl";
+import { Loader } from "lucide-react";
 
 export function LoginForm({
   className,
@@ -75,7 +75,7 @@ export function LoginForm({
               </div>
               <Button type="submit" className="w-full" disabled={authLoading}>
                 {authLoading ? (
-                  <CircularProgress size={24} className="text-white" />
+                  <Loader className="h-5 w-5 animate-spin text-white mx-auto" />
                 ) : (
                   t("login")
                 )}

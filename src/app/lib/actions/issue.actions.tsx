@@ -9,7 +9,7 @@ import {
 
 export async function getIssues(): Promise<IssueItem[]> {
   const res = await api.get(URI.ISSUES);
-  return res.data;
+  return res.data.data;
 }
 
 export async function getIssue(id: string): Promise<IssueItem> {
@@ -28,7 +28,7 @@ export const createIssue = async (
   params: IssueCreateParams
 ): Promise<IssueItem> => {
   const res = await api.post(URI.ISSUES, params);
-  return res.data;
+  return res.data.data;
 };
 
 export const updateIssue = async (
@@ -36,7 +36,7 @@ export const updateIssue = async (
   params: Partial<IssueCreateParams>
 ): Promise<IssueItem> => {
   const res = await api.put(`${URI.ISSUES}/${id}`, params);
-  return res.data;
+  return res.data.data;
 };
 
 export async function deleteIssue(id: string): Promise<void> {
