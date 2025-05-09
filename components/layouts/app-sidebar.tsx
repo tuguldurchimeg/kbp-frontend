@@ -26,7 +26,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { Plus, FolderPlus, FileText, Building2 } from "lucide-react";
+import { Plus, FolderPlus, FileText, ArrowLeftFromLine } from "lucide-react";
 import Link from "next/link";
 import CategoryDocuments from "./category-documents-tree";
 import { NavHeader } from "./app-sidebar-header";
@@ -42,6 +42,7 @@ import NewDocumentDialog from "@/components/@documents/new-document-dialog";
 import { createCategory } from "@/src/app/lib/actions/category.actions";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 export function AppSidebar() {
   const params = useParams();
@@ -49,7 +50,7 @@ export function AppSidebar() {
   const pathname = usePathname();
   const [newDocDialogOpen, setNewDocDialogOpen] = useState(false);
   const [documentMenus, setDocumentMenus] = useState<MenuItemChildren[]>([]);
-
+  const t = useTranslations("SYSCOMMON");
   const { staticMenus, dynamicMenu } = useSidebarMenus(workspaceId);
 
   const fetchDocumentMenus = async () => {
@@ -227,8 +228,8 @@ export function AppSidebar() {
       <SidebarFooter className="gap-0.5">
         <Link href={ROUTE.ROOT}>
           <SidebarMenuButton className="w-full justify-start gap-2">
-            <Building2 className="h-4 w-4" />
-            Back to Workspaces
+            <ArrowLeftFromLine className="h-4 w-4" />
+            {t("backToWorkspaces")}
           </SidebarMenuButton>
         </Link>
       </SidebarFooter>

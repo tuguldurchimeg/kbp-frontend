@@ -6,6 +6,7 @@
   "SYSCOMMON": {
     "yes": "Тийм",
     "no": "Үгүй",
+    "new": "Шинэ",
     "apply": "Тохируулах",
     "confirm": "OK",
     "cancel": "Болих",

@@ -6,6 +6,7 @@
   "SYSCOMMON": {
     "yes": "Yes",
     "no": "No",
+    "new": "New",
     "apply": "Apply",
     "confirm": "OK",
     "cancel": "Cancel",
