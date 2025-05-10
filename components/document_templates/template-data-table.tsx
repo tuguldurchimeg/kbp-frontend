@@ -45,7 +45,7 @@ export default function TemplateTable() {
   const pathname = usePathname();
   const router = useRouter();
   const columns = getColumns(pathname);
-  const t = useTranslations("SYSCOMMON");
+  const t = useTranslations();
   const params = useParams();
 
   useEffect(() => {
@@ -96,8 +96,8 @@ export default function TemplateTable() {
     <div className="p-6 space-y-6 max-w-screen-xl mx-auto">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-semibold">{t("name")}</h2>
-          <p className="text-muted-foreground">{t("description")}</p>
+          <h2 className="text-2xl font-semibold">{t("Templates.title")}</h2>
+          <p className="text-muted-foreground">{t("Templates.description")}</p>
         </div>
 
         <Button

@@ -129,7 +129,10 @@
     "editWorkspace": "Edit workspace",
     "loading": "Loading...",
     "empty": "Not found.",
-    "title": "Title"
+    "title": "Title",
+    "created_at": "Created at",
+    "updated_successfully": "Updated successfully",
+    "update_failed": "Failed to update"
   },
   "LOGIN": {
     "title": "Sign In",
@@ -234,7 +237,7 @@
     "title": "Tags",
     "description": "Create and manage employee access with tags",
     "columns": "Columns",
-    "empty": "No tags found."
+    "empty": "No tags found"
   },
   "Editor": {
     "add_image": "Add image",

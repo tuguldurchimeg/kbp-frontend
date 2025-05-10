@@ -6,50 +6,56 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { CategoryItem } from "@/types/document";
+import { WorkspaceItem } from "@/types/workspace";
 import { useTranslations } from "next-intl";
+import WorkspaceEditForm from "./workspace-edit-form";
 
 export default function WorkspaceSummary({
-  categories,
+  workspace,
+  onUpdateWorkspace,
 }: {
-  categories: CategoryItem[];
+  workspace: WorkspaceItem;
+  onUpdateWorkspace: (values: { name: string; description?: string }) => void;
 }) {
   const t = useTranslations("Workspace");
 
-  const totalDocs = categories.reduce(
-    (sum, cat) => sum + (cat.attributes.documents?.data.length || 0),
-    0
-  );
+  const categories = workspace.attributes.categories?.data;
+  const categoryDocsCount = categories?.reduce((sum, cat) => {
+    const docs = cat.attributes.documents?.data ?? [];
+    return sum + docs.length;
+  }, 0);
+
+  const workspaceDocsCount = workspace.attributes.documents?.data?.length ?? 0;
+  const totalDocs = (categoryDocsCount ?? 0) + workspaceDocsCount;
 
   return (
     <Card>
       <CardContent className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 sm:gap-10 p-4 sm:p-6">
-        {/* Text Section */}
         <div className="flex-1">
           <CardTitle className="text-xl sm:text-2xl">
-            {t("summary_title")}
+            {workspace.attributes.name}
+            <WorkspaceEditForm
+              workspace={workspace}
+              onSubmit={onUpdateWorkspace}
+            />
           </CardTitle>
           <CardDescription className="text-sm sm:text-base">
-            {t("summary_desc")}
+            {workspace.attributes.description}
           </CardDescription>
         </div>
 
-        <div className="flex justify-around">
-          {/* Categories Count */}
-          <div className="flex flex-col items-start sm:items-center">
-            <p className="text-sm text-muted-foreground">
-              {t("total_categories")}
-            </p>
-            <p className="text-2xl font-bold">{categories.length}</p>
-          </div>
+        <div className="flex flex-col items-start sm:items-center">
+          <p className="text-sm text-muted-foreground">
+            {t("total_categories")}
+          </p>
+          <p className="text-2xl font-bold">{categories?.length}</p>
+        </div>
 
-          {/* Documents Count */}
-          <div className="flex flex-col items-start sm:items-center">
-            <p className="text-sm text-muted-foreground">
-              {t("total_documents")}
-            </p>
-            <p className="text-2xl font-bold">{totalDocs}</p>
-          </div>
+        <div className="flex flex-col items-start sm:items-center">
+          <p className="text-sm text-muted-foreground">
+            {t("total_documents")}
+          </p>
+          <p className="text-2xl font-bold">{totalDocs}</p>
         </div>
       </CardContent>
     </Card>

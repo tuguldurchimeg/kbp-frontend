@@ -29,7 +29,7 @@ export function AppBreadcrumb() {
     glossaries: t("glossary"),
     issues: t("issues"),
     files: t("files"),
-    account: t("user_access"),
+    user_access: t("user_access"),
     profile: t("user_access"),
   };
 

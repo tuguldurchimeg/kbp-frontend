@@ -22,9 +22,9 @@ export const ROUTE = {
   TOOLS: {
     USER_ACCESS: {
       ROOT: (workspaceId: string) =>
-        `${workspaceBase(workspaceId)}/tools/user-access`,
+        `${workspaceBase(workspaceId)}/tools/user_access`,
       DETAIL: (workspaceId: string, id: string) =>
-        `${workspaceBase(workspaceId)}/tools/user-access/${id}`,
+        `${workspaceBase(workspaceId)}/tools/user_access/${id}`,
     },
 
     TEMPLATES: {

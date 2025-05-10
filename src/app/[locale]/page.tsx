@@ -13,7 +13,7 @@ import {
 import PrivateRoute from "@/components/PrivateRoute";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Rocket, Search, Zap } from "lucide-react";
+import { Plus, Rocket, Search, Zap } from "lucide-react";
 import SiteLayout from "@/components/layouts/SiteLayout";
 import QuickAccessDocumentList from "@/components/@workspace/quick-access-document-list";
 import { SearchResults } from "@/components/SearchResult";
@@ -34,7 +34,7 @@ export default function Home() {
   return (
     <PrivateRoute>
       <SiteLayout>
-        <section className="bg-gradient-to-r from-[var(--gradient-from)] via-[var(--gradient-via)] to-[var(--gradient-to)] rounded-xl px-6 py-10 text-center space-y-6 shadow-sm border">
+        <section className="bg-gradient-to-r from-[var(--gradient-from)] via-[var(--gradient-via)] to-[var(--gradient-to)] rounded-b-xl px-6 py-10 text-center space-y-6 shadow-sm border">
           <div className="space-y-2">
             <h1 className="text-2xl md:text-3xl font-semibold">
               {t("Home.title")}
@@ -95,7 +95,9 @@ export default function Home() {
 
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button>+ {t("SYSCOMMON.create")}</Button>
+                  <Button>
+                    <Plus /> {t("SYSCOMMON.create")}
+                  </Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>

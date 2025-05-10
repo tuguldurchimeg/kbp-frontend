@@ -32,7 +32,7 @@ import { GlossaryItem } from "@/types/document";
 import { getColumns } from "./table-columns";
 import { useParams } from "next/navigation";
 
-export default function TemplateTable() {
+export default function GlossaryTable() {
   const [data, setData] = useState<GlossaryItem[]>([]);
   const [rowSelection, setRowSelection] = useState({});
   const t = useTranslations();

@@ -7,8 +7,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { Badge } from "../ui/badge";
 import TagRowActions from "./tag-row-actions";
+import { useTranslations } from "next-intl";
 
-export function getColumns(pathname: string): ColumnDef<TagItem>[] {
+export function getColumns(
+  pathname: string,
+  t: ReturnType<typeof useTranslations>
+): ColumnDef<TagItem>[] {
   return [
     {
       id: "select",
@@ -37,7 +41,7 @@ export function getColumns(pathname: string): ColumnDef<TagItem>[] {
     },
     {
       accessorKey: "attributes.title",
-      header: "Template",
+      header: t("SYSCOMMON.name"),
       cell: ({ row }) => {
         const title = row.original.attributes.name;
         const id = row.original.id;
@@ -54,7 +58,7 @@ export function getColumns(pathname: string): ColumnDef<TagItem>[] {
     {
       id: "createdAt",
       accessorFn: (row) => row.attributes.created_at,
-      header: "Created at",
+      header: t("SYSCOMMON.created_at"),
       cell: ({ getValue }) => {
         const updatedAt = getValue<string>();
         return updatedAt
@@ -65,7 +69,7 @@ export function getColumns(pathname: string): ColumnDef<TagItem>[] {
     },
     {
       id: "documents",
-      header: "Documents",
+      header: t("SYSCOMMON.documents"),
       cell: ({ row }) => {
         const documents = row.original.attributes.documents?.data;
         return <Badge variant="outline">{documents?.length}</Badge>;

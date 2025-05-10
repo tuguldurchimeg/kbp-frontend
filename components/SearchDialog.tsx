@@ -26,7 +26,7 @@ export function SearchDialog() {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <SidebarMenuButton className="w-full justify-start text-muted-foreground shadow-sm border">
-          <Search className="w-4 h-4 text-muted-foreground mr-2" />
+          <Search className="size-4 text-muted-foreground mr-2" />
           {t("title")}
         </SidebarMenuButton>
       </DialogTrigger>

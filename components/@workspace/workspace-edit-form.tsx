@@ -1,0 +1,120 @@
+"use client";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { WorkspaceItem } from "@/types/workspace";
+import { useState } from "react";
+import { useTranslations } from "next-intl";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Pencil } from "lucide-react";
+
+const schema = z.object({
+  name: z.string().min(1, "Workspace name is required"),
+  description: z.string().optional(),
+});
+type FormValues = z.infer<typeof schema>;
+interface Props {
+  workspace: WorkspaceItem;
+  onSubmit: (values: FormValues) => void;
+}
+
+export default function WorkspaceEditForm({ workspace, onSubmit }: Props) {
+  const form = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: workspace.attributes.name || "",
+      description: workspace.attributes.description || "",
+    },
+  });
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const t = useTranslations("SYSCOMMON");
+
+  const handleSubmit = async (values: FormValues) => {
+    setLoading(true);
+    try {
+      await onSubmit(values);
+      setOpen(false);
+    } catch (error) {
+      console.error("Update failed", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline" size="xs" className="ml-5">
+          <Pencil className="size-3" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{t("editWorkspace")}</DialogTitle>
+        </DialogHeader>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="grid gap-4 py-4"
+          >
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("name")}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={t("name")} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("description")}</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder={t("description")}
+                      className="w-full resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <DialogFooter className="pt-4">
+              <Button type="submit" loading={loading}>
+                {t("save")}
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
+  );
+}

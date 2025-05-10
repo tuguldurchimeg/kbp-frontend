@@ -90,10 +90,10 @@ export function FileCard({ file }: { file: FileItem }) {
                         doc.attributes.workspace_id,
                         doc.id
                       )}
-                      className="hover:underline break-words whitespace-normal text-sm"
+                      className="hover:underline break-words whitespace-normal"
                     >
-                      <div className="flex items-start gap-2">
-                        <FileText className="w-3 h-3 min-w-3 shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-2 text-xs">
+                        <FileText className="size-3 shrink-0 mt-0.5 text-primary" />
                         {doc.attributes.title}
                       </div>
                     </Link>
@@ -115,7 +115,7 @@ export function FileCard({ file }: { file: FileItem }) {
           download
           className="text-muted-foreground hover:text-foreground"
         >
-          <ArrowDownToLine className="w-4 h-4" />
+          <ArrowDownToLine className="size-3.5" />
         </Link>
       </CardFooter>
     </Card>

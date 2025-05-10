@@ -1,6 +1,10 @@
 import api from "@/utils/api";
 import { URI } from "@/constants/uri.constants";
-import { WorkspaceCreateParams, WorkspaceItem } from "@/types/workspace";
+import {
+  WorkspaceCreateParams,
+  WorkspaceItem,
+  WorkspaceUpdateParams,
+} from "@/types/workspace";
 
 export const getWorkspaces = async (): Promise<WorkspaceItem[]> => {
   const res = await api.get(URI.WORKSPACES);
@@ -15,10 +19,9 @@ export const createWorkspace = async (
 };
 
 export const updateWorkspace = async (
-  id: string,
-  params: Partial<WorkspaceCreateParams>
+  arg: WorkspaceUpdateParams
 ): Promise<WorkspaceItem> => {
-  const res = await api.put(`${URI.WORKSPACES}/${id}`, params);
+  const res = await api.put(`${URI.WORKSPACES}/${arg.id}`, arg.params);
   return res.data.data;
 };
 

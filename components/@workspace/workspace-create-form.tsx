@@ -36,10 +36,7 @@ export default function CreateWorkspaceForm() {
   });
 
   const handleSubmit = async (values: FormValues) => {
-    createWorkspace({
-      ...values,
-      description: values.description || "",
-    })
+    createWorkspace(values)
       .then((res) => {
         form.reset();
         router.push(ROUTE.WORKSPACES.WORKSPACE(res.id));

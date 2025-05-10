@@ -1,35 +1,56 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { FolderOpen } from "lucide-react";
 import DocumentCard from "@/components/@documents/document-card";
-import { getWorkspace } from "@/src/app/lib/actions/workspace.actions";
+import {
+  getWorkspace,
+  updateWorkspace,
+} from "@/src/app/lib/actions/workspace.actions";
 import { WorkspaceItem } from "@/types/workspace";
 import WorkspaceSummary from "@/components/@workspace/summary-chart";
+import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export default function WorkspaceDetailPage() {
   const params = useParams();
   const id = params.workspaceId;
   const [workspace, setWorkspace] = useState<WorkspaceItem | null>(null);
-
-  useEffect(() => {
+  const t = useTranslations();
+  const fetchWorkspace = useCallback(async () => {
     if (!id || typeof id !== "string") return;
-
-    const fetchWorkspace = async () => {
-      try {
-        const data = await getWorkspace(id);
-        setWorkspace(data);
-      } catch (error) {
-        console.error("Failed to load workspace", error);
-      }
-    };
-
-    fetchWorkspace();
+    try {
+      const data = await getWorkspace(id);
+      setWorkspace(data);
+    } catch (error) {
+      console.error("Failed to load workspace", error);
+    }
   }, [id]);
 
+  useEffect(() => {
+    fetchWorkspace();
+  }, [fetchWorkspace]);
+
+  const handleWorkspaceUpdate = async (updatedValues: {
+    name: string;
+    description?: string;
+  }) => {
+    if (!workspace) return;
+    try {
+      await updateWorkspace({
+        id: workspace.id,
+        params: updatedValues,
+      });
+      toast.success(t("SYSCOMMON.updated_successfully"));
+      fetchWorkspace();
+    } catch {
+      toast.error(t("SYSCOMMON.update_failed"));
+    }
+  };
+
   if (!workspace) {
-    return <p className="p-6">Ачааллаж байна...</p>;
+    return <p className="p-6">{t("SYSCOMMON.loading")}</p>;
   }
 
   const uncategorizedDocuments = workspace.attributes.documents?.data || [];
@@ -37,7 +58,10 @@ export default function WorkspaceDetailPage() {
 
   return (
     <main className="flex flex-col gap-10 px-4 w-full mx-auto max-w-7xl">
-      <WorkspaceSummary categories={categories} />
+      <WorkspaceSummary
+        workspace={workspace}
+        onUpdateWorkspace={handleWorkspaceUpdate}
+      />
 
       <section className="space-y-12">
         {uncategorizedDocuments.length > 0 && (

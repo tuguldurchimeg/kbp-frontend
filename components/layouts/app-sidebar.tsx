@@ -26,7 +26,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { Plus, FolderPlus, FileText, ArrowLeftFromLine } from "lucide-react";
+import { Plus, FolderPlus, FileText, ArrowBigLeftDash } from "lucide-react";
 import Link from "next/link";
 import CategoryDocuments from "./category-documents-tree";
 import { NavHeader } from "./app-sidebar-header";
@@ -228,7 +228,7 @@ export function AppSidebar() {
       <SidebarFooter className="gap-0.5">
         <Link href={ROUTE.ROOT}>
           <SidebarMenuButton className="w-full justify-start gap-2">
-            <ArrowLeftFromLine className="h-4 w-4" />
+            <ArrowBigLeftDash className="h-4 w-4" />
             {t("backToWorkspaces")}
           </SidebarMenuButton>
         </Link>

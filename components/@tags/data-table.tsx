@@ -34,8 +34,8 @@ import {
 export default function TemplateTable() {
   const [rowSelection, setRowSelection] = useState({});
   const pathname = usePathname();
-  const columns = getColumns(pathname);
-  const t = useTranslations("Tags");
+  const t = useTranslations();
+  const columns = getColumns(pathname, t);
 
   const table = useReactTable({
     data: TAG_PLACEHOLDERS,
@@ -56,13 +56,14 @@ export default function TemplateTable() {
     <div className="p-6 space-y-6 max-w-screen-xl mx-auto">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-semibold">{t("title")}</h2>
-          <p className="text-muted-foreground">{t("description")}</p>
+          <h2 className="text-2xl font-semibold">{t("Tags.title")}</h2>
+          <p className="text-muted-foreground">{t("Tags.description")}</p>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              {t("columns")} <ChevronDownIcon className="ml-1 h-4 w-4" />
+              {t("SYSCOMMON.columns")}{" "}
+              <ChevronDownIcon className="ml-1 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

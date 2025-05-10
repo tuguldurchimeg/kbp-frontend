@@ -1,5 +1,5 @@
 import {
-  ArrowLeftFromLine,
+  ArrowBigLeftDash,
   Building,
   ChevronsUpDown,
   Pencil,
@@ -54,15 +54,15 @@ export function NavHeader() {
             <DropdownMenuLabel className="text-xs text-muted-foreground">
               {t("menu")}
             </DropdownMenuLabel>
-            <DropdownMenuItem className="gap-2 p-2">
-              <Link href={ROUTE.ROOT} className="flex gap-2 items-center">
-                <ArrowLeftFromLine className="size-4 shrink-0" />
+            <Link href={ROUTE.ROOT} className="flex gap-2 items-center">
+              <DropdownMenuItem className="gap-2 p-2 w-full">
+                <ArrowBigLeftDash className="size-4 shrink-0" />
                 {t("backToWorkspaces")}
-              </Link>
-            </DropdownMenuItem>
+              </DropdownMenuItem>
+            </Link>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="gap-2 p-2">
-              <Pencil className="size-4" />
+              <Pencil className="size-3 mr-1" />
               {t("editWorkspace")}
             </DropdownMenuItem>
           </DropdownMenuContent>

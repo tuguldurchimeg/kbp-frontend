@@ -14,5 +14,10 @@ export type WorkspaceItem = {
 
 export type WorkspaceCreateParams = {
   name: string;
-  description: string;
+  description?: string;
+};
+
+export type WorkspaceUpdateParams = {
+  id: string;
+  params: WorkspaceCreateParams;
 };
