@@ -98,7 +98,7 @@ export const placeholderData = {
         name: "UI-Заавар",
         url: "https://s3.amazonaws.com/bucket-name/UI-Guide.pdf",
         size: "1.2 MB",
-        fileType: "pdf",
+        file_type: "pdf",
         documents: {
           data: [
             {
@@ -128,7 +128,7 @@ export const placeholderData = {
         name: "Брендийн хөрөнгүүд",
         url: "https://s3.amazonaws.com/bucket-name/BrandAssets.zip",
         size: "8.4 MB",
-        fileType: "xls",
+        file_type: "xls",
         documents: {
           data: [
             {
@@ -158,7 +158,7 @@ export const placeholderData = {
         name: "Баримт бичгийн тойм",
         url: "https://s3.amazonaws.com/bucket-name/DocsOverview.md",
         size: "350 KB",
-        fileType: "pdf",
+        file_type: "pdf",
         documents: {
           data: [
             {
@@ -188,7 +188,7 @@ export const placeholderData = {
         name: "Судалгааны тэмдэглэл",
         url: "https://s3.amazonaws.com/bucket-name/ResearchNotes.docx",
         size: "2.7 MB",
-        fileType: "docx",
+        file_type: "docx",
         documents: {
           data: [
             {

@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import DocumentCard from "@/components/@documents/document-card";
 import { getQuickAccessDocuments } from "@/src/app/lib/actions/document.actions";
 import { DocumentItem } from "@/types/document";
+import { useTranslations } from "next-intl";
 
 export default function QuickAccessDocumentList() {
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const t = useTranslations();
 
   useEffect(() => {
     const fetchDocs = async () => {
@@ -24,10 +26,12 @@ export default function QuickAccessDocumentList() {
     fetchDocs();
   }, []);
 
-  if (loading) return <p>Loading quick access documents...</p>;
+  if (loading) return <p>{t("SYSCOMMON.loading")}</p>;
 
   if (documents.length === 0) {
-    return <p className="text-muted-foreground text-sm">No documents found.</p>;
+    return (
+      <p className="text-muted-foreground text-sm">{t("SYSCOMMON.empty")}</p>
+    );
   }
 
   return (

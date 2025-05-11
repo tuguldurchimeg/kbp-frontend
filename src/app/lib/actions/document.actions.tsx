@@ -1,6 +1,11 @@
 import api from "../../../../utils/api";
 import { URI } from "@/constants/uri.constants";
-import { DocumentCreateParams, DocumentItem } from "@/types/document";
+import {
+  DocumentCreateParams,
+  DocumentItem,
+  PresignedUrlRequest,
+  PresignedUrlResponse,
+} from "@/types/document";
 
 export async function getDocuments(): Promise<DocumentItem[]> {
   const res = await api.get(URI.DOCUMENTS);
@@ -36,7 +41,6 @@ export const getQuickAccessDocuments = async (): Promise<DocumentItem[]> => {
   return res.data?.data;
 };
 
-// Get only template documents
 export const getTemplateDocuments = async (): Promise<DocumentItem[]> => {
   const res = await api.get(`${URI.DOCUMENTS}?is_template=true`);
   return res.data.data;
@@ -58,3 +62,29 @@ export const createDocumentFromTemplate = async (
   const res = await api.post(URI.DOCUMENTS, payload);
   return res.data.data;
 };
+
+/**
+ * Gets a presigned S3 upload URL from the backend.
+ */
+export async function getPresignedUploadUrl(
+  params: PresignedUrlRequest
+): Promise<PresignedUrlResponse> {
+  const res = await api.post(URI.S3_PRESIGNED_URL, params);
+  return res.data;
+}
+
+/**
+ * Uploads a file to S3 using the provided presigned URL.
+ */
+export async function uploadFileToS3(
+  file: File,
+  uploadUrl: string
+): Promise<void> {
+  await fetch(uploadUrl, {
+    method: "PUT",
+    headers: {
+      "Content-Type": file.type,
+    },
+    body: file,
+  });
+}

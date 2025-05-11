@@ -36,8 +36,9 @@ export type FileItem = {
     name: string;
     documents?: { data: DocumentItem[] };
     size: string;
-    fileType: string;
+    file_type: string;
     url: string;
+    uploader?: { data: UserItem };
   };
 };
 
@@ -150,3 +151,18 @@ export type AccessUpdateParams = {
 export type ListParams = {
   workspace_id: string;
 };
+
+// file
+export interface PresignedUrlRequest {
+  file_name: string;
+  mime_type: string;
+  content_type: "documents" | "avatar" | "files";
+  document_id?: string;
+}
+
+export interface PresignedUrlResponse {
+  upload_url: string;
+  file_url: string;
+  key: string;
+  file_name: string;
+}

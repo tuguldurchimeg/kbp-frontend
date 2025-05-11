@@ -10,6 +10,7 @@ export const URI = {
   RESET_PASSWORD: "/v1/passwords/reset",
   CHANGE_PASSWORD: "/v1/passwords/change",
   PROFILE: "/v1/employee/users/profile",
+  S3_PRESIGNED_URL: "/v1/s3/presigned_url",
 
   //
   WORKSPACES: "/v1/workspaces",

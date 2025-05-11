@@ -26,9 +26,7 @@ export default async function LocaleLayout({
   }
   return (
     <html lang={locale} className="h-full" suppressHydrationWarning>
-      <body
-        className={`h-full ${notoSans.variable} ${roboto.variable} antialiased`}
-      >
+      <body className={`${notoSans.variable} ${roboto.variable} antialiased`}>
         <NextIntlClientProvider locale={locale}>
           <AuthProvider>
             <ThemeProvider
