@@ -133,7 +133,14 @@
     "title": "Гарчиг",
     "created_at": "Үүссэн огноо",
     "updated_successfully": "Амжилттай шинэчлэгдлээ",
-    "update_failed": "Шинэчлэхэд алдаа гарлаа"
+    "update_failed": "Шинэчлэхэд алдаа гарлаа",
+    "upload_click_or_drag": "Дарж эсвэл чирж оруулна уу",
+    "upload_max_size": "Дээд файл хэмжээ {size}MB.",
+    "upload_no_file_selected": "Файл сонгогдоогүй байна",
+    "upload_too_many_files": "Хамгийн ихдээ {limit} файл оруулж болно",
+    "upload_too_large": "Файлын хэмжээ хэтэрсэн ({size}MB)",
+    "upload_failed": "Файл байршуулахад алдаа гарлаа",
+    "upload_progress": "{progress}%"
   },
   "LOGIN": {
     "title": "Нэвтрэх",

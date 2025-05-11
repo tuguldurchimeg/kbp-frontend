@@ -120,6 +120,7 @@ import InsertTableButton from "@/components/tiptap-ui/table";
 import TableBubbleMenu from "@/components/tiptap-ui/table/table-bubble-menu";
 import { ResizableImage } from "tiptap-extension-resizable-image";
 import { createTag } from "@/src/app/lib/actions/tag.actions";
+import { useTranslations } from "next-intl";
 type Props = {
   document: DocumentItem;
 };
@@ -300,7 +301,7 @@ export function SimpleEditor({ document }: Props) {
   const [isEditable, setEditable] = React.useState(false);
   const [isTitleEditing, setIsTitleEditing] = React.useState(false);
   const [title, setTitle] = React.useState<string>("");
-
+  const t = useTranslations("SYSCOMMON");
   const editor = useEditor({
     editable: isEditable,
     immediatelyRender: false,
@@ -330,7 +331,9 @@ export function SimpleEditor({ document }: Props) {
         accept: "image/*",
         maxSize: MAX_FILE_SIZE,
         limit: 3,
-        upload: handleImageUpload,
+        translate: t,
+        upload: (file, onProgress, signal) =>
+          handleImageUpload(file, document.id, onProgress, signal),
         onError: (error) => console.error("Upload failed:", error),
       }),
       ResizableImage,
@@ -415,7 +418,6 @@ export function SimpleEditor({ document }: Props) {
   const handleDocUpdate = async () => {
     if (!editor || !document) return;
     const updatedContent = editor.getJSON();
-    console.log("Updated content:", updatedContent);
 
     try {
       await updateDocument(document.id, {

@@ -1,6 +1,11 @@
-import { Editor } from "@tiptap/react"
+import {
+  getPresignedUploadUrl,
+  uploadFileToS3,
+} from "@/src/app/lib/actions/document.actions";
+import { PresignedUrlRequest } from "@/types/document";
+import { Editor } from "@tiptap/react";
 
-export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 /**
  * Checks if a mark exists in the editor schema
@@ -9,7 +14,7 @@ export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
  * @param editor - The editor instance
  */
 export const isMarkInSchema = (markName: string, editor: Editor | null) =>
-  editor?.schema.spec.marks.get(markName) !== undefined
+  editor?.schema.spec.marks.get(markName) !== undefined;
 
 /**
  * Checks if a node exists in the editor schema
@@ -18,30 +23,42 @@ export const isMarkInSchema = (markName: string, editor: Editor | null) =>
  * @param editor - The editor instance
  */
 export const isNodeInSchema = (nodeName: string, editor: Editor | null) =>
-  editor?.schema.spec.nodes.get(nodeName) !== undefined
+  editor?.schema.spec.nodes.get(nodeName) !== undefined;
 
 /**
  * Handles image upload with progress tracking and abort capability
  */
 export const handleImageUpload = async (
-  _file: File,
+  file: File,
+  docId: string,
   onProgress?: (event: { progress: number }) => void,
   abortSignal?: AbortSignal
 ): Promise<string> => {
+  const mimeType = file.type || "application/octet-stream";
+  const presignedPayload: PresignedUrlRequest = {
+    file_name: file.name,
+    mime_type: mimeType,
+    content_type: "documents",
+    document_id: docId,
+  };
+
+  const { url, file_url } = await getPresignedUploadUrl(presignedPayload);
   // Simulate upload progress
   for (let progress = 0; progress <= 100; progress += 10) {
     if (abortSignal?.aborted) {
-      throw new Error("Upload cancelled")
+      throw new Error("Upload cancelled");
     }
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    onProgress?.({ progress })
-  }
+    await uploadFileToS3(file, url);
 
-  return "/images/placeholder-image.png"
+    // await new Promise((resolve) => setTimeout(resolve, 500));
+    onProgress?.({ progress });
+  }
 
   // Uncomment to use actual file conversion:
   // return convertFileToBase64(file, abortSignal)
-}
+
+  return file_url;
+};
 
 /**
  * Converts a File to base64 string
@@ -51,30 +68,30 @@ export const convertFileToBase64 = (
   abortSignal?: AbortSignal
 ): Promise<string> => {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader()
+    const reader = new FileReader();
 
     const abortHandler = () => {
-      reader.abort()
-      reject(new Error("Upload cancelled"))
-    }
+      reader.abort();
+      reject(new Error("Upload cancelled"));
+    };
 
     if (abortSignal) {
-      abortSignal.addEventListener("abort", abortHandler)
+      abortSignal.addEventListener("abort", abortHandler);
     }
 
     reader.onloadend = () => {
       if (abortSignal) {
-        abortSignal.removeEventListener("abort", abortHandler)
+        abortSignal.removeEventListener("abort", abortHandler);
       }
 
       if (typeof reader.result === "string") {
-        resolve(reader.result)
+        resolve(reader.result);
       } else {
-        reject(new Error("Failed to convert File to base64"))
+        reject(new Error("Failed to convert File to base64"));
       }
-    }
+    };
 
-    reader.onerror = reject
-    reader.readAsDataURL(file)
-  })
-}
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+};

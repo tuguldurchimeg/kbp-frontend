@@ -161,7 +161,7 @@ export interface PresignedUrlRequest {
 }
 
 export interface PresignedUrlResponse {
-  upload_url: string;
+  url: string;
   file_url: string;
   key: string;
   file_name: string;

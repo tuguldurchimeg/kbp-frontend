@@ -80,6 +80,7 @@ export async function uploadFileToS3(
   file: File,
   uploadUrl: string
 ): Promise<void> {
+  console.log("heretest ", uploadUrl);
   await fetch(uploadUrl, {
     method: "PUT",
     headers: {

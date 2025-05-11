@@ -132,7 +132,14 @@
     "title": "Title",
     "created_at": "Created at",
     "updated_successfully": "Updated successfully",
-    "update_failed": "Failed to update"
+    "update_failed": "Failed to update",
+    "upload_click_or_drag": "Click to upload or drag and drop",
+    "upload_max_size": "Maximum file size {size}MB.",
+    "upload_no_file_selected": "No file selected",
+    "upload_too_many_files": "Maximum {limit} file(s) allowed",
+    "upload_too_large": "File size exceeds maximum allowed ({size}MB)",
+    "upload_failed": "Upload failed",
+    "upload_progress": "{progress}%"
   },
   "LOGIN": {
     "title": "Sign In",
