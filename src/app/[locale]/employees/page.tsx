@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { workspaces } from "@/lib/dummyData";
-import WorkspaceCard from "@/components/workspace/WorkspaceCard";
+import WorkspaceCard from "@/components/@workspace/workspace-card";
 import { ROUTE } from "@/constants/route.constants";
 import { Input } from "@/components/ui/input";
 import SiteLayout from "@/components/layouts/SiteLayout";

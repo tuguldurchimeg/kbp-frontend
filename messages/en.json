@@ -133,6 +133,7 @@
     "created_at": "Created at",
     "updated_successfully": "Updated successfully",
     "update_failed": "Failed to update",
+    "upload_click": "Click to upload",
     "upload_click_or_drag": "Click to upload or drag and drop",
     "upload_max_size": "Maximum file size {size}MB.",
     "upload_no_file_selected": "No file selected",

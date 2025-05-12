@@ -101,9 +101,7 @@ export default function Home() {
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>
-                      {t("SYSCOMMON.create")} {t("SYSCOMMON.documents")}
-                    </DialogTitle>
+                    <DialogTitle>{t("SYSCOMMON.create")}</DialogTitle>
                   </DialogHeader>
                   <CreateWorkspaceForm />
                 </DialogContent>

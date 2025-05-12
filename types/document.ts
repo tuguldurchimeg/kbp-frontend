@@ -156,8 +156,9 @@ export type ListParams = {
 export interface PresignedUrlRequest {
   file_name: string;
   mime_type: string;
-  content_type: "documents" | "avatar" | "files";
+  content_type: "documents" | "avatar" | "file" | "workspace";
   document_id?: string;
+  workspace_id?: string;
 }
 
 export interface PresignedUrlResponse {

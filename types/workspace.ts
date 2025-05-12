@@ -6,7 +6,7 @@ export type WorkspaceItem = {
   attributes: {
     name: string;
     description: string;
-    imageUrl?: string;
+    image_url?: string;
     categories?: { data: CategoryItem[] };
     documents?: { data: DocumentItem[] };
   };
@@ -15,6 +15,7 @@ export type WorkspaceItem = {
 export type WorkspaceCreateParams = {
   name: string;
   description?: string;
+  image_url?: string;
 };
 
 export type WorkspaceUpdateParams = {
