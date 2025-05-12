@@ -23,8 +23,8 @@ type DocumentCardProps = {
 export default function DocumentCard({ document }: DocumentCardProps) {
   const locale = useLocale();
 
-  const updatedAt = document.attributes.updated_at
-    ? formatDistanceToNowStrict(new Date(document.attributes.updated_at), {
+  const createdAt = document.attributes.created_at
+    ? formatDistanceToNowStrict(new Date(document.attributes.created_at), {
         addSuffix: true,
         locale: locale === "mn" ? mn : enUS,
       })
@@ -64,8 +64,8 @@ export default function DocumentCard({ document }: DocumentCardProps) {
                 </Tooltip>
               </TooltipProvider>
 
-              {updatedAt && (
-                <p className="text-sm text-muted-foreground">{updatedAt}</p>
+              {createdAt && (
+                <p className="text-sm text-muted-foreground">{createdAt}</p>
               )}
             </div>
           </div>

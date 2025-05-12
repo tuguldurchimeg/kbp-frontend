@@ -28,6 +28,8 @@ export default function WorkspaceSummary({
   const workspaceDocsCount = workspace.attributes.documents?.data?.length ?? 0;
   const totalDocs = (categoryDocsCount ?? 0) + workspaceDocsCount;
 
+  const issues = workspace.attributes.issues?.data;
+
   return (
     <Card>
       <CardContent className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 sm:gap-10 p-4 sm:p-6">
@@ -56,6 +58,11 @@ export default function WorkspaceSummary({
             {t("total_documents")}
           </p>
           <p className="text-2xl font-bold">{totalDocs}</p>
+        </div>
+
+        <div className="flex flex-col items-start sm:items-center">
+          <p className="text-sm text-muted-foreground">{t("total_issues")}</p>
+          <p className="text-2xl font-bold">{issues?.length}</p>
         </div>
       </CardContent>
     </Card>

@@ -1,15 +1,9 @@
-import {
-  ArrowBigLeftDash,
-  Building,
-  ChevronsUpDown,
-  Pencil,
-} from "lucide-react";
+import { ArrowBigLeftDash, Building, ChevronsUpDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -22,13 +16,11 @@ import { SearchDialog } from "../SearchDialog";
 import Link from "next/link";
 import { ROUTE } from "@/constants/route.constants";
 import { useTranslations } from "next-intl";
-import { useParams } from "next/navigation";
+import { WorkspaceItem } from "@/types/workspace";
 
-export function NavHeader() {
+export function NavHeader({ workspace }: { workspace: WorkspaceItem }) {
   const { isMobile } = useSidebar();
   const t = useTranslations();
-  const params = useParams();
-  const workspaceId = params.workspaceId as string;
 
   return (
     <SidebarMenu>
@@ -44,7 +36,7 @@ export function NavHeader() {
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">
-                  {t("SYSCOMMON.workspace")}
+                  {workspace.attributes.name}
                 </span>
               </div>
               <ChevronsUpDown className="ml-auto" />
@@ -60,7 +52,7 @@ export function NavHeader() {
               {t("SYSCOMMON.menu")}
             </DropdownMenuLabel>
             <Link
-              href={ROUTE.WORKSPACES.WORKSPACE(workspaceId)}
+              href={ROUTE.WORKSPACES.WORKSPACE(workspace.id)}
               className="flex gap-2 items-center"
             >
               <DropdownMenuItem className="gap-2 p-2 w-full">
@@ -74,11 +66,6 @@ export function NavHeader() {
                 {t("SYSCOMMON.backToWorkspaces")}
               </DropdownMenuItem>
             </Link>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2 p-2">
-              <Pencil className="size-3 mr-1" />
-              {t("SYSCOMMON.editWorkspace")}
-            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

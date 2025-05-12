@@ -25,7 +25,7 @@ import {
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Pencil } from "lucide-react";
+import { Building, Pencil } from "lucide-react";
 import {
   getPresignedUploadUrl,
   uploadFileToS3,
@@ -115,7 +115,10 @@ export default function WorkspaceEditForm({ workspace, onSubmit }: Props) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("editWorkspace")}</DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            <Building className="size-5 text-primary " />
+            {t("editWorkspace")}
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form

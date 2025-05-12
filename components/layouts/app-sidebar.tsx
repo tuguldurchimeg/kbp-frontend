@@ -43,11 +43,14 @@ import { createCategory } from "@/src/app/lib/actions/category.actions";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { getWorkspace } from "@/src/app/lib/actions/workspace.actions";
+import { WorkspaceItem } from "@/types/workspace";
 
 export function AppSidebar() {
   const params = useParams();
   const workspaceId = params.workspaceId as string;
   const pathname = usePathname();
+  const [workspace, setWorkspace] = useState<WorkspaceItem>();
   const [newDocDialogOpen, setNewDocDialogOpen] = useState(false);
   const [documentMenus, setDocumentMenus] = useState<MenuItemChildren[]>([]);
   const t = useTranslations("SYSCOMMON");
@@ -55,8 +58,12 @@ export function AppSidebar() {
 
   const fetchDocumentMenus = async () => {
     try {
-      const fetched = await generateDocumentMenus(workspaceId);
-      setDocumentMenus(fetched);
+      const ws = await getWorkspace(workspaceId);
+      setWorkspace(ws);
+      if (ws) {
+        const fetched = await generateDocumentMenus(ws);
+        setDocumentMenus(fetched);
+      }
     } catch {
       toast.error("Failed to load documents");
     }
@@ -75,7 +82,7 @@ export function AppSidebar() {
       className="group/sidebar h-screen w-inherit"
     >
       <SidebarHeader>
-        <NavHeader />
+        {workspace && <NavHeader workspace={workspace} />}
       </SidebarHeader>
       <SidebarContent>
         {/* Static Menus */}

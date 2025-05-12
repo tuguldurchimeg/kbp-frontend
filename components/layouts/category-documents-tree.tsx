@@ -167,7 +167,7 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuAction className="invisible peer-hover:visible hover:visible transition-all duration-200">
-                  <Ellipsis className="w-4 h-4 text-gray-700" />
+                  <Ellipsis className="w-4 h-4 text-foreground" />
                 </SidebarMenuAction>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">

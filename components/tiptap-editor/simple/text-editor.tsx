@@ -607,7 +607,7 @@ export function SimpleEditor({ document }: Props) {
                     {document.attributes?.user.data.attributes?.lastname?.[0]}
                   </AvatarFallback>
                 </Avatar>
-                <span className="font-medium text-gray-700">
+                <span className="font-medium text-foreground-2">
                   {document.attributes?.user.data.attributes?.firstname}{" "}
                   {document.attributes?.user.data.attributes?.lastname}
                 </span>
@@ -615,9 +615,9 @@ export function SimpleEditor({ document }: Props) {
             )}
             <span className="text-xs text-gray-500">
               •{" "}
-              {document.attributes?.updated_at &&
+              {document.attributes?.created_at &&
                 formatDistanceToNowStrict(
-                  new Date(document.attributes?.updated_at),
+                  new Date(document.attributes.created_at),
                   {
                     addSuffix: true,
                     locale: locale === "mn" ? mn : enUS,

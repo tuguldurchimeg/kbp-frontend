@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { CategoryItem } from "@/types/document";
 import { useTranslations } from "next-intl";
-import { getWorkspace } from "@/src/app/lib/actions/workspace.actions";
+import { WorkspaceItem } from "@/types/workspace";
 
 export type MenuItemChildren = {
   id?: string;
@@ -126,15 +126,12 @@ const buildCategoryTree = (
 };
 
 export const generateDocumentMenus = async (
-  workspaceId: string
+  workspace: WorkspaceItem
 ): Promise<MenuItemChildren[]> => {
-  const workspace = await getWorkspace(workspaceId);
-
-  // Documents not assigned to a category
   const uncategorizedDocuments =
     workspace.attributes?.documents?.data?.map((doc) => ({
       label: doc.attributes.title,
-      uri: ROUTE.BASE.DOCUMENT.DETAIL(workspaceId, doc.id),
+      uri: ROUTE.BASE.DOCUMENT.DETAIL(workspace.id, doc.id),
       icon: Dot,
       id: doc.id,
     })) || [];
@@ -142,7 +139,7 @@ export const generateDocumentMenus = async (
   // Categorized documents
   const categorizedTree = buildCategoryTree(
     workspace.attributes.categories?.data || [],
-    workspaceId
+    workspace.id
   );
 
   return [...categorizedTree, ...uncategorizedDocuments];

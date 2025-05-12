@@ -3,6 +3,7 @@ const workspaceBase = (id: string) => `/workspaces/${id}`;
 export const ROUTE = {
   ROOT: "/",
   LOGIN: "/login",
+  HELP: "/help",
   WORKSPACES: {
     ROOT: "/workspaces",
     WORKSPACE: (id: string) => `${workspaceBase(id)}`,

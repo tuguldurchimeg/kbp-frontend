@@ -147,7 +147,8 @@
     "color": "Color",
     "new_category": "New category",
     "new_document": "New document",
-    "rename": "Rename"
+    "rename": "Rename",
+    "help": "Help"
   },
   "LOGIN": {
     "title": "Sign In",
@@ -183,7 +184,8 @@
     "summary_title": "Workspace Summary",
     "summary_desc": "Quick overview of categories and documents",
     "total_categories": "Total Categories",
-    "total_documents": "Total Documents"
+    "total_documents": "Total Documents",
+    "total_issues": "Total Issues"
   },
   "Main": {
     "issues": "Issues",
