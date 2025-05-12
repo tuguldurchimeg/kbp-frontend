@@ -22,10 +22,13 @@ import { SearchDialog } from "../SearchDialog";
 import Link from "next/link";
 import { ROUTE } from "@/constants/route.constants";
 import { useTranslations } from "next-intl";
+import { useParams } from "next/navigation";
 
 export function NavHeader() {
   const { isMobile } = useSidebar();
-  const t = useTranslations("SYSCOMMON");
+  const t = useTranslations();
+  const params = useParams();
+  const workspaceId = params.workspaceId as string;
 
   return (
     <SidebarMenu>
@@ -40,7 +43,9 @@ export function NavHeader() {
                 <Building className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{t("workspace")}</span>
+                <span className="truncate font-semibold">
+                  {t("SYSCOMMON.workspace")}
+                </span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -52,18 +57,27 @@ export function NavHeader() {
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-xs text-muted-foreground">
-              {t("menu")}
+              {t("SYSCOMMON.menu")}
             </DropdownMenuLabel>
+            <Link
+              href={ROUTE.WORKSPACES.WORKSPACE(workspaceId)}
+              className="flex gap-2 items-center"
+            >
+              <DropdownMenuItem className="gap-2 p-2 w-full">
+                <Building className="size-4 shrink-0" />
+                {t("Main.overview")}
+              </DropdownMenuItem>
+            </Link>
             <Link href={ROUTE.ROOT} className="flex gap-2 items-center">
               <DropdownMenuItem className="gap-2 p-2 w-full">
                 <ArrowBigLeftDash className="size-4 shrink-0" />
-                {t("backToWorkspaces")}
+                {t("SYSCOMMON.backToWorkspaces")}
               </DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="gap-2 p-2">
               <Pencil className="size-3 mr-1" />
-              {t("editWorkspace")}
+              {t("SYSCOMMON.editWorkspace")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

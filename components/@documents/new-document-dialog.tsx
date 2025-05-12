@@ -48,7 +48,9 @@ export default function NewDocumentDialog({
 
   useEffect(() => {
     if (open) {
-      getTemplateDocuments().then(setTemplates).catch(console.error);
+      getTemplateDocuments({ workspace_id: workspaceId })
+        .then(setTemplates)
+        .catch(console.error);
     } else {
       setTitle("");
       setSelectedTemplate(null);

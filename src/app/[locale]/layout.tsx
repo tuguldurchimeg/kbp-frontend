@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { routing } from "@/src/i18n/routing";
 import { notFound } from "next/navigation";
+import { notoSans, roboto } from "@/styles/fonts";
 
 export const metadata: Metadata = {
   title: "KBP",
@@ -27,8 +28,11 @@ export default async function LocaleLayout({
     notFound();
   }
   return (
-    <html lang={locale} className={`h-full`} suppressHydrationWarning>
-      <body>
+    <html lang={locale} className="h-full">
+      <body
+        className={`h-full ${notoSans.className} ${roboto.className}`}
+        suppressHydrationWarning
+      >
         <NextIntlClientProvider locale={locale}>
           <AuthProvider>
             <ThemeProvider

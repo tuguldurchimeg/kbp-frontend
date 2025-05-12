@@ -171,13 +171,13 @@ export function AppSidebar() {
                                   }}
                                 >
                                   <FolderPlus className="w-4 h-4 mr-2 text-blue-600" />
-                                  New Category
+                                  {t("new_category")}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                   onClick={() => setNewDocDialogOpen(true)}
                                 >
                                   <FileText className="w-4 h-4 mr-2 text-indigo-600" />
-                                  New Document
+                                  {t("new_document")}
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>

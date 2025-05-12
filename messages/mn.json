@@ -145,7 +145,10 @@
     "upload_too_large": "Файлын хэмжээ хэтэрсэн ({size}MB)",
     "upload_failed": "Файл байршуулахад алдаа гарлаа",
     "upload_progress": "{progress}%",
-    "color": "Өнгө"
+    "color": "Өнгө",
+    "new_category": "Шинэ ангилал",
+    "new_document": "Шинэ нийтлэл",
+    "rename": "Нэр солих"
   },
   "LOGIN": {
     "title": "Нэвтрэх",

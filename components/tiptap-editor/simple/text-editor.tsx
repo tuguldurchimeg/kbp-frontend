@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import * as React from "react";
@@ -94,11 +93,10 @@ import {
 import { FileCheck, Palette, Pencil, Plus } from "lucide-react";
 import { DocumentItem, TagCreateParams, TagItem } from "@/types/document";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNowStrict } from "date-fns";
 import { Button as CNButton } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  getDocument,
   setDocumentTag,
   updateDocument,
 } from "@/src/app/lib/actions/document.actions";
@@ -114,7 +112,6 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { TAG_PLACEHOLDERS } from "@/constants/kb-placeholder-data";
 import { TAG_COLORS } from "@/constants/color.constants";
 import clsx from "clsx";
 import InsertTableButton from "@/components/tiptap-ui/table";
@@ -125,7 +122,9 @@ import {
   getTags,
   updateTag,
 } from "@/src/app/lib/actions/tag.actions";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { enUS, mn } from "date-fns/locale";
+
 type Props = {
   document: DocumentItem;
 };
@@ -439,8 +438,11 @@ export function SimpleEditor({ document }: Props) {
   const [tagOpen, setTagOpen] = React.useState(false);
   const [tagInputValue, setTagInputValue] = React.useState("");
   const [selectedValue, setSelectedValue] = React.useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedTag, setSelectedTag] = React.useState<TagItem>();
   const [allTags, setAllTags] = React.useState<TagItem[]>();
+  const locale = useLocale();
+
   React.useEffect(() => {
     const fetchTags = async () => {
       try {
@@ -613,11 +615,12 @@ export function SimpleEditor({ document }: Props) {
             )}
             <span className="text-xs text-gray-500">
               •{" "}
-              {document.attributes?.created_at &&
-                formatDistanceToNow(
-                  new Date(document.attributes?.updated_at || Date.now()),
+              {document.attributes?.updated_at &&
+                formatDistanceToNowStrict(
+                  new Date(document.attributes?.updated_at),
                   {
                     addSuffix: true,
+                    locale: locale === "mn" ? mn : enUS,
                   }
                 )}
             </span>

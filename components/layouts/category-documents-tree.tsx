@@ -36,6 +36,7 @@ import { toast } from "sonner";
 import { Input } from "../ui/input";
 import { useState } from "react";
 import NewDocumentDialog from "../@documents/new-document-dialog";
+import { useTranslations } from "next-intl";
 
 interface CategoryDocumentsProps {
   item: MenuItemChildren;
@@ -52,7 +53,7 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
     !!documentIdFromUrl &&
     item.id?.toString() === documentIdFromUrl &&
     !item.collapsible;
-
+  const t = useTranslations("SYSCOMMON");
   const handleRename = async () => {
     if (!newName || newName === item.label) return;
     try {
@@ -173,21 +174,22 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
                 {/* Inline Rename */}
                 <DropdownMenuItem onClick={() => setIsEditing(true)}>
                   <Edit className="w-4 h-4 mr-2 text-green-500" />
-                  Rename
+                  {t("rename")}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleCreateCategory}>
                   <FolderPlus className="w-4 h-4 mr-2 text-blue-600" />
-                  New Category
+                  {t("new_category")}
                 </DropdownMenuItem>
 
                 <DropdownMenuItem onClick={handleCreateDocument}>
                   <FileText className="w-4 h-4 mr-2 text-indigo-600" />
-                  New Document
+                  {t("new_document")}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => console.log("Delete item")}>
-                  <Trash2 className="w-4 h-4 mr-2 text-red-600" /> Delete
+                  <Trash2 className="w-4 h-4 mr-2 text-red-600" />
+                  {t("delete")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -207,7 +209,7 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
                 ))}
               </SidebarMenuSub>
             ) : (
-              <div className="ml-4 text-muted text-sm py-2">Loading...</div>
+              <div className="ml-4 text-muted text-sm py-2">{t("loading")}</div>
             )}
           </CollapsibleContent>
         )}

@@ -144,7 +144,10 @@
     "upload_too_large": "File size exceeds maximum allowed ({size}MB)",
     "upload_failed": "Upload failed",
     "upload_progress": "{progress}%",
-    "color": "Color"
+    "color": "Color",
+    "new_category": "New category",
+    "new_document": "New document",
+    "rename": "Rename"
   },
   "LOGIN": {
     "title": "Sign In",
