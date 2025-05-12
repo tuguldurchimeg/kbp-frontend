@@ -99,6 +99,7 @@ import { Button as CNButton } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   getDocument,
+  setDocumentTag,
   updateDocument,
 } from "@/src/app/lib/actions/document.actions";
 import { Badge } from "@/components/ui/badge";
@@ -119,7 +120,11 @@ import clsx from "clsx";
 import InsertTableButton from "@/components/tiptap-ui/table";
 import TableBubbleMenu from "@/components/tiptap-ui/table/table-bubble-menu";
 import { ResizableImage } from "tiptap-extension-resizable-image";
-import { createTag } from "@/src/app/lib/actions/tag.actions";
+import {
+  createTag,
+  getTags,
+  updateTag,
+} from "@/src/app/lib/actions/tag.actions";
 import { useTranslations } from "next-intl";
 type Props = {
   document: DocumentItem;
@@ -435,36 +440,63 @@ export function SimpleEditor({ document }: Props) {
   const [tagInputValue, setTagInputValue] = React.useState("");
   const [selectedValue, setSelectedValue] = React.useState<string | null>(null);
   const [selectedTag, setSelectedTag] = React.useState<TagItem>();
-  const [allTags, setAllTags] = React.useState<TagItem[]>(TAG_PLACEHOLDERS);
+  const [allTags, setAllTags] = React.useState<TagItem[]>();
   React.useEffect(() => {
     const fetchTags = async () => {
-      // Replace this with real API call later
-      const mockTags: TagItem[] = TAG_PLACEHOLDERS;
-      setAllTags(mockTags);
+      try {
+        const tags = await getTags({
+          workspace_id: document.attributes.workspace_id,
+        });
+        setAllTags(tags);
+      } catch (error) {
+        console.error("Failed to fetch tags", error);
+      }
     };
     fetchTags();
-  }, []);
+  }, [document.attributes.workspace_id]);
 
-  const handleSelectTag = (tag: TagItem) => {
-    setSelectedTag(tag);
-    setSelectedValue(tag.attributes?.name);
-    setTagInputValue("");
-    setTagOpen(false);
+  const handleSelectTag = async (tag: TagItem) => {
+    try {
+      await setDocumentTag({
+        document_id: document.id,
+        tag_id: tag.id,
+      });
+
+      setSelectedTag(tag);
+      setSelectedValue(tag.attributes?.name);
+      setTagInputValue("");
+      setTagOpen(false);
+    } catch (error) {
+      console.error("Failed to set document tag:", error);
+    }
   };
 
-  const handleCreateTag = (name: string) => {
+  const handleCreateTag = async (name: string) => {
     const newTag: TagCreateParams = {
       name,
-      description: "",
-      color: "bg-purple-100 text-purple-800",
+      color: "#8b5cf6",
+      workspace_id: document.attributes.workspace_id,
     };
-    createTag(newTag);
-    console.log(" Creating tag:", name);
+
+    try {
+      const created = await createTag(newTag);
+      setAllTags((prev) => [...(prev || []), created]);
+      await handleSelectTag(created);
+    } catch (error) {
+      console.error("Failed to create tag:", error);
+    }
   };
 
   const handleTagColorChange = async (tag: TagItem, newColor: string) => {
     try {
-      // await updateTag(tag.attributes?.id, { ...tag, color: newColor });
+      await updateTag({
+        id: tag.id,
+        params: {
+          name: tag.attributes?.name,
+          workspace_id: document.attributes.workspace_id,
+          color: newColor,
+        },
+      });
       console.log("Color updated");
     } catch (err) {
       console.error("Failed to update color", err);
@@ -633,7 +665,7 @@ export function SimpleEditor({ document }: Props) {
                   onValueChange={setTagInputValue}
                 />
                 <CommandList>
-                  {allTags.map((tag) => (
+                  {allTags?.map((tag) => (
                     <CommandItem
                       key={tag?.id}
                       className="flex text-sm items-center gap-2.5 px-2 py-1 hover:bg-muted rounded-sm"
@@ -648,9 +680,9 @@ export function SimpleEditor({ document }: Props) {
                         </PopoverTrigger>
                         <PopoverContent className="w-[180px] p-2 grid grid-cols-5 gap-1">
                           {TAG_COLORS.map((color) => (
-                            <button
+                            <Button
                               key={color}
-                              className={`w-6 h-6 rounded-sm border hover:ring-2 hover:ring-offset-2 transition-colors`}
+                              className={`w-6 h-6 rounded-sm border hover:ring-2 hover:ring-offset-2 transition-colors p-0`}
                               style={{ backgroundColor: color }}
                               onClick={() => handleTagColorChange(tag, color)}
                             />

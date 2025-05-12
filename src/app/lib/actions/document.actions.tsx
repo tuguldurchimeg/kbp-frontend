@@ -3,6 +3,7 @@ import { URI } from "@/constants/uri.constants";
 import {
   DocumentCreateParams,
   DocumentItem,
+  DocumentTagSetParams,
   ListParams,
   PresignedUrlRequest,
   PresignedUrlResponse,
@@ -65,6 +66,13 @@ export const createDocumentFromTemplate = async (
   };
 
   const res = await api.post(URI.DOCUMENTS, payload);
+  return res.data.data;
+};
+
+export const setDocumentTag = async (
+  params: DocumentTagSetParams
+): Promise<DocumentItem> => {
+  const res = await api.post(`${URI.DOCUMENTS}/set_document_tag`, params);
   return res.data.data;
 };
 

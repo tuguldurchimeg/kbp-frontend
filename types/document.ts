@@ -61,6 +61,11 @@ export type DocumentUpdateParams = {
   params: DocumentCreateParams;
 };
 
+export type DocumentTagSetParams = {
+  document_id: string;
+  tag_id: string;
+};
+
 export type TagItem = {
   id: string;
   type: "tag";
