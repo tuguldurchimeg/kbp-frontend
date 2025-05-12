@@ -29,7 +29,7 @@ import { Pencil } from "lucide-react";
 import {
   getPresignedUploadUrl,
   uploadFileToS3,
-} from "@/src/app/lib/actions/document.actions";
+} from "@/src/app/lib/actions/file.actions";
 import Image from "next/image";
 
 const schema = z.object({

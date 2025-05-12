@@ -10,7 +10,7 @@ import {
 export const getGlossaries = async (
   params: ListParams
 ): Promise<GlossaryItem[]> => {
-  const res = await api.get(URI.GLOSSARIES, { params: params });
+  const res = await api.get(URI.GLOSSARIES, { params });
   return res.data.data;
 };
 

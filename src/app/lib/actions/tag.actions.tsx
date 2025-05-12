@@ -8,7 +8,7 @@ import {
 } from "@/types/document";
 
 export const getTags = async (params: ListParams): Promise<TagItem[]> => {
-  const res = await api.get(URI.TAGS, { params: params });
+  const res = await api.get(URI.TAGS, { params });
   return res.data.data;
 };
 

@@ -1,26 +1,86 @@
 "use client";
 
 import * as React from "react";
-import { useRef, useState } from "react";
-import { UploadIcon, XIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Loader2, UploadIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { FileCard } from "@/components/search-result-tabs/file-results";
-import { placeholderData } from "@/constants/search-data";
-import { FileItem } from "@/types/document";
+
+import {
+  getFiles,
+  getPresignedUploadUrl,
+  uploadFileToS3,
+  createFile,
+} from "@/src/app/lib/actions/file.actions";
+
+import {
+  FileItem,
+  FileCreateParams,
+  PresignedUrlRequest,
+} from "@/types/document";
 
 export default function Page() {
-  const t = useTranslations("MENUS");
+  const t = useTranslations();
   const params = useParams();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [data, setData] = React.useState<FileItem[]>(placeholderData.files);
+  const workspaceId = params.workspaceId as string;
 
-  const handleFileUpload = (files: FileList | null) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [data, setData] = useState<FileItem[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchFiles = async () => {
+    try {
+      const files = await getFiles({ workspace_id: workspaceId });
+      setData(files);
+    } catch (error) {
+      console.error("Error fetching files:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFiles();
+  }, []);
+
+  const handleFileUpload = async (files: FileList | null) => {
     if (!files) return;
-    const fileArray = Array.from(files);
-    console.log("Uploading files...", fileArray);
-    // call api later
+
+    setLoading(true);
+    try {
+      const fileArray = Array.from(files);
+
+      for (const file of fileArray) {
+        const presignedParams: PresignedUrlRequest = {
+          file_name: file.name,
+          mime_type: file.type,
+          content_type: "file",
+          workspace_id: workspaceId,
+        };
+
+        const presigned = await getPresignedUploadUrl(presignedParams);
+
+        await uploadFileToS3(file, presigned.url);
+
+        const fileParams: FileCreateParams = {
+          name: file.name,
+          workspace_id: workspaceId,
+          file_type: file.type,
+          size: `${(file.size / 1024).toFixed(2)} KB`,
+          url: presigned.file_url,
+        };
+
+        await createFile(fileParams);
+      }
+
+      await fetchFiles();
+    } catch (error) {
+      console.error("Upload failed:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleFileInputChange = (
@@ -35,17 +95,23 @@ export default function Page() {
 
   return (
     <main className="relative w-full px-6 space-y-8">
-      <h2 className="text-xl font-semibold">{t("files")}</h2>
+      <h2 className="text-xl font-semibold">{t("MENUS.files")}</h2>
 
       <section className="flex flex-wrap gap-6">
-        {data.map((file) => (
-          <div key={file.id} className="flex">
-            <FileCard file={file} />
-          </div>
-        ))}
+        {data.length > 0 ? (
+          data.map((file) => (
+            <div key={file.id} className="w-[180px]">
+              <FileCard file={file} />
+            </div>
+          ))
+        ) : (
+          <p className="text-muted-foreground text-sm">
+            {t("SYSCOMMON.empty")}
+          </p>
+        )}
       </section>
 
-      <input
+      <Input
         ref={fileInputRef}
         type="file"
         multiple
@@ -54,11 +120,16 @@ export default function Page() {
       />
 
       <Button
+        disabled={loading}
         variant="default"
         className="fixed bottom-10 right-10 z-50 shadow-lg"
         onClick={triggerFilePicker}
       >
-        <UploadIcon className="h-4 w-4" />
+        {loading ? (
+          <Loader2 className="size-4 animate-spin" />
+        ) : (
+          <UploadIcon className="size-4" />
+        )}
       </Button>
     </main>
   );

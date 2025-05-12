@@ -5,8 +5,6 @@ import {
   DocumentItem,
   DocumentTagSetParams,
   ListParams,
-  PresignedUrlRequest,
-  PresignedUrlResponse,
 } from "@/types/document";
 
 export async function getDocuments(): Promise<DocumentItem[]> {
@@ -47,7 +45,7 @@ export const getTemplateDocuments = async (
   params: ListParams
 ): Promise<DocumentItem[]> => {
   const res = await api.get(`${URI.DOCUMENTS}?is_template=true`, {
-    params: params,
+    params,
   });
   return res.data.data;
 };
@@ -75,30 +73,3 @@ export const setDocumentTag = async (
   const res = await api.post(`${URI.DOCUMENTS}/set_document_tag`, params);
   return res.data.data;
 };
-
-/**
- * Gets a presigned S3 upload URL from the backend.
- */
-export async function getPresignedUploadUrl(
-  params: PresignedUrlRequest
-): Promise<PresignedUrlResponse> {
-  const res = await api.post(URI.S3_PRESIGNED_URL, params);
-  return res.data;
-}
-
-/**
- * Uploads a file to S3 using the provided presigned URL.
- */
-export async function uploadFileToS3(
-  file: File,
-  uploadUrl: string
-): Promise<void> {
-  console.log("heretest ", uploadUrl);
-  await fetch(uploadUrl, {
-    method: "PUT",
-    headers: {
-      "Content-Type": file.type,
-    },
-    body: file,
-  });
-}

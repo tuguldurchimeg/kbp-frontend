@@ -1,7 +1,7 @@
 import {
   getPresignedUploadUrl,
   uploadFileToS3,
-} from "@/src/app/lib/actions/document.actions";
+} from "@/src/app/lib/actions/file.actions";
 import { PresignedUrlRequest } from "@/types/document";
 import { Editor } from "@tiptap/react";
 

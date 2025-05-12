@@ -2,7 +2,6 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import type { Metadata } from "next";
 import "../../../styles/globals.css";
 import { AuthProvider } from "@/hooks/useAuth";
-import { notoSans, roboto } from "@/styles/fonts";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { routing } from "@/src/i18n/routing";
@@ -11,6 +10,9 @@ import { notFound } from "next/navigation";
 export const metadata: Metadata = {
   title: "KBP",
   description: "Local Knowledge base",
+  icons: {
+    icon: "/login_p.png",
+  },
 };
 
 export default async function LocaleLayout({
@@ -25,8 +27,8 @@ export default async function LocaleLayout({
     notFound();
   }
   return (
-    <html lang={locale} className="h-full" suppressHydrationWarning>
-      <body className={`${notoSans.variable} ${roboto.variable} antialiased`}>
+    <html lang={locale} className={`h-full`} suppressHydrationWarning>
+      <body>
         <NextIntlClientProvider locale={locale}>
           <AuthProvider>
             <ThemeProvider

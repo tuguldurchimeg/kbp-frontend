@@ -21,7 +21,7 @@ export async function getIssue(id: string): Promise<IssueItem> {
 export async function getIssueChartDatas(
   params: ReportParams
 ): Promise<ReportResponse> {
-  const res = await api.get(`${URI.ISSUES}/report`, { params: params });
+  const res = await api.get(`${URI.ISSUES}/report`, { params });
   return res.data;
 }
 

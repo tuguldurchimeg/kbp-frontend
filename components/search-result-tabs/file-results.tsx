@@ -108,7 +108,7 @@ export function FileCard({ file }: { file: FileItem }) {
       <CardFooter className="p-0 border-t [.border-t]:pt-2 text-xs text-muted-foreground flex justify-between">
         <div>
           <span>{file.attributes.size ?? "-"}</span>{" "}
-          <span>.{file.attributes.file_type ?? "Unknown"}</span>
+          {/* <span>.{file.attributes.file_type ?? "Unknown"}</span> */}
         </div>
         <Link
           href={file.attributes.url}

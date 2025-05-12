@@ -42,6 +42,14 @@ export type FileItem = {
   };
 };
 
+export type FileCreateParams = {
+  name: string;
+  workspace_id: string;
+  size: string;
+  file_type: string;
+  url: string;
+};
+
 export type CategoryCreateParams = {
   name: string;
   parent_id?: string;

@@ -16,6 +16,7 @@ export const URI = {
   WORKSPACES: "/v1/workspaces",
   CATEGORIES: "/v1/documents/categories",
   DOCUMENTS: "/v1/documents/documents",
+  FILES: "/v1/documents/files",
   ISSUES: "/v1/documents/issues",
   TAGS: "/v1/tools/tags",
   GLOSSARIES: "/v1/tools/glossaries",
