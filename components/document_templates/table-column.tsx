@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { DocumentItem } from "@/types/document";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNowStrict } from "date-fns";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,11 +11,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Copy, MoreVerticalIcon, Pencil, Trash2 } from "lucide-react";
+import { MoreVerticalIcon, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useTranslations } from "next-intl";
+import { enUS, mn } from "date-fns/locale";
 
-export function getColumns(pathname: string): ColumnDef<DocumentItem>[] {
+export function getColumns(
+  pathname: string,
+  t: ReturnType<typeof useTranslations>,
+  locale: string
+): ColumnDef<DocumentItem>[] {
   return [
     {
       id: "select",
@@ -44,7 +50,7 @@ export function getColumns(pathname: string): ColumnDef<DocumentItem>[] {
     },
     {
       accessorKey: "attributes.title",
-      header: "Template",
+      header: t("Main.table.name"),
       cell: ({ row }) => {
         const title = row.original.attributes.title;
         const id = row.original.id;
@@ -60,7 +66,7 @@ export function getColumns(pathname: string): ColumnDef<DocumentItem>[] {
     },
     {
       id: "createdBy",
-      header: "Created by",
+      header: t("Main.table.created_by"),
       cell: ({ row }) => {
         const user = row.original.attributes.user?.data?.attributes;
         const name = user?.firstname ?? "";
@@ -82,12 +88,13 @@ export function getColumns(pathname: string): ColumnDef<DocumentItem>[] {
     {
       id: "lastUpdated",
       accessorFn: (row) => row.attributes.updated_at,
-      header: "Last updated",
+      header: t("Main.table.updated_at"),
       cell: ({ getValue }) => {
         const updatedAt = getValue<string>();
-        return updatedAt
-          ? formatDistanceToNow(new Date(updatedAt), { addSuffix: true })
-          : "N/A";
+        return formatDistanceToNowStrict(new Date(updatedAt), {
+          addSuffix: true,
+          locale: locale === "mn" ? mn : enUS,
+        });
       },
       sortingFn: "datetime",
     },
@@ -101,23 +108,18 @@ export function getColumns(pathname: string): ColumnDef<DocumentItem>[] {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
                 <MoreVerticalIcon className="h-4 w-4" />
-                <span className="sr-only">Open row menu</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <Link href={`${pathname}/${id}`} passHref>
                 <DropdownMenuItem>
                   <Pencil className="mr-2 h-4 w-4" />
-                  Edit
+                  {t("SYSCOMMON.edit")}
                 </DropdownMenuItem>
               </Link>
               <DropdownMenuItem>
-                <Copy className="mr-2 h-4 w-4" />
-                Duplicate
-              </DropdownMenuItem>
-              <DropdownMenuItem>
                 <Trash2 className="mr-2 h-4 w-4" />
-                Delete
+                {t("SYSCOMMON.delete")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

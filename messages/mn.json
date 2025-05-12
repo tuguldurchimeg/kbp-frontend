@@ -28,6 +28,7 @@
     "settings": "Тохиргоо",
     "update": "Өөрчлөх",
     "actions": "Үйлдлүүд",
+    "content": "Агуулга",
     "delete_modal_title": "Итгэлтэй байна уу?",
     "write": "Бичих",
     "read": "Харах",
@@ -132,6 +133,8 @@
     "empty": "Хоосон",
     "title": "Гарчиг",
     "created_at": "Үүссэн огноо",
+    "created_successfully": "Амжилттай үүслээ",
+    "create_failed": "Үүсэхэд алдаа гарлаа",
     "updated_successfully": "Амжилттай шинэчлэгдлээ",
     "update_failed": "Шинэчлэхэд алдаа гарлаа",
     "upload_click": "Зураг сонгоно уу",
@@ -141,7 +144,8 @@
     "upload_too_many_files": "Хамгийн ихдээ {limit} файл оруулж болно",
     "upload_too_large": "Файлын хэмжээ хэтэрсэн ({size}MB)",
     "upload_failed": "Файл байршуулахад алдаа гарлаа",
-    "upload_progress": "{progress}%"
+    "upload_progress": "{progress}%",
+    "color": "Өнгө"
   },
   "LOGIN": {
     "title": "Нэвтрэх",

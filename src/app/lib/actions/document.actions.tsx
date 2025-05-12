@@ -3,6 +3,7 @@ import { URI } from "@/constants/uri.constants";
 import {
   DocumentCreateParams,
   DocumentItem,
+  ListParams,
   PresignedUrlRequest,
   PresignedUrlResponse,
 } from "@/types/document";
@@ -41,8 +42,12 @@ export const getQuickAccessDocuments = async (): Promise<DocumentItem[]> => {
   return res.data?.data;
 };
 
-export const getTemplateDocuments = async (): Promise<DocumentItem[]> => {
-  const res = await api.get(`${URI.DOCUMENTS}?is_template=true`);
+export const getTemplateDocuments = async (
+  params: ListParams
+): Promise<DocumentItem[]> => {
+  const res = await api.get(`${URI.DOCUMENTS}?is_template=true`, {
+    params: params,
+  });
   return res.data.data;
 };
 

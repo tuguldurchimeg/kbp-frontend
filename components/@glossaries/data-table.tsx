@@ -8,9 +8,12 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
-import { getGlossaries } from "@/src/app/lib/actions/glossary.actions";
-
+import { useCallback, useEffect, useState } from "react";
+import {
+  getGlossaries,
+  createGlossary,
+  updateGlossary,
+} from "@/src/app/lib/actions/glossary.actions";
 import {
   Table,
   TableBody,
@@ -27,32 +30,70 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useTranslations } from "next-intl";
-import { GlossaryItem } from "@/types/document";
+import { useLocale, useTranslations } from "next-intl";
+import {
+  GlossaryCreateParams,
+  GlossaryItem,
+  GlossaryUpdateParams,
+} from "@/types/document";
 import { getColumns } from "./table-columns";
 import { useParams } from "next/navigation";
+import { toast } from "sonner";
+import GlossaryCreateForm from "./glossary-create-form";
+import GlossaryEditForm from "./glossary-edit-form";
 
 export default function GlossaryTable() {
   const [data, setData] = useState<GlossaryItem[]>([]);
   const [rowSelection, setRowSelection] = useState({});
+  const [creating, setCreating] = useState(false);
+  const [editItem, setEditItem] = useState<GlossaryItem | null>(null);
   const t = useTranslations();
   const params = useParams();
+  const locale = useLocale();
+
+  const fetchData = useCallback(async () => {
+    try {
+      const glossaries = await getGlossaries({
+        workspace_id: params.workspaceId as string,
+      });
+      setData(glossaries);
+    } catch (error) {
+      toast.error("Failed to fetch glossaries.");
+      console.error(error);
+    } finally {
+    }
+  }, [params]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const glossaries = await getGlossaries({
-          workspace_id: params.workspaceId as string,
-        });
-        setData(glossaries);
-      } catch (error) {
-        console.error("Failed to fetch glossaries", error);
-      }
-    };
     fetchData();
-  }, []);
+  }, [fetchData]);
 
-  const columns = getColumns(t);
+  const handleCreate = async (formData: GlossaryCreateParams) => {
+    try {
+      await createGlossary({
+        ...formData,
+        workspace_id: params.workspaceId as string,
+      });
+      toast.success(t("SYSCOMMON.created_successfully"));
+      setCreating(false);
+      await fetchData();
+    } catch {
+      toast.error(t("SYSCOMMON.create_failed"));
+    }
+  };
+
+  const handleEdit = async (formData: GlossaryUpdateParams) => {
+    try {
+      await updateGlossary(formData);
+      toast.success(t("SYSCOMMON.updated_successfully"));
+      setEditItem(null);
+      await fetchData();
+    } catch {
+      toast.error(t("SYSCOMMON.update_failed"));
+    }
+  };
+
+  const columns = getColumns(t, locale, (item) => setEditItem(item));
 
   const table = useReactTable({
     data,
@@ -101,6 +142,7 @@ export default function GlossaryTable() {
         </DropdownMenu>
       </div>
 
+      {creating && <GlossaryCreateForm onSubmit={handleCreate} />}
       <div className="overflow-x-auto rounded-md border">
         <Table>
           <TableHeader>
@@ -146,6 +188,16 @@ export default function GlossaryTable() {
           </TableBody>
         </Table>
       </div>
+
+      {editItem && (
+        <GlossaryEditForm
+          glossaryItem={editItem}
+          open={!!editItem}
+          setOpen={(open) => !open && setEditItem(null)}
+          onEdit={handleEdit}
+          t={t}
+        />
+      )}
     </div>
   );
 }

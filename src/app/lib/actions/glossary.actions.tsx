@@ -3,6 +3,7 @@ import { URI } from "@/constants/uri.constants";
 import {
   GlossaryCreateParams,
   GlossaryItem,
+  GlossaryUpdateParams,
   ListParams,
 } from "@/types/document";
 
@@ -21,10 +22,9 @@ export const createGlossary = async (
 };
 
 export const updateGlossary = async (
-  id: string,
-  params: Partial<GlossaryCreateParams>
+  arg: Partial<GlossaryUpdateParams>
 ): Promise<GlossaryItem> => {
-  const res = await api.put(`${URI.GLOSSARIES}/${id}`, params);
+  const res = await api.put(`${URI.GLOSSARIES}/${arg.id}`, arg.params);
   return res.data.data;
 };
 

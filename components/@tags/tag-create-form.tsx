@@ -1,72 +1,146 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Plus, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
+import { useTranslations } from "next-intl";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { useState } from "react";
+import { TAG_COLORS } from "@/constants/color.constants";
 
-export default function TagCreateForm() {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [loading, setLoading] = useState(false);
+const schema = z.object({
+  name: z.string().min(1, "Name is required"),
+  description: z.string().optional(),
+  color: z.string().optional(),
+});
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+type FormValues = z.infer<typeof schema>;
 
-    // try {
-    //   const res = await fetch("/api/tags", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ name, description }),
-    //   });
+interface Props {
+  onSubmit: (data: FormValues) => void;
+  loading: boolean;
+}
 
-    //   if (!res.ok) throw new Error("Failed to create tag");
+export default function TagCreateForm({ onSubmit, loading }: Props) {
+  const t = useTranslations("SYSCOMMON");
+  const form = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: "",
+      description: "",
+      color: "",
+    },
+  });
 
-    //   const data = await res.json();
-    //   toast.success("Tag created successfully!");
-    //   setName("");
-    //   setDescription("");
-    //   // You can emit an event or refresh data here if needed
-    // } catch () {
-    // } finally {
-    //   setLoading(false);
-    // }
+  const [open, setOpen] = useState(false);
+
+  const handleSubmit = (values: FormValues) => {
+    onSubmit(values);
+    form.reset();
+    setOpen(false);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <Label htmlFor="name">Name</Label>
-        <Input
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Tag name"
-          required
-          className="mt-1"
-        />
-      </div>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button className="fixed bottom-15 right-15 h-12 w-12 rounded-xl hover:bg-purple-700 shadow-lg">
+          <Plus />
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="text-primary flex items-center gap-2">
+            <Tag className="w-4 h-4" />
+            {t("create")}
+          </DialogTitle>
+        </DialogHeader>
 
-      <div>
-        <Label htmlFor="description">Description</Label>
-        <Textarea
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Tag description"
-          className="mt-1"
-        />
-      </div>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("name")}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={t("name")} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-      <Button type="submit" disabled={loading}>
-        {loading ? "Creating..." : "Create Tag"}
-      </Button>
-    </form>
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("description")}</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder={t("description")} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="color"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("color")}</FormLabel>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {TAG_COLORS.map((color) => (
+                      <Button
+                        type="button"
+                        key={color}
+                        onClick={() => field.onChange(color)}
+                        className={`p-0 w-6 h-6 rounded-md transition-all ${
+                          field.value === color
+                            ? "ring-2 ring-offset-2 ring-black"
+                            : "border-gray-300"
+                        }`}
+                        style={{ backgroundColor: color }}
+                        aria-label={`Select color ${color}`}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <DialogFooter className="flex justify-end">
+              <Button type="submit" disabled={loading}>
+                {loading ? t("loading") : t("create")}
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }

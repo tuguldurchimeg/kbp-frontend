@@ -2,16 +2,17 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { TagItem } from "@/types/document";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNowStrict } from "date-fns";
 import { Checkbox } from "@/components/ui/checkbox";
-import Link from "next/link";
 import { Badge } from "../ui/badge";
 import TagRowActions from "./tag-row-actions";
 import { useTranslations } from "next-intl";
+import { enUS, mn } from "date-fns/locale";
 
 export function getColumns(
-  pathname: string,
-  t: ReturnType<typeof useTranslations>
+  t: ReturnType<typeof useTranslations>,
+  locale: string,
+  onUpdate: (item: TagItem) => void
 ): ColumnDef<TagItem>[] {
   return [
     {
@@ -43,16 +44,26 @@ export function getColumns(
       accessorKey: "attributes.title",
       header: t("SYSCOMMON.name"),
       cell: ({ row }) => {
-        const title = row.original.attributes.name;
-        const id = row.original.id;
+        const tag = row.original.attributes;
         return (
-          <Link
-            href={`${pathname}/${id}`}
-            className="text-blue-600 hover:underline"
-          >
-            {title}
-          </Link>
+          <div className="flex items-center gap-2">
+            {tag.color && (
+              <span
+                className="inline-block w-4 h-4 rounded-md border"
+                style={{ backgroundColor: tag.color }}
+              />
+            )}
+            <span>{tag.name}</span>
+          </div>
         );
+      },
+    },
+    {
+      accessorKey: "attributes.description",
+      header: t("SYSCOMMON.description"),
+      cell: ({ row }) => {
+        const tag = row.original.attributes;
+        return <span>{tag.description}</span>;
       },
     },
     {
@@ -61,9 +72,10 @@ export function getColumns(
       header: t("SYSCOMMON.created_at"),
       cell: ({ getValue }) => {
         const updatedAt = getValue<string>();
-        return updatedAt
-          ? formatDistanceToNow(new Date(updatedAt), { addSuffix: true })
-          : "N/A";
+        return formatDistanceToNowStrict(new Date(updatedAt), {
+          addSuffix: true,
+          locale: locale === "mn" ? mn : enUS,
+        });
       },
       sortingFn: "datetime",
     },
@@ -78,9 +90,9 @@ export function getColumns(
     {
       id: "actions",
       header: "",
-      cell: ({ row }) => {
-        return <TagRowActions item={row.original} />;
-      },
+      cell: ({ row }) => (
+        <TagRowActions t={t} onEditClick={() => onUpdate(row.original)} />
+      ),
       enableSorting: false,
       enableHiding: false,
     },

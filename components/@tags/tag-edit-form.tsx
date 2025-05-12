@@ -1,74 +1,147 @@
 "use client";
 
-import { TagItem } from "@/types/document";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { TagItem, TagUpdateParams } from "@/types/document";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { Label } from "../ui/label";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { useTranslations } from "next-intl";
+import { TAG_COLORS } from "@/constants/color.constants";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Tag } from "lucide-react";
+
+const schema = z.object({
+  name: z.string().min(1, "Name is required"),
+  description: z.string().optional(),
+  color: z.string().optional(),
+});
+
+type FormValues = z.infer<typeof schema>;
 
 export default function TagEditForm({
   tagItem,
-  onClose,
+  open,
+  setOpen,
+  onUpdate,
 }: {
   tagItem: TagItem;
-  onClose: () => void;
+  onUpdate: (item: TagUpdateParams) => void;
+  open: boolean;
+  setOpen: (value: boolean) => void;
 }) {
-  const [name, setName] = useState(tagItem.attributes.name);
-  const [content, setContent] = useState(tagItem.attributes.description);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [loading, setLoading] = useState(false);
+  const t = useTranslations("SYSCOMMON");
+  const form = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: tagItem.attributes.name,
+      description: tagItem.attributes.description || "",
+      color: tagItem.attributes.color,
+    },
+  });
 
-  const handleUpdate = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = form;
 
+  const submitHandler = async (values: FormValues) => {
     try {
-      // Example API call
-      await fetch(`/api/tags/${tagItem.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, content }),
+      await onUpdate({
+        id: tagItem.id,
+        params: {
+          ...values,
+          workspace_id: tagItem.attributes.workspace_id || "",
+        },
       });
-
-      onClose(); // Close dialog on success
+      setOpen(false);
     } catch (err) {
       console.error("Failed to update tag:", err);
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleUpdate} className="space-y-4">
-      <div>
-        <Label htmlFor="name">Name</Label>
-        <Input
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="name"
-          required
-          className="mt-1"
-        />
-      </div>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="text-primary flex items-center gap-2">
+            <Tag className="size-4" />
+            {t("edit")}
+          </DialogTitle>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={handleSubmit(submitHandler)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("name")}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={t("name")} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-      <div>
-        <Label htmlFor="description">Description</Label>
-        <Textarea
-          id="description"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="description"
-          className="mt-1"
-        />
-      </div>
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("description")}</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder={t("description")} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="color"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("color")}</FormLabel>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {TAG_COLORS.map((color) => (
+                      <Button
+                        type="button"
+                        key={color}
+                        onClick={() => field.onChange(color)}
+                        className={`p-0 w-6 h-6 rounded-md transition-all ${
+                          field.value === color
+                            ? "ring-2 ring-offset-2 ring-black"
+                            : "border-gray-300"
+                        }`}
+                        style={{ backgroundColor: color }}
+                        aria-label={`Select color ${color}`}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-      <div className="flex justify-end">
-        <Button type="submit" disabled={loading}>
-          {loading ? "Updating..." : "Update"}
-        </Button>
-      </div>
-    </form>
+            <div className="flex justify-end">
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? t("loading") : t("update")}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }

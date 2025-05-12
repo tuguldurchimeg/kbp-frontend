@@ -8,11 +8,9 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { getColumns } from "./table-columns";
-import { TAG_PLACEHOLDERS } from "@/constants/kb-placeholder-data";
-
 import {
   Table,
   TableBody,
@@ -22,7 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { ChevronDownIcon } from "lucide-react";
 import {
   DropdownMenu,
@@ -30,15 +28,79 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import {
+  getTags,
+  createTag,
+  updateTag,
+} from "@/src/app/lib/actions/tag.actions";
+import { TagItem, TagUpdateParams } from "@/types/document";
+import TagCreateForm from "./tag-create-form";
+import { toast } from "sonner";
+import TagEditForm from "./tag-edit-form";
 
-export default function TemplateTable() {
+export default function TagTable() {
+  const [tags, setTags] = useState<TagItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [creating, setCreating] = useState(false);
   const [rowSelection, setRowSelection] = useState({});
-  const pathname = usePathname();
+  const [editItem, setEditItem] = useState<TagItem | null>(null);
+
   const t = useTranslations();
-  const columns = getColumns(pathname, t);
+  const params = useParams();
+  const workspaceId = params.workspaceId as string;
+  const locale = useLocale();
+
+  const fetchTags = async () => {
+    try {
+      const data = await getTags({ workspace_id: workspaceId });
+      setTags(data);
+    } catch (error) {
+      console.error("Failed to fetch tags:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTags();
+  }, []);
+
+  const handleTagCreate = async (data: {
+    name: string;
+    description?: string;
+  }) => {
+    setCreating(true);
+    try {
+      await createTag({
+        ...data,
+        workspace_id: workspaceId,
+      });
+      toast.success(t("SYSCOMMON.created_successfully"));
+      await fetchTags();
+    } catch (err) {
+      toast.error(t("SYSCOMMON.create_failed"));
+      console.error(err);
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const handleTagUpdate = async (data: TagUpdateParams) => {
+    try {
+      await updateTag(data);
+      toast.success(t("SYSCOMMON.updated_successfully"));
+      setEditItem(null);
+      await fetchTags();
+    } catch (error) {
+      toast.error(t("SYSCOMMON.update_failed"));
+      console.error("Tag update failed:", error);
+    }
+  };
+
+  const columns = getColumns(t, locale, (item) => setEditItem(item));
 
   const table = useReactTable({
-    data: TAG_PLACEHOLDERS,
+    data: tags,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -62,7 +124,7 @@ export default function TemplateTable() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              {t("SYSCOMMON.columns")}{" "}
+              {t("SYSCOMMON.columns")}
               <ChevronDownIcon className="ml-1 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -85,6 +147,7 @@ export default function TemplateTable() {
         </DropdownMenu>
       </div>
 
+      <TagCreateForm onSubmit={handleTagCreate} loading={creating} />
       <div className="overflow-x-auto rounded-md border">
         <Table>
           <TableHeader>
@@ -104,7 +167,13 @@ export default function TemplateTable() {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows.length ? (
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="text-center">
+                  {t("SYSCOMMON.loading")}
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -123,13 +192,22 @@ export default function TemplateTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  {t("empty")}
+                  {t("SYSCOMMON.empty")}
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
+
+      {editItem && (
+        <TagEditForm
+          tagItem={editItem}
+          onUpdate={handleTagUpdate}
+          open={!!editItem}
+          setOpen={(open) => !open && setEditItem(null)}
+        />
+      )}
     </div>
   );
 }

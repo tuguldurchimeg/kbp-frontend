@@ -70,6 +70,7 @@ export type TagItem = {
     color: string;
     documents?: { data: DocumentItem[] };
     created_at?: string;
+    workspace_id?: string;
   };
 };
 
@@ -77,6 +78,7 @@ export type TagCreateParams = {
   name: string;
   description?: string;
   color?: string;
+  workspace_id: string;
 };
 
 export type TagUpdateParams = {

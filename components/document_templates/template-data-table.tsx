@@ -35,7 +35,7 @@ import {
   createDocument,
 } from "@/src/app/lib/actions/document.actions";
 import { DocumentItem } from "@/types/document";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function TemplateTable() {
   const [rowSelection, setRowSelection] = useState({});
@@ -44,14 +44,17 @@ export default function TemplateTable() {
 
   const pathname = usePathname();
   const router = useRouter();
-  const columns = getColumns(pathname);
+  const locale = useLocale();
   const t = useTranslations();
+  const columns = getColumns(pathname, t, locale);
   const params = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const docs = await getTemplateDocuments();
+        const docs = await getTemplateDocuments({
+          workspace_id: params.workspaceId as string,
+        });
         setData(docs);
       } catch (err) {
         console.error("Failed to fetch templates:", err);
@@ -103,7 +106,7 @@ export default function TemplateTable() {
         <Button
           className="fixed bottom-15 right-15 h-12 w-12 rounded-xl hover:bg-purple-700"
           onClick={handleCreateTemplate}
-          aria-label={t("new")}
+          aria-label={t("SYSCOMMON.new")}
         >
           <Plus />
         </Button>
@@ -111,7 +114,8 @@ export default function TemplateTable() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              {t("columns")} <ChevronDownIcon className="ml-1 h-4 w-4" />
+              {t("SYSCOMMON.columns")}{" "}
+              <ChevronDownIcon className="ml-1 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -155,7 +159,7 @@ export default function TemplateTable() {
             {loading ? (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  {t("loading")}
+                  {t("SYSCOMMON.loading")}
                 </TableCell>
               </TableRow>
             ) : table.getRowModel().rows.length ? (
@@ -177,7 +181,7 @@ export default function TemplateTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  {t("empty")}
+                  {t("SYSCOMMON.empty")}
                 </TableCell>
               </TableRow>
             )}

@@ -1,5 +1,6 @@
 import api from "../../../../utils/api";
 import { URI } from "@/constants/uri.constants";
+import { ListParams } from "@/types/document";
 import {
   IssueCreateParams,
   IssueItem,
@@ -7,8 +8,8 @@ import {
   ReportResponse,
 } from "@/types/issue";
 
-export async function getIssues(): Promise<IssueItem[]> {
-  const res = await api.get(URI.ISSUES);
+export async function getIssues(params: ListParams): Promise<IssueItem[]> {
+  const res = await api.get(URI.ISSUES, { params });
   return res.data.data;
 }
 

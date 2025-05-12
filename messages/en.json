@@ -28,6 +28,7 @@
     "settings": "Settings",
     "update": "Update",
     "actions": "Actions",
+    "content": "Content",
     "delete_modal_title": "Are you sure?",
     "write": "Write",
     "read": "Read",
@@ -131,6 +132,8 @@
     "empty": "Not found.",
     "title": "Title",
     "created_at": "Created at",
+    "created_successfully": "Created successfully",
+    "create_failed": "Failed to create",
     "updated_successfully": "Updated successfully",
     "update_failed": "Failed to update",
     "upload_click": "Click to upload",
@@ -140,7 +143,8 @@
     "upload_too_many_files": "Maximum {limit} file(s) allowed",
     "upload_too_large": "File size exceeds maximum allowed ({size}MB)",
     "upload_failed": "Upload failed",
-    "upload_progress": "{progress}%"
+    "upload_progress": "{progress}%",
+    "color": "Color"
   },
   "LOGIN": {
     "title": "Sign In",

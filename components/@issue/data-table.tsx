@@ -57,11 +57,11 @@ import {
   MoreVerticalIcon,
   Plus,
 } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNowStrict } from "date-fns";
 import { IssueItem } from "@/types/issue";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useParams, usePathname } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { useStatusAndPriorityMaps } from "@/constants/issue.constants";
 import {
   Tooltip,
@@ -71,6 +71,7 @@ import {
 } from "@/components/ui/tooltip";
 import { CreateIssueDialog } from "./create-edit-dialog";
 import { getIssues } from "@/src/app/lib/actions/issue.actions";
+import { enUS, mn } from "date-fns/locale";
 
 function DraggableRow({ row }: { row: Row<IssueItem> }) {
   const { setNodeRef, transform, transition } = useSortable({
@@ -101,13 +102,14 @@ export function DataTable() {
     React.useState<VisibilityState>({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const pathname = usePathname();
-
+  const params = useParams();
+  const workspaceId = params.workspaceId as string;
   const [data, setData] = React.useState<IssueItem[]>([]);
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await getIssues();
+        const res = await getIssues({ workspace_id: workspaceId });
         setData(res);
       } catch (error) {
         console.error("Failed to fetch issues:", error);
@@ -134,6 +136,7 @@ export function DataTable() {
     pageIndex: 0,
     pageSize: 10,
   });
+  const locale = useLocale();
 
   const columns: ColumnDef<IssueItem>[] = [
     {
@@ -159,7 +162,7 @@ export function DataTable() {
       cell: ({ row }) => (
         <Link
           href={`${pathname}/${row.original.id}`}
-          className="text-blue-600 hover:underline"
+          className="hover:underline"
         >
           {row.original.attributes.title}
         </Link>
@@ -293,9 +296,12 @@ export function DataTable() {
       header: t("table.updated_at"),
       cell: ({ getValue }) => {
         const date = getValue<string>();
-        return date
-          ? formatDistanceToNow(new Date(date), { addSuffix: true })
-          : "N/A";
+        if (!date) return "N/A";
+
+        return formatDistanceToNowStrict(new Date(date), {
+          addSuffix: true,
+          locale: locale === "mn" ? mn : enUS,
+        });
       },
     },
     {
