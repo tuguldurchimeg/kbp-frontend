@@ -12,7 +12,8 @@ import { enUS, mn } from "date-fns/locale";
 export function getColumns(
   t: ReturnType<typeof useTranslations>,
   locale: string,
-  onUpdate: (item: TagItem) => void
+  onUpdate: (item: TagItem) => void,
+  onDelete: (item: TagItem) => void
 ): ColumnDef<TagItem>[] {
   return [
     {
@@ -91,7 +92,11 @@ export function getColumns(
       id: "actions",
       header: "",
       cell: ({ row }) => (
-        <TagRowActions t={t} onEditClick={() => onUpdate(row.original)} />
+        <TagRowActions
+          t={t}
+          onEditClick={() => onUpdate(row.original)}
+          onDeleteClick={() => onDelete(row.original)}
+        />
       ),
       enableSorting: false,
       enableHiding: false,

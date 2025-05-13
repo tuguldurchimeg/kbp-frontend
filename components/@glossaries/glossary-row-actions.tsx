@@ -11,9 +11,11 @@ import { useTranslations } from "next-intl";
 export default function GlossaryRowActions({
   t,
   onEditClick,
+  onDeleteClick,
 }: {
   t: ReturnType<typeof useTranslations>;
   onEditClick: () => void;
+  onDeleteClick: () => void;
 }) {
   return (
     <DropdownMenu>
@@ -27,7 +29,7 @@ export default function GlossaryRowActions({
           <Pencil className="mr-2 size-4 text-sky-500" />
           {t("SYSCOMMON.edit")}
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={onDeleteClick}>
           <Trash2 className="mr-2 size-4 text-red-600" />
           {t("SYSCOMMON.delete")}
         </DropdownMenuItem>

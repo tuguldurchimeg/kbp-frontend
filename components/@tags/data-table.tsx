@@ -32,11 +32,13 @@ import {
   getTags,
   createTag,
   updateTag,
+  deleteTag,
 } from "@/src/app/lib/actions/tag.actions";
 import { TagItem, TagUpdateParams } from "@/types/document";
 import TagCreateForm from "./tag-create-form";
 import { toast } from "sonner";
 import TagEditForm from "./tag-edit-form";
+import ConfirmDialog from "../confirm-dialog";
 
 export default function TagTable() {
   const [tags, setTags] = useState<TagItem[]>([]);
@@ -49,6 +51,9 @@ export default function TagTable() {
   const params = useParams();
   const workspaceId = params.workspaceId as string;
   const locale = useLocale();
+
+  const [deleteItem, setDeleteItem] = useState<TagItem | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchTags = async () => {
     try {
@@ -97,7 +102,28 @@ export default function TagTable() {
     }
   };
 
-  const columns = getColumns(t, locale, (item) => setEditItem(item));
+  const handleTagDelete = async () => {
+    if (!deleteItem) return;
+    setDeleting(true);
+    try {
+      await deleteTag(deleteItem.id.toString());
+      toast.success(t("SYSCOMMON.deleted_successfully"));
+      await fetchTags();
+    } catch (error) {
+      toast.error(t("SYSCOMMON.delete_failed"));
+      console.error("Tag delete failed:", error);
+    } finally {
+      setDeleting(false);
+      setDeleteItem(null);
+    }
+  };
+
+  const columns = getColumns(
+    t,
+    locale,
+    (item) => setEditItem(item),
+    (item) => setDeleteItem(item)
+  );
 
   const table = useReactTable({
     data: tags,
@@ -208,6 +234,17 @@ export default function TagTable() {
           setOpen={(open) => !open && setEditItem(null)}
         />
       )}
+
+      <ConfirmDialog
+        open={!!deleteItem}
+        onOpenChange={(confirmOpen) => !confirmOpen && setDeleteItem(null)}
+        title={t("SYSCOMMON.confirm_delete")}
+        description={t("SYSCOMMON.confirm_delete_message")}
+        confirmText={t("SYSCOMMON.confirm")}
+        cancelText={t("SYSCOMMON.cancel")}
+        onConfirm={handleTagDelete}
+        loading={deleting}
+      />
     </div>
   );
 }

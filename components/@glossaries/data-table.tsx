@@ -13,6 +13,7 @@ import {
   getGlossaries,
   createGlossary,
   updateGlossary,
+  deleteGlossary,
 } from "@/src/app/lib/actions/glossary.actions";
 import {
   Table,
@@ -41,6 +42,7 @@ import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import GlossaryCreateForm from "./glossary-create-form";
 import GlossaryEditForm from "./glossary-edit-form";
+import ConfirmDialog from "../confirm-dialog";
 
 export default function GlossaryTable() {
   const [data, setData] = useState<GlossaryItem[]>([]);
@@ -93,7 +95,30 @@ export default function GlossaryTable() {
     }
   };
 
-  const columns = getColumns(t, locale, (item) => setEditItem(item));
+  const [deleteItem, setDeleteItem] = useState<GlossaryItem | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    if (!deleteItem) return;
+    setDeleting(true);
+    try {
+      await deleteGlossary(deleteItem.id.toString());
+      toast.success(t("SYSCOMMON.deleted_successfully"));
+      await fetchData();
+    } catch {
+      toast.error(t("SYSCOMMON.delete_failed"));
+    } finally {
+      setDeleting(false);
+      setDeleteItem(null);
+    }
+  };
+
+  const columns = getColumns(
+    t,
+    locale,
+    (item) => setEditItem(item),
+    (item) => setDeleteItem(item)
+  );
 
   const table = useReactTable({
     data,
@@ -198,6 +223,17 @@ export default function GlossaryTable() {
           t={t}
         />
       )}
+
+      <ConfirmDialog
+        open={!!deleteItem}
+        onOpenChange={(open) => !open && setDeleteItem(null)}
+        title={t("SYSCOMMON.confirm_delete")}
+        description={t("SYSCOMMON.confirm_delete_message")}
+        confirmText={t("SYSCOMMON.confirm")}
+        cancelText={t("SYSCOMMON.cancel")}
+        onConfirm={handleDelete}
+        loading={deleting}
+      />
     </div>
   );
 }

@@ -9,7 +9,8 @@ import { useTranslations } from "next-intl";
 export function getColumns(
   t: ReturnType<typeof useTranslations>,
   locale: string,
-  onEditClick: (item: GlossaryItem) => void
+  onEditClick: (item: GlossaryItem) => void,
+  onDelete: (item: GlossaryItem) => void
 ): ColumnDef<GlossaryItem>[] {
   return [
     {
@@ -72,6 +73,7 @@ export function getColumns(
         <GlossaryRowActions
           t={t}
           onEditClick={() => onEditClick(row.original)}
+          onDeleteClick={() => onDelete(row.original)}
         />
       ),
       enableSorting: false,

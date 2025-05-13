@@ -20,7 +20,8 @@ import { enUS, mn } from "date-fns/locale";
 export function getColumns(
   pathname: string,
   t: ReturnType<typeof useTranslations>,
-  locale: string
+  locale: string,
+  onDeleteClick: (item: DocumentItem) => void
 ): ColumnDef<DocumentItem>[] {
   return [
     {
@@ -102,7 +103,7 @@ export function getColumns(
       id: "actions",
       header: "",
       cell: ({ row }) => {
-        const id = row.original.id;
+        const item = row.original;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -111,14 +112,14 @@ export function getColumns(
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <Link href={`${pathname}/${id}`} passHref>
+              <Link href={`${pathname}/${item.id}`} passHref>
                 <DropdownMenuItem>
                   <Pencil className="mr-2 h-4 w-4" />
                   {t("SYSCOMMON.edit")}
                 </DropdownMenuItem>
               </Link>
-              <DropdownMenuItem>
-                <Trash2 className="mr-2 h-4 w-4" />
+              <DropdownMenuItem onClick={() => onDeleteClick(item)}>
+                <Trash2 className="mr-2 h-4 w-4 text-red-600" />
                 {t("SYSCOMMON.delete")}
               </DropdownMenuItem>
             </DropdownMenuContent>

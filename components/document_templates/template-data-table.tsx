@@ -33,9 +33,12 @@ import {
 import {
   getTemplateDocuments,
   createDocument,
+  deleteDocument,
 } from "@/src/app/lib/actions/document.actions";
 import { DocumentItem } from "@/types/document";
 import { useLocale, useTranslations } from "next-intl";
+import { toast } from "sonner";
+import ConfirmDialog from "../confirm-dialog";
 
 export default function TemplateTable() {
   const [rowSelection, setRowSelection] = useState({});
@@ -46,7 +49,9 @@ export default function TemplateTable() {
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations();
-  const columns = getColumns(pathname, t, locale);
+  const columns = getColumns(pathname, t, locale, (item) =>
+    setDeleteItem(item)
+  );
   const params = useParams();
 
   useEffect(() => {
@@ -94,6 +99,27 @@ export default function TemplateTable() {
     enableRowSelection: true,
     getRowId: (row) => row.id.toString(),
   });
+
+  const [deleteItem, setDeleteItem] = useState<DocumentItem | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const handleDelete = async () => {
+    if (!deleteItem) return;
+    setDeleting(true);
+    try {
+      await deleteDocument(deleteItem.id.toString());
+      toast.success(t("SYSCOMMON.deleted_successfully"));
+      const docs = await getTemplateDocuments({
+        workspace_id: params.workspaceId as string,
+      });
+      setData(docs);
+    } catch (err) {
+      toast.error(t("SYSCOMMON.delete_failed"));
+      console.error(err);
+    } finally {
+      setDeleting(false);
+      setDeleteItem(null);
+    }
+  };
 
   return (
     <div className="p-6 space-y-6 max-w-screen-xl mx-auto">
@@ -188,6 +214,16 @@ export default function TemplateTable() {
           </TableBody>
         </Table>
       </div>
+      <ConfirmDialog
+        open={!!deleteItem}
+        onOpenChange={(open) => !open && setDeleteItem(null)}
+        title={t("SYSCOMMON.confirm_delete")}
+        description={t("SYSCOMMON.confirm_delete_message")}
+        confirmText={t("SYSCOMMON.confirm")}
+        cancelText={t("SYSCOMMON.cancel")}
+        onConfirm={handleDelete}
+        loading={deleting}
+      />
     </div>
   );
 }
