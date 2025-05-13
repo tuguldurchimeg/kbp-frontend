@@ -45,7 +45,7 @@ export default function UserDropdown() {
   const handleLogout = async () => {
     try {
       await logoutService();
-      router.push(ROUTE.LOGIN);
+      router.push(ROUTE.HOME);
     } catch (err) {
       console.error("Logout failed:", err);
     }

@@ -226,7 +226,23 @@
     "subtitle": "Search for help, guides, and solutions here",
     "browse": "Browse articles",
     "whats_new": "See what’s new",
-    "search_placeholder": "Search the knowledge base..."
+    "search_placeholder": "Search the knowledge base...",
+    "tagline": "Your Local Knowledge Base",
+    "heading": {
+      "line1": "Empowering Companies",
+      "line2": "With Local Knowledge"
+    },
+    "description": "We help organizations capture, share, and access company knowledge in one secure, searchable hub—designed for teams that grow and scale.",
+    "trusted_by": "TRUSTED BY",
+    "login": "Login",
+    "signup": "Sign up",
+    "advantages": {
+      "title": "Advantages",
+      "point1": "Private",
+      "point2": "Centralized",
+      "point3": "Fast Access",
+      "point4": "Easy to Use"
+    }
   },
   "Search": {
     "title": "Search from workspace",
@@ -333,6 +349,49 @@
       "save": "Save Changes",
       "updatePassword": "Update Password",
       "markAsRead": "Mark all as read"
+    }
+  },
+  "ResetPassword": {
+    "steps": {
+      "1": {
+        "title": "Reset Password",
+        "desc": "Enter registered email please"
+      },
+      "2": {
+        "title": "Verify Identity",
+        "desc": "Enter the code sent to your email."
+      },
+      "3": {
+        "title": "Create New Password",
+        "desc": "Your identity has been verified. Now create a new secure password."
+      },
+      "4": {
+        "title": "Password Updated",
+        "desc": "Your password has been reset successfully."
+      }
+    },
+    "form": {
+      "password": "New Password",
+      "confirm": "Confirm Password",
+      "submit": "Reset Password",
+      "hint": "Must be 8+ characters with uppercase, lowercase, and number",
+      "email": "Email"
+    },
+    "success": "Your password has been successfully reset.",
+    "login": "Sign in",
+    "send_code": "Send Verification Code",
+    "verify": "Verify code",
+    "6-digit-code": "6 digit code",
+    "signin": {
+      "label": "Remember your password?",
+      "link": "Sign in"
+    },
+    "password": {
+      "min": "Password must be at least 8 characters.",
+      "upper": "Password must contain at least one uppercase letter.",
+      "lower": "Password must contain at least one lowercase letter.",
+      "number": "Password must contain at least one number.",
+      "match": "Passwords do not match."
     }
   }
 }

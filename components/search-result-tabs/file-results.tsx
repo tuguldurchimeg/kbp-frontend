@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Paperclip, FileText, ArrowDownToLine } from "lucide-react";
+import { Paperclip, FileText, Download } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { FileItem } from "@/types/document";
 import {
@@ -107,15 +107,15 @@ export function FileCard({ file }: { file: FileItem }) {
 
       <CardFooter className="p-0 border-t [.border-t]:pt-2 text-xs text-muted-foreground flex justify-between">
         <div>
-          <span>{file.attributes.size ?? "-"}</span>{" "}
-          {/* <span>.{file.attributes.file_type ?? "Unknown"}</span> */}
+          {/* <span>.{file.attributes.file_type ?? "Unknown"}</span>{"•"} */}
+          <span>{file.attributes.size ?? "-"}</span>
         </div>
         <Link
           href={file.attributes.url}
           download
           className="text-muted-foreground hover:text-foreground"
         >
-          <ArrowDownToLine className="size-3.5" />
+          <Download className="size-3.5" />
         </Link>
       </CardFooter>
     </Card>

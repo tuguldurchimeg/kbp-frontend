@@ -12,12 +12,13 @@ import { useRouter } from "next/navigation";
 import { ROUTE } from "@/constants/route.constants";
 import { useTranslations } from "next-intl";
 import { Loader } from "lucide-react";
+import Link from "next/link";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const { login, loading: authLoading } = useAuth(); // Access loading from AuthContext
+  const { login, loading: authLoading } = useAuth();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
@@ -50,7 +51,7 @@ export function LoginForm({
                 <Input
                   id="email"
                   type="email"
-                  placeholder="example@mail.com"
+                  placeholder={t("email")}
                   required
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -58,12 +59,6 @@ export function LoginForm({
               <div className="grid gap-3">
                 <div className="flex items-center">
                   <Label htmlFor="password">{t("password")}</Label>
-                  {/* <a
-                    href="#"
-                    className="ml-auto text-sm underline-offset-2 hover:underline"
-                  >
-                    Forgot your password?
-                  </a> */}
                 </div>
                 <Input
                   id="password"
@@ -93,15 +88,14 @@ export function LoginForm({
                       fill="currentColor"
                     />
                   </svg>
-                  <span className="sr-only">Login with Google</span>
                 </Button>
               </div>
-              <div className="text-center text-sm">
-                {t("ask_registration")}
-                <a href="#" className="underline underline-offset-4">
-                  {t("sign_up")}
-                </a>
-              </div>
+              <Link
+                href={ROUTE.RESET_PASS}
+                className="text-center text-xs text-muted-foreground underline-offset-2 hover:underline"
+              >
+                {t("forgot_password")}
+              </Link>
             </div>
           </form>
           <div className="bg-muted relative hidden md:block">
@@ -109,15 +103,11 @@ export function LoginForm({
               src="/login.png"
               alt="Image"
               fill
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.8]"
             />
           </div>
         </CardContent>
       </Card>
-      {/* <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
-      </div> */}
     </div>
   );
 }
