@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "KBP",
   description: "Local Knowledge base",
   icons: {
-    icon: "/login_p.png",
+    icon: "/login.png",
   },
 };
 

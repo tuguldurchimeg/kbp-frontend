@@ -9,10 +9,10 @@ export const URI = {
   CONFIRM_PASSWORD: "/v1/passwords/confirm",
   RESET_PASSWORD: "/v1/passwords/reset",
   CHANGE_PASSWORD: "/v1/passwords/change",
-  PROFILE: "/v1/employee/users/profile",
+  PROFILE: "/v1/profile",
+  USERS: "/v1/users",
   S3_PRESIGNED_URL: "/v1/s3/presigned_url",
 
-  //
   WORKSPACES: "/v1/workspaces",
   CATEGORIES: "/v1/documents/categories",
   DOCUMENTS: "/v1/documents/documents",

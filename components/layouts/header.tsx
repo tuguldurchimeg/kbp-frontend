@@ -12,7 +12,7 @@ export default function Header() {
           className="flex items-center space-x-2 text-foreground font-bold text-xl"
         >
           <Image
-            src="/login_p.png"
+            src="/login.png"
             alt="Logo"
             width={30}
             height={30}

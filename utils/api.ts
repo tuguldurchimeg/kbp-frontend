@@ -97,7 +97,7 @@ function addSubscriber(callback: (token: string) => void) {
   subscribers.push(callback);
 }
 
-function getUser() {
+export function getUser() {
   if (typeof window !== "undefined") {
     const raw = localStorage.getItem("authUser");
     return raw ? JSON.parse(raw) : null;

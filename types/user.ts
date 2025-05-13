@@ -15,6 +15,7 @@ export type UserItem = {
     firstname: string;
     lastname: string;
     avatar: string;
+    company: { data: CompanyItem };
   };
 };
 
@@ -32,3 +33,22 @@ export type UserLoginParams = {
   email: string;
   password: string;
 };
+
+export interface CreateUserParams {
+  email: string;
+  firstname: string;
+  lastname: string;
+  avatar?: string;
+  company_id?: string;
+}
+
+export interface UpdateUserParams {
+  id: string;
+  params: CreateUserParams;
+}
+
+export interface PasswordChangeParams {
+  current_password: string;
+  new_password: string;
+  confirm_new_password: string;
+}

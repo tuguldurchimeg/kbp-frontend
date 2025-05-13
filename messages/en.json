@@ -293,6 +293,7 @@
     "title": "Account Settings",
     "description": "Manage your account settings and preferences",
     "profilePicAlt": "Profile Picture",
+    "password_change_success": "Password changed successfully",
     "tabs": {
       "profile": "Profile",
       "password": "Password",
@@ -300,23 +301,27 @@
     },
     "profile": {
       "title": "Profile",
-      "description": "Update your profile information here."
+      "description": "Update your profile information here.",
+      "updateSuccess": "Profile updated successfully",
+      "updateError": "Something went wrong while updating your profile"
     },
     "security": {
       "title": "Change Password",
       "description": "Update your password below. Forgot your current password? Use the button at the bottom.",
-      "forgot": "Forgot Password?"
+      "forgot": "Forgot Password?",
+      "updateSuccess": "Password changed successfully",
+      "updateError": "Failed to change password"
     },
     "notifications": {
       "title": "Notifications",
-      "description": "Control what notifications you receive.",
-      "body": "Notifications settings content..."
+      "description": "Description of notifications here",
+      "body": "Upcoming..."
     },
     "form": {
       "firstName": "First name",
       "lastName": "Last name",
       "email": "Email",
-      "role": "Role",
+      "company": "Company",
       "currentPassword": "Current password",
       "newPassword": "New password",
       "confirmPassword": "Confirm new password"
@@ -324,7 +329,7 @@
     "actions": {
       "save": "Save Changes",
       "updatePassword": "Update Password",
-      "savePreferences": "Save Preferences"
+      "markAsRead": "Mark all as read"
     }
   }
 }
