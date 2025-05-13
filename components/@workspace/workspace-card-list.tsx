@@ -58,16 +58,14 @@ const WorkspaceCardList = () => {
   if (workspaces.length === 0) return <div>{t("empty")}</div>;
 
   return (
-    <div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3">
-        {workspaces.map((workspace) => (
-          <WorkspaceCard
-            key={workspace.id}
-            item={workspace}
-            onUpdate={handleWorkspaceUpdate}
-          />
-        ))}
-      </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3">
+      {workspaces.map((workspace) => (
+        <WorkspaceCard
+          key={workspace.id}
+          item={workspace}
+          onUpdate={handleWorkspaceUpdate}
+        />
+      ))}
     </div>
   );
 };

@@ -148,7 +148,10 @@
     "new_category": "New category",
     "new_document": "New document",
     "rename": "Rename",
-    "help": "Help"
+    "help": "Help",
+    "theme_toggle": "Switch to {mode} mode",
+    "theme_light": "light",
+    "theme_dark": "dark"
   },
   "LOGIN": {
     "title": "Sign In",

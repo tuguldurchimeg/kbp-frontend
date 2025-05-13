@@ -9,6 +9,7 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -19,6 +20,9 @@ import { fetchProfile } from "@/src/app/lib/actions/user.actions";
 import { ROUTE } from "@/constants/route.constants";
 import { UserItem } from "@/types/user";
 import Link from "next/link";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { useTheme } from "next-themes";
 
 export default function UserDropdown() {
   const t = useTranslations("SYSCOMMON");
@@ -52,7 +56,8 @@ export default function UserDropdown() {
         user.attributes.lastname?.[0] ?? ""
       }`.toUpperCase()
     : "";
-
+  const { resolvedTheme } = useTheme();
+  const nextMode = resolvedTheme === "dark" ? "light" : "dark";
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -71,6 +76,24 @@ export default function UserDropdown() {
         align="end"
         sideOffset={4}
       >
+        <DropdownMenuLabel className="p-0 font-normal">
+          <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+            <Avatar className="size-8 rounded-lg">
+              <AvatarImage
+                src={user?.attributes.avatar}
+                alt={user?.attributes.firstname}
+              />
+              <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
+            </Avatar>
+            <div className="grid flex-1 text-left text-sm leading-tight">
+              <span className="truncate font-semibold">
+                {user?.attributes.firstname}
+              </span>
+              <span className="truncate text-xs">{user?.attributes.email}</span>
+            </div>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <Link href={ROUTE.PROFILE}>
             <DropdownMenuItem>
@@ -80,6 +103,16 @@ export default function UserDropdown() {
           </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
+        <DropdownMenuGroup className="block md:hidden">
+          <DropdownMenuItem>
+            <LanguageSwitcher />
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <ThemeToggle />
+            {t("theme_toggle", { mode: t(`theme_${nextMode}`) })}
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+        </DropdownMenuGroup>
         <DropdownMenuItem onSelect={handleLogout} className="text-red-700">
           <LogOut className="mr-2 h-4 w-4 text-red-700" />
           {t("logout")}

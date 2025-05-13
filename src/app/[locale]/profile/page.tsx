@@ -253,7 +253,7 @@ export default function ProfliePage() {
                     </p>
                   </CardContent>
                   <CardFooter className="flex justify-end">
-                    <Button variant="outline">
+                    <Button variant="outline" disabled>
                       <CheckCheck className="mr-2 h-4 w-4" />
                       {t("actions.markAsRead")}
                     </Button>

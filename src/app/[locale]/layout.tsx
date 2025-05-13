@@ -12,9 +12,7 @@ import PrivateRoute from "@/components/PrivateRoute";
 export const metadata: Metadata = {
   title: "KBP",
   description: "Local Knowledge base",
-  icons: {
-    icon: "/login.png",
-  },
+  icons: { icon: "/login.png" },
 };
 
 export default async function LocaleLayout({
@@ -29,7 +27,7 @@ export default async function LocaleLayout({
     notFound();
   }
   return (
-    <html lang={locale} className="h-full">
+    <html lang={locale} suppressHydrationWarning>
       <body
         className={`h-full ${notoSans.className} ${roboto.className}`}
         suppressHydrationWarning

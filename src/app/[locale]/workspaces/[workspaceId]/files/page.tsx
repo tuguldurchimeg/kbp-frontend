@@ -97,15 +97,11 @@ export default function Page() {
     <main className="relative w-full px-6 space-y-8">
       <h2 className="text-xl font-semibold">{t("MENUS.files")}</h2>
 
-      <section className="flex flex-wrap gap-6">
+      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {data.length > 0 ? (
-          data.map((file) => (
-            <div key={file.id} className="w-[180px]">
-              <FileCard file={file} />
-            </div>
-          ))
+          data.map((file) => <FileCard key={file.id} file={file} />)
         ) : (
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground text-sm col-span-full">
             {t("SYSCOMMON.empty")}
           </p>
         )}
