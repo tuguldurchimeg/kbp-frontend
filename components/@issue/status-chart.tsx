@@ -27,11 +27,11 @@ export function StatusChart({ data }: { data: StatusData[] }) {
     count: item.count,
   }));
 
-  const chartConfig = data.reduce((acc, item, index) => {
+  const chartConfig = data.reduce((acc, item) => {
     const status = STATUS_MAP[item.status as keyof typeof STATUS_MAP];
     acc[item.status] = {
       label: status.label,
-      color: `hsl(var(--chart-${index + 1}))`,
+      color: status.chartColor,
     };
     return acc;
   }, {} as ChartConfig);
@@ -60,7 +60,7 @@ export function StatusChart({ data }: { data: StatusData[] }) {
               outerRadius={65}
               strokeWidth={5}
             >
-              {chartData.map((entry, index) => (
+              {chartData.map((entry) => (
                 <Cell
                   key={`slice-${entry.status}`}
                   fill={

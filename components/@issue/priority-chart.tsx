@@ -9,8 +9,8 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useTranslations } from "next-intl";
-import { ReportResponse } from "@/types/issue";
 import { useStatusAndPriorityMaps } from "@/constants/issue.constants";
+import { Cell } from "recharts";
 
 type PriorityData = {
   priority: string;
@@ -30,7 +30,7 @@ export function PriorityChart({ data }: { data: PriorityData[] }) {
     const priority = PRIORITY_MAP[item.priority as keyof typeof PRIORITY_MAP];
     acc[item.priority] = {
       label: priority.label,
-      color: priority.color,
+      color: priority.chartColor,
     };
     return acc;
   }, {} as ChartConfig);
@@ -58,7 +58,8 @@ export function PriorityChart({ data }: { data: PriorityData[] }) {
               tickMargin={10}
               axisLine={false}
               tickFormatter={(value) =>
-                chartConfig[value as keyof typeof chartConfig]?.label
+                chartConfig[value as keyof typeof chartConfig]?.label ??
+                value.toString()
               }
             />
             <XAxis dataKey="count" type="number" hide />
@@ -66,7 +67,14 @@ export function PriorityChart({ data }: { data: PriorityData[] }) {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="count" layout="vertical" radius={5} />
+            <Bar dataKey="count" layout="vertical" radius={5}>
+              {chartData.map((entry) => (
+                <Cell
+                  key={`bar-${entry.priority}`}
+                  fill={chartConfig[entry.priority]?.color}
+                />
+              ))}
+            </Bar>
           </BarChart>
         </ChartContainer>
       </CardContent>

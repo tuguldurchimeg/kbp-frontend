@@ -233,7 +233,7 @@ export function DataTable() {
           <div className="flex items-center gap-1">
             <Avatar className="h-6 w-6 rounded-full ">
               <AvatarImage src={user?.avatar} alt={user?.firstname} />
-              <AvatarFallback className="bg-green-200 text-xs ">
+              <AvatarFallback className="text-xs ">
                 {`${user?.firstname?.[0] ?? ""}${
                   user?.lastname?.[0] ?? ""
                 }`.toUpperCase()}
