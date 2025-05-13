@@ -288,5 +288,43 @@
     "cancel": "Cancel",
     "create": "Create",
     "creating": "Creating..."
+  },
+  "Account": {
+    "title": "Account Settings",
+    "description": "Manage your account settings and preferences",
+    "profilePicAlt": "Profile Picture",
+    "tabs": {
+      "profile": "Profile",
+      "password": "Password",
+      "notifications": "Notifications"
+    },
+    "profile": {
+      "title": "Profile",
+      "description": "Update your profile information here."
+    },
+    "security": {
+      "title": "Change Password",
+      "description": "Update your password below. Forgot your current password? Use the button at the bottom.",
+      "forgot": "Forgot Password?"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Control what notifications you receive.",
+      "body": "Notifications settings content..."
+    },
+    "form": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "role": "Role",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm new password"
+    },
+    "actions": {
+      "save": "Save Changes",
+      "updatePassword": "Update Password",
+      "savePreferences": "Save Preferences"
+    }
   }
 }

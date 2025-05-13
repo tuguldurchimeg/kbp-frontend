@@ -289,5 +289,43 @@
     "cancel": "Болих",
     "create": "Үүсгэх",
     "creating": "Үүсгэж байна..."
+  },
+  "Account": {
+    "title": "Хэрэглэгчийн тохиргоо",
+    "description": "Хувийн тохиргоо, мэдээллээ энд удирдана уу",
+    "profilePicAlt": "Профайл зураг",
+    "tabs": {
+      "profile": "Профайл",
+      "password": "Нууц үг",
+      "notifications": "Мэдэгдэл"
+    },
+    "profile": {
+      "title": "Профайл",
+      "description": "Хувийн мэдээллээ шинэчилнэ үү."
+    },
+    "security": {
+      "title": "Нууц үг солих",
+      "description": "Доорх талбаруудыг бөглөж шинэ нууц үгээ тохируулна уу.",
+      "forgot": "Нууц үгээ мартсан уу?"
+    },
+    "notifications": {
+      "title": "Мэдэгдэл",
+      "description": "Ямар мэдэгдэл хүлээн авахыг удирдана уу.",
+      "body": "Мэдэгдлийн тохиргооны агуулга..."
+    },
+    "form": {
+      "firstName": "Нэр",
+      "lastName": "Овог",
+      "email": "Имэйл",
+      "role": "Албан тушаал",
+      "currentPassword": "Одоогийн нууц үг",
+      "newPassword": "Шинэ нууц үг",
+      "confirmPassword": "Шинэ нууц үг баталгаажуулах"
+    },
+    "actions": {
+      "save": "Хадгалах",
+      "updatePassword": "Шинэчлэх",
+      "savePreferences": "Тохиргоо хадгалах"
+    }
   }
 }

@@ -11,11 +11,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { BadgeCheck, Bookmark, LogOut } from "lucide-react";
+import { BadgeCheck, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CURRENT_USER } from "@/constants/kb-placeholder-data";
 import { logoutService } from "@/src/app/lib/actions/auth.actions";
 import { ROUTE } from "@/constants/route.constants";
+import Link from "next/link";
 
 export default function UserDropdown() {
   const t = useTranslations("SYSCOMMON");
@@ -54,16 +55,12 @@ export default function UserDropdown() {
         sideOffset={4}
       >
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <BadgeCheck className="mr-2 h-4 w-4" />
-            {t("account")}
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <Bookmark className="mr-2 h-4 w-4" />
-            {t("saved")}
-          </DropdownMenuItem>
+          <Link href={ROUTE.PROFILE}>
+            <DropdownMenuItem>
+              <BadgeCheck className="mr-2 h-4 w-4" />
+              {t("account")}
+            </DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem

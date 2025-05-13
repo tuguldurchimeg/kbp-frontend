@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { routing } from "@/src/i18n/routing";
 import { notFound } from "next/navigation";
 import { notoSans, roboto } from "@/styles/fonts";
+import PrivateRoute from "@/components/PrivateRoute";
 
 export const metadata: Metadata = {
   title: "KBP",
@@ -41,7 +42,7 @@ export default async function LocaleLayout({
               enableSystem
               disableTransitionOnChange
             >
-              {children}
+              <PrivateRoute>{children}</PrivateRoute>
             </ThemeProvider>
           </AuthProvider>
           <Toaster />
