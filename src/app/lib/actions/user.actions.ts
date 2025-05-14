@@ -35,3 +35,8 @@ export async function updatePassword(
 ): Promise<void> {
   await api.post(URI.CHANGE_PASSWORD, params);
 }
+
+export async function getUsers(): Promise<UserItem[]> {
+  const res = await api.get(URI.USERS);
+  return res.data.data;
+}

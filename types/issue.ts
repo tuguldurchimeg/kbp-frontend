@@ -27,6 +27,12 @@ export type IssueCreateParams = {
   priority: string; // "low", "medium", "high"
   issue_type: string; // "problem", "question"
   workspace_id: string;
+  assignee_ids?: string[];
+};
+
+export type IssueUpdateParams = {
+  id: string;
+  params: IssueCreateParams;
 };
 
 export type ReportParams = { workspace_id: string };

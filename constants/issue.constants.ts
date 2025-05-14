@@ -6,6 +6,9 @@ import {
   HelpCircleIcon,
   CircleHelp,
   Flame,
+  SignalLow,
+  SignalMedium,
+  SignalHigh,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -15,25 +18,29 @@ export function useStatusAndPriorityMaps() {
   const STATUS_MAP = {
     open: {
       label: t("status.open"),
-      color: "bg-blue-500",
+      textColor: "text-blue-500",
+      backColor: "bg-blue-100",
       icon: FileIcon,
       chartColor: "#3b82f6",
     },
     in_progress: {
       label: t("status.in_progress"),
-      color: "bg-yellow-500",
+      textColor: "text-yellow-500",
+      backColor: "bg-yellow-100",
       icon: LoaderIcon,
       chartColor: "#facc15",
     },
     closed: {
       label: t("status.closed"),
-      color: "bg-green-600",
+      textColor: "text-green-600",
+      backColor: "bg-green-100",
       icon: CheckCircleIcon,
-      chartColor: "#16a34a",
+      chartColor: "#10b981",
     },
     default: {
       label: t("status.default"),
-      color: "bg-muted",
+      textColor: "text-gray-500",
+      backColor: "bg-gray-100",
       icon: HelpCircleIcon,
       chartColor: "#6b7280",
     },
@@ -43,30 +50,33 @@ export function useStatusAndPriorityMaps() {
     low: {
       label: t("priority.low"),
       color: "bg-green-100 text-green-800",
-      chartColor: "#bbf7d0", // Tailwind green-100
+      chartColor: "#10b981", // Tailwind emerald-500
+      icon: SignalLow,
     },
     medium: {
       label: t("priority.medium"),
       color: "bg-yellow-100 text-yellow-800",
-      chartColor: "#fef9c3", // Tailwind yellow-100
+      chartColor: "#fbbf24", // Tailwind amber-400
+      icon: SignalMedium,
     },
     high: {
       label: t("priority.high"),
       color: "bg-red-100 text-red-800",
-      chartColor: "#fecaca", // Tailwind red-100
+      chartColor: "#ef4444", // Tailwind red-500
+      icon: SignalHigh,
     },
   };
 
   const TYPE_MAP = {
     problem: {
       label: t("issue_type.problem"),
-      color: "red-500",
+      color: "",
       icon: Flame,
       chartColor: "#ef4444", // Tailwind red-500
     },
     question: {
       label: t("issue_type.question"),
-      color: "green-500",
+      color: "",
       icon: CircleHelp,
       chartColor: "#fbbf24", // Tailwind amber-400
     },

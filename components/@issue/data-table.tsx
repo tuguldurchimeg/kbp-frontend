@@ -38,7 +38,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -72,6 +71,7 @@ import {
 import { CreateIssueDialog } from "./create-edit-dialog";
 import { getIssues } from "@/src/app/lib/actions/issue.actions";
 import { enUS, mn } from "date-fns/locale";
+import { Checkbox } from "@radix-ui/react-checkbox";
 
 function DraggableRow({ row }: { row: Row<IssueItem> }) {
   const { setNodeRef, transform, transition } = useSortable({
@@ -134,7 +134,7 @@ export function DataTable() {
   const t = useTranslations("Main");
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 5,
   });
   const locale = useLocale();
 
@@ -182,7 +182,7 @@ export function DataTable() {
         const Icon = statusInfo.icon;
         return (
           <Badge
-            className={`flex items-center gap-1 capitalize ${statusInfo.color}`}
+            className={`flex items-center gap-1 capitalize ${statusInfo.backColor} ${statusInfo.textColor}`}
           >
             <Icon className="h-3 w-3" />
             <span className="capitalize">{statusInfo.label}</span>
@@ -292,8 +292,8 @@ export function DataTable() {
       ),
     },
     {
-      accessorKey: "attributes.updated_at",
-      header: t("table.updated_at"),
+      accessorKey: "attributes.created_at",
+      header: t("table.created_at"),
       cell: ({ getValue }) => {
         const date = getValue<string>();
         if (!date) return "N/A";
@@ -359,7 +359,7 @@ export function DataTable() {
     <div className="w-full space-y-4">
       <Button
         onClick={() => handleOpenDialog()}
-        className="fixed bottom-15 right-15 h-12 w-12 rounded-xl hover:bg-emerald-600 z-99"
+        className="fixed bottom-10 right-10 h-12 w-12 rounded-xl hover:bg-emerald-600 z-10"
       >
         <Plus />
       </Button>
@@ -367,7 +367,7 @@ export function DataTable() {
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
       />
-      <div className="w-full overflow-x-auto rounded-md border p-4">
+      <div className="w-full overflow-x-auto rounded-md border">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -378,7 +378,7 @@ export function DataTable() {
             strategy={verticalListSortingStrategy}
           >
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-muted">
                 {table.getHeaderGroups().map((group) => (
                   <TableRow key={group.id}>
                     {group.headers.map((header) => (
@@ -392,7 +392,7 @@ export function DataTable() {
                   </TableRow>
                 ))}
               </TableHeader>
-              <TableBody>
+              <TableBody className="**:data-[slot=table-cell]:first:w-8">
                 {table.getRowModel().rows.map((row) => (
                   <DraggableRow key={row.id} row={row} />
                 ))}
@@ -452,7 +452,7 @@ export function DataTable() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              Columns <ChevronDownIcon className="ml-1 h-4 w-4" />
+              {t("columns")} <ChevronDownIcon className="ml-1 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

@@ -1,42 +1,42 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { CommentCard } from "./comment-card";
+import { SendHorizonal } from "lucide-react";
 
-export function CommentSection({ issueId }: { issueId: string }) {
-  const [comments, setComments] = React.useState<string[]>([]);
-  const [newComment, setNewComment] = React.useState("");
+export function CommentSection() {
+  const [comments, setComments] = useState<{ message: string; user: string }[]>(
+    []
+  );
+  const [input, setInput] = useState("");
 
   const handleAddComment = () => {
-    if (newComment.trim()) {
-      setComments((prev) => [...prev, newComment]);
-      setNewComment(""); // Reset the comment input
-    }
+    if (!input.trim()) return;
+    setComments((prev) => [
+      ...prev,
+      { user: "Tatum Paolo", message: input.trim() },
+    ]);
+    setInput("");
   };
 
   return (
-    <div className="mt-8">
-      <h3 className="text-xl font-semibold">Stream</h3>
-      <div className="my-4">
-        <textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          placeholder="Write your comment here"
-          className="w-full p-2 border border-gray-300 rounded-md"
-        />
-        <button
-          onClick={handleAddComment}
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md"
-        >
-          Add Comment
-        </button>
-      </div>
+    <div className="space-y-6">
+      {comments.map((c, i) => (
+        <CommentCard key={i} user={c.user} message={c.message} />
+      ))}
 
-      <div className="space-y-4">
-        {comments.map((comment, index) => (
-          <div key={index} className="p-4 border rounded-md bg-gray-100">
-            <p>{comment}</p>
-          </div>
-        ))}
+      <div className="space-y-2">
+        <Textarea
+          placeholder="Write a comment…"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          className="resize-none"
+        />
+        <Button onClick={handleAddComment} className="ml-auto block">
+          <SendHorizonal />
+        </Button>
       </div>
     </div>
   );

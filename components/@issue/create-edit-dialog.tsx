@@ -6,6 +6,7 @@ import {
   DialogTrigger,
   DialogContent,
   DialogTitle,
+  DialogHeader,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +35,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { ROUTE } from "@/constants/route.constants";
 import { useParams, useRouter } from "next/navigation";
+import { FileQuestion } from "lucide-react";
 
 const FormSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
@@ -60,17 +62,7 @@ export function CreateIssueDialog({
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     createIssue({ ...data, workspace_id: workspaceId }).then((res) => {
-      toast("You submitted the following values:", {
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-          </pre>
-        ),
-        action: {
-          label: "Undo",
-          onClick: () => console.log("Undo"),
-        },
-      });
+      toast.success(t("SYSCOMMON.created_successfully"));
       router.push(
         ROUTE.BASE.ISSUES.DETAIL(res.attributes.workspace_id, res.id)
       );
@@ -87,7 +79,13 @@ export function CreateIssueDialog({
       <DialogTrigger asChild></DialogTrigger>
 
       <DialogContent>
-        <DialogTitle>{t("SYSCOMMON.create")}</DialogTitle>
+        <DialogHeader>
+          <DialogTitle className="text-primary flex items-center gap-2">
+            <FileQuestion />
+            {t("SYSCOMMON.create")}
+          </DialogTitle>
+        </DialogHeader>
+
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}

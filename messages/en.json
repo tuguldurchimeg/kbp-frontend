@@ -404,5 +404,16 @@
     "buttonLabel": "Export document",
     "pdf": "Export as PDF",
     "docx": "Export as DOCX"
+  },
+  "ISSUE": {
+    "issue_id": "Issue ID",
+    "created": "Created",
+    "assignees": "Assignees",
+    "documents": "Related Documents",
+    "connect_document": "Connect Document",
+    "author": "Author",
+    "last_updated": "Last updated",
+    "edit_issue": "Edit issue",
+    "add_assignee": "Add assignee"
   }
 }

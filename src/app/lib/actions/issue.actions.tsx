@@ -4,6 +4,7 @@ import { ListParams } from "@/types/document";
 import {
   IssueCreateParams,
   IssueItem,
+  IssueUpdateParams,
   ReportParams,
   ReportResponse,
 } from "@/types/issue";
@@ -33,10 +34,9 @@ export const createIssue = async (
 };
 
 export const updateIssue = async (
-  id: string,
-  params: Partial<IssueCreateParams>
+  arg: IssueUpdateParams
 ): Promise<IssueItem> => {
-  const res = await api.put(`${URI.ISSUES}/${id}`, params);
+  const res = await api.put(`${URI.ISSUES}/${arg.id}`, arg.params);
   return res.data.data;
 };
 

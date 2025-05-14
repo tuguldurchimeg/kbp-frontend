@@ -9,29 +9,29 @@ import { UserChart } from "@/components/@issue/user-chart";
 import { getIssueChartDatas } from "@/src/app/lib/actions/issue.actions";
 import { useParams } from "next/navigation";
 import { ReportResponse } from "@/types/issue";
+import { useEffect } from "react";
 
 export default function Page() {
-  const t = useTranslations("Main");
+  const t = useTranslations();
   const params = useParams();
   const [data, setData] = React.useState<ReportResponse>();
   const [isLoading, setIsLoading] = React.useState(true);
-  React.useEffect(() => {
+  useEffect(() => {
     getIssueChartDatas({ workspace_id: params.workspaceId as string })
       .then((result) => {
         setData(result);
         setIsLoading(false);
-        console.log("data ", result);
       })
       .catch();
   }, [params.workspaceId]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>{t("SYSCOMMON.loading")}</div>;
   }
 
   return (
     <main className="w-full px-6 space-y-8">
-      <h2 className="text-xl font-semibold">{t("issues")}</h2>
+      <h2 className="text-xl font-semibold">{t("Main.issues")}</h2>
       <section className="space-y-6">
         {data && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

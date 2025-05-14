@@ -217,7 +217,7 @@
       "priority": "Зэрэглэл",
       "type": "Төрөл",
       "created_by": "Үүсгэсэн",
-      "assignees": "Оноосон",
+      "assignees": "Хариуцагч",
       "docs": "Нийтлэл",
       "created_at": "Үүссэн огноо",
       "updated_at": "Шинэчилсэн огноо",
@@ -404,5 +404,16 @@
     "buttonLabel": "Татаж авах",
     "pdf": "PDF татах",
     "docx": "DOCX татах"
+  },
+  "ISSUE": {
+    "issue_id": "Асуудлын дугаар",
+    "created": "Үүсгэсэн",
+    "assignees": "Хариуцагчид",
+    "documents": "Холбогдох нийтлэл / заавар",
+    "connect_document": "Нийтлэл холбох",
+    "author": "Зохиогч",
+    "last_updated": "Сүүлд шинэчилсэн",
+    "edit_issue": "Засах",
+    "add_assignee": "Хариуцагч нэмэх"
   }
 }
