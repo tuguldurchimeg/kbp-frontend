@@ -156,7 +156,8 @@
     "help": "Help",
     "theme_toggle": "Switch to {mode} mode",
     "theme_light": "light",
-    "theme_dark": "dark"
+    "theme_dark": "dark",
+    "tag": "Tag"
   },
   "LOGIN": {
     "title": "Sign In",
@@ -177,8 +178,8 @@
   "MENUS": {
     "tools": "Tools",
     "user_access": "User Access",
-    "templates": "Templates",
-    "tags": "Tags",
+    "templates": "Template",
+    "tags": "Tag",
     "glossary": "Glossary",
     "knowledge_base": "Knowledge Base",
     "issues": "Issues",

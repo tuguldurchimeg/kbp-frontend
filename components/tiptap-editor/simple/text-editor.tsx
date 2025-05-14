@@ -667,13 +667,13 @@ export function SimpleEditor({ document }: Props) {
                 size="xs"
                 className="text-xs font-medium rounded-lg px-4 bg-muted hover:bg-muted/80"
               >
-                {selectedValue || "+ Add tag"}
+                {selectedValue || `+ ${t("tag")}`}
               </CNButton>
             </PopoverTrigger>
             <PopoverContent className="w-[240px] py-1 px-0">
               <Command>
                 <CommandInput
-                  placeholder="Search tags..."
+                  placeholder={t("search")}
                   value={tagInputValue}
                   onValueChange={setTagInputValue}
                 />

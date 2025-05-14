@@ -154,9 +154,10 @@
     "new_document": "Шинэ нийтлэл",
     "rename": "Нэр солих",
     "help": "Тусламж",
-    "theme_toggle": "{mode} горим руу шилжих",
-    "theme_light": "Гэрэлтэй",
-    "theme_dark": "Харанхуй"
+    "theme_toggle": "{mode} горимд шилжих",
+    "theme_light": "Өдрийн",
+    "theme_dark": "Шөнийн",
+    "tag": "Түлхүүр үг"
   },
   "LOGIN": {
     "title": "Нэвтрэх",

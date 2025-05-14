@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, Tag } from "lucide-react";
+import { Loader, Plus, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -135,7 +135,7 @@ export default function TagCreateForm({ onSubmit, loading }: Props) {
             />
             <DialogFooter className="flex justify-end">
               <Button type="submit" disabled={loading}>
-                {loading ? t("loading") : t("create")}
+                {loading ? <Loader className="animate-spin" /> : t("create")}
               </Button>
             </DialogFooter>
           </form>

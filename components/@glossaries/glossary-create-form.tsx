@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, BookOpen } from "lucide-react";
+import { Plus, BookOpen, Loader } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import {
@@ -35,15 +35,14 @@ const schema = z.object({
 });
 
 type FormValues = z.infer<typeof schema>;
+interface Props {
+  onSubmit: (data: GlossaryCreateParams) => void;
+  loading: boolean;
+}
 
-export default function GlossaryCreateForm({
-  onSubmit,
-}: {
-  onSubmit: (item: GlossaryCreateParams) => void | Promise<void>;
-}) {
+export default function TagCreateForm({ onSubmit, loading }: Props) {
   const t = useTranslations("SYSCOMMON");
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const params = useParams();
 
   const form = useForm<FormValues>({
@@ -55,7 +54,6 @@ export default function GlossaryCreateForm({
   });
 
   const handleSubmit = async (values: FormValues) => {
-    setLoading(true);
     try {
       await onSubmit({
         ...values,
@@ -65,7 +63,6 @@ export default function GlossaryCreateForm({
       form.reset();
       setOpen(false);
     } finally {
-      setLoading(false);
     }
   };
 
@@ -119,7 +116,7 @@ export default function GlossaryCreateForm({
 
             <DialogFooter className="flex justify-end">
               <Button type="submit" disabled={loading}>
-                {loading ? t("loading") : t("create")}
+                {loading ? <Loader className="animate-spin" /> : t("create")}
               </Button>
             </DialogFooter>
           </form>

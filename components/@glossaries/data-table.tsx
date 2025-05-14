@@ -167,7 +167,7 @@ export default function GlossaryTable() {
         </DropdownMenu>
       </div>
 
-      {creating && <GlossaryCreateForm onSubmit={handleCreate} />}
+      <GlossaryCreateForm onSubmit={handleCreate} loading={creating} />
       <div className="overflow-x-auto rounded-md border">
         <Table>
           <TableHeader>

@@ -66,7 +66,7 @@ export function useStatusAndPriorityMaps() {
     },
     question: {
       label: t("issue_type.question"),
-      color: "amber-400",
+      color: "green-500",
       icon: CircleHelp,
       chartColor: "#fbbf24", // Tailwind amber-400
     },
