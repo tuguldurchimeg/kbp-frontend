@@ -398,5 +398,10 @@
       "number": "Password must contain at least one number.",
       "match": "Passwords do not match."
     }
+  },
+  "EXPORT": {
+    "buttonLabel": "Export document",
+    "pdf": "Export as PDF",
+    "docx": "Export as DOCX"
   }
 }

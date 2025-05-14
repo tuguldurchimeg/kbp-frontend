@@ -6,6 +6,7 @@ import {
   EditorContext,
   useEditor,
   BubbleMenu,
+  Editor,
 } from "@tiptap/react";
 
 // --- Tiptap Core Extensions ---
@@ -124,17 +125,22 @@ import {
 } from "@/src/app/lib/actions/tag.actions";
 import { useLocale, useTranslations } from "next-intl";
 import { enUS, mn } from "date-fns/locale";
+import ExportButton from "@/components/tiptap-ui/export-button";
 
 type Props = {
   document: DocumentItem;
 };
 
 const MainToolbarContent = ({
+  editor,
+  title,
   onHighlighterClick,
   onTextColorClick,
   onLinkClick,
   isMobile,
 }: {
+  editor: Editor;
+  title: string;
   onHighlighterClick: () => void;
   onTextColorClick: () => void;
   onLinkClick: () => void;
@@ -201,11 +207,13 @@ const MainToolbarContent = ({
         <InsertTableButton />
       </ToolbarGroup>
 
+      <ToolbarGroup>
+        <ExportButton editor={editor} title={title} />
+      </ToolbarGroup>
+
       <Spacer />
 
       {isMobile && <ToolbarSeparator />}
-
-      <ToolbarGroup></ToolbarGroup>
     </>
   );
 };
@@ -518,6 +526,8 @@ export function SimpleEditor({ document }: Props) {
         <Toolbar ref={toolbarRef} variant="floating">
           {mobileView === "main" ? (
             <MainToolbarContent
+              editor={editor!}
+              title={title}
               onHighlighterClick={() => setMobileView("highlighter")}
               onTextColorClick={() => setMobileView("textcolor")}
               onLinkClick={() => setMobileView("link")}
