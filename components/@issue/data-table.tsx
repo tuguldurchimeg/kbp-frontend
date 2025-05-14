@@ -69,9 +69,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { CreateIssueDialog } from "./create-edit-dialog";
-import { getIssues } from "@/src/app/lib/actions/issue.actions";
+import { deleteIssue, getIssues } from "@/src/app/lib/actions/issue.actions";
 import { enUS, mn } from "date-fns/locale";
 import { Checkbox } from "@radix-ui/react-checkbox";
+import { toast } from "sonner";
+import { useState } from "react";
+import ConfirmDialog from "../confirm-dialog";
 
 function DraggableRow({ row }: { row: Row<IssueItem> }) {
   const { setNodeRef, transform, transition } = useSortable({
@@ -131,7 +134,7 @@ export function DataTable() {
   const handleOpenDialog = () => {
     setIsDialogOpen(true);
   };
-  const t = useTranslations("Main");
+  const t = useTranslations();
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 5,
@@ -158,7 +161,7 @@ export function DataTable() {
     },
     {
       accessorKey: "attributes.title",
-      header: t("table.name"),
+      header: t("Main.table.name"),
       cell: ({ row }) => (
         <Link
           href={`${pathname}/${row.original.id}`}
@@ -170,7 +173,7 @@ export function DataTable() {
     },
     {
       accessorKey: "attributes.status",
-      header: t("table.status"),
+      header: t("Main.table.status"),
       cell: ({ getValue }) => {
         const status = getValue<string>();
         const statusInfo = STATUS_MAP[status as keyof typeof STATUS_MAP];
@@ -192,7 +195,7 @@ export function DataTable() {
     },
     {
       accessorKey: "attributes.priority",
-      header: t("table.priority"),
+      header: t("Main.table.priority"),
       cell: ({ getValue }) => {
         const priority = getValue<string>();
         const priorityInfo =
@@ -206,7 +209,7 @@ export function DataTable() {
     },
     {
       accessorKey: "attributes.issue_type",
-      header: t("table.type"),
+      header: t("Main.table.type"),
       cell: ({ getValue }) => {
         const type = getValue<string>();
         const typeInfo = TYPE_MAP[type as keyof typeof TYPE_MAP];
@@ -226,27 +229,31 @@ export function DataTable() {
     },
     {
       accessorKey: "attributes.created_by",
-      header: t("table.created_by"),
+      header: t("Main.table.created_by"),
       cell: ({ row }) => {
         const user = row.original.attributes.created_by.data.attributes;
         return (
-          <div className="flex items-center gap-1">
-            <Avatar className="h-6 w-6 rounded-full ">
-              <AvatarImage src={user?.avatar} alt={user?.firstname} />
-              <AvatarFallback className="text-xs ">
-                {`${user?.firstname?.[0] ?? ""}${
-                  user?.lastname?.[0] ?? ""
-                }`.toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <span className="text-foreground">{user.firstname}</span>
-          </div>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Avatar className="h-6 w-6 rounded-full ">
+                  <AvatarImage src={user?.avatar} alt={user?.firstname} />
+                  <AvatarFallback className="text-xs ">
+                    {`${user?.firstname?.[0] ?? ""}${
+                      user?.lastname?.[0] ?? ""
+                    }`.toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+              </TooltipTrigger>
+              <TooltipContent side="top">{user.firstname}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         );
       },
     },
     {
       accessorKey: "attributes.assignees",
-      header: t("table.assignees"),
+      header: t("Main.table.assignees"),
       cell: ({ row }) => {
         const assignees = row.original.attributes.assignees.data;
         const visible = assignees.slice(0, 1);
@@ -286,14 +293,14 @@ export function DataTable() {
     },
     {
       accessorKey: "attributes.documents_count",
-      header: t("table.docs"),
+      header: t("Main.table.docs"),
       cell: ({ getValue }) => (
         <Badge variant="outline">{getValue<number>()}</Badge>
       ),
     },
     {
       accessorKey: "attributes.created_at",
-      header: t("table.created_at"),
+      header: t("Main.table.created_at"),
       cell: ({ getValue }) => {
         const date = getValue<string>();
         if (!date) return "N/A";
@@ -316,9 +323,11 @@ export function DataTable() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <Link href={`${pathname}/${row.original.id}`}>
-              <DropdownMenuItem>Edit</DropdownMenuItem>
+              <DropdownMenuItem>{t("SYSCOMMON.edit")}</DropdownMenuItem>
             </Link>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setDeleteItem(row.original)}>
+              {t("SYSCOMMON.delete")}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       ),
@@ -355,6 +364,25 @@ export function DataTable() {
     }
   };
 
+  const [deleteItem, setDeleteItem] = useState<IssueItem | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const handleIssueDelete = async () => {
+    if (!deleteItem) return;
+    setDeleting(true);
+    try {
+      await deleteIssue(deleteItem.id.toString());
+      toast.success(t("SYSCOMMON.deleted_successfully"));
+      const updated = await getIssues({ workspace_id: workspaceId });
+      setData(updated);
+    } catch (error) {
+      toast.error(t("SYSCOMMON.delete_failed"));
+      console.error("Issue delete failed:", error);
+    } finally {
+      setDeleting(false);
+      setDeleteItem(null);
+    }
+  };
+
   return (
     <div className="w-full space-y-4">
       <Button
@@ -367,6 +395,17 @@ export function DataTable() {
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
       />
+      <ConfirmDialog
+        open={!!deleteItem}
+        onOpenChange={(confirmOpen) => !confirmOpen && setDeleteItem(null)}
+        title={t("SYSCOMMON.confirm_delete")}
+        description={t("SYSCOMMON.confirm_delete_message")}
+        confirmText={t("SYSCOMMON.confirm")}
+        cancelText={t("SYSCOMMON.cancel")}
+        onConfirm={handleIssueDelete}
+        loading={deleting}
+      />
+
       <div className="w-full overflow-x-auto rounded-md border">
         <DndContext
           sensors={sensors}
@@ -403,7 +442,8 @@ export function DataTable() {
           <div className="flex items-center justify-end pt-4">
             <div className="flex items-center gap-4">
               <span className="text-sm text-muted-foreground">
-                {t("page")} {table.getState().pagination.pageIndex + 1} {" / "}
+                {t("Main.page")} {table.getState().pagination.pageIndex + 1}{" "}
+                {" / "}
                 {table.getPageCount()}
               </span>
               <div className="flex gap-1">
@@ -452,7 +492,7 @@ export function DataTable() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              {t("columns")} <ChevronDownIcon className="ml-1 h-4 w-4" />
+              {t("Main.columns")} <ChevronDownIcon className="ml-1 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

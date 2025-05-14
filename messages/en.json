@@ -414,6 +414,21 @@
     "author": "Author",
     "last_updated": "Last updated",
     "edit_issue": "Edit issue",
-    "add_assignee": "Add assignee"
+    "add_assignee": "Add assignee",
+    "status": "Status",
+    "priority": "Priority",
+    "type": "Type"
+  },
+  "comment": {
+    "write": "Write a comment...",
+    "reply": "Reply",
+    "cancel": "Cancel",
+    "send": "Send",
+    "hideReplies": "Hide Replies",
+    "showReplies": "Show Replies",
+    "you": "You",
+    "justNow": "just now",
+    "writeReply": "Write a reply...",
+    "save": "Save"
   }
 }

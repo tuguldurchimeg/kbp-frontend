@@ -20,6 +20,19 @@ export type IssueItem = {
   };
 };
 
+export type IssueCommentItem = {
+  id: string;
+  type: "issue_comment";
+  attributes: {
+    comment: string;
+    issue: { data: IssueItem };
+    user: { data: UserItem };
+    replies: { data: IssueCommentItem[] };
+    created_at: string;
+    updated_at: string;
+  };
+};
+
 export type IssueCreateParams = {
   title: string;
   description: string;
@@ -33,6 +46,22 @@ export type IssueCreateParams = {
 export type IssueUpdateParams = {
   id: string;
   params: IssueCreateParams;
+};
+
+export type IssueCommentListParams = {
+  issue_id: string;
+};
+
+export type IssueCommentCreateParams = {
+  comment: string;
+  user_id: string;
+  issue_id: string;
+  parent_id?: string;
+};
+
+export type IssueCommentUpdateParams = {
+  id: string;
+  params: IssueCommentCreateParams;
 };
 
 export type ReportParams = { workspace_id: string };

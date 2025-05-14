@@ -18,6 +18,7 @@ export const URI = {
   DOCUMENTS: "/v1/documents/documents",
   FILES: "/v1/documents/files",
   ISSUES: "/v1/documents/issues",
+  ISSUE_COMMENTS: "/v1/documents/issue_comments",
   TAGS: "/v1/tools/tags",
   GLOSSARIES: "/v1/tools/glossaries",
   SEOS: "/v1/tools/seos",

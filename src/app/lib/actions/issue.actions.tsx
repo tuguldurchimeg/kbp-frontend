@@ -2,6 +2,10 @@ import api from "../../../../utils/api";
 import { URI } from "@/constants/uri.constants";
 import { ListParams } from "@/types/document";
 import {
+  IssueCommentCreateParams,
+  IssueCommentItem,
+  IssueCommentListParams,
+  IssueCommentUpdateParams,
   IssueCreateParams,
   IssueItem,
   IssueUpdateParams,
@@ -44,7 +48,27 @@ export async function deleteIssue(id: string): Promise<void> {
   await api.delete(`${URI.ISSUES}/${id}`);
 }
 
-export const getQuickAccessIssues = async (): Promise<IssueItem[]> => {
-  const res = await api.get(`${URI.ISSUES}/quick_access`);
-  return res.data?.data;
+export async function getIssueComments(
+  params: IssueCommentListParams
+): Promise<IssueCommentItem[]> {
+  const res = await api.get(URI.ISSUE_COMMENTS, { params });
+  return res.data.data;
+}
+
+export const createIssueComment = async (
+  params: IssueCommentCreateParams
+): Promise<IssueCommentItem> => {
+  const res = await api.post(URI.ISSUE_COMMENTS, params);
+  return res.data.data;
 };
+
+export const updateIssueComment = async (
+  arg: IssueCommentUpdateParams
+): Promise<IssueCommentItem> => {
+  const res = await api.put(`${URI.ISSUE_COMMENTS}/${arg.id}`, arg.params);
+  return res.data.data;
+};
+
+export async function deleteIssueComment(id: string): Promise<void> {
+  await api.delete(`${URI.ISSUE_COMMENTS}/${id}`);
+}

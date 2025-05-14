@@ -210,7 +210,7 @@
     "by_assignee": "Хариуцагчаар",
     "by_status": "Төлөвөөр",
     "by_priority": "Зэрэглэлээр",
-    "issue": "Issue",
+    "issue": "асуудал",
     "table": {
       "name": "Гарчиг",
       "status": "Төлөв",
@@ -414,6 +414,21 @@
     "author": "Зохиогч",
     "last_updated": "Сүүлд шинэчилсэн",
     "edit_issue": "Засах",
-    "add_assignee": "Хариуцагч нэмэх"
+    "add_assignee": "Хариуцагч нэмэх",
+    "status": "Төлөв",
+    "priority": "Зэрэглэл",
+    "type": "Төрөл"
+  },
+  "comment": {
+    "write": "Сэтгэгдэл бичих...",
+    "reply": "Хариу бичих",
+    "cancel": "Цуцлах",
+    "send": "Илгээх",
+    "hideReplies": "Хариу нуух",
+    "showReplies": "Хариу харуулах",
+    "you": "Та",
+    "justNow": "яг одоо",
+    "writeReply": "Хариу бичнэ үү...",
+    "save": "Хадгалах"
   }
 }
