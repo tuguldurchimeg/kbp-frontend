@@ -16,7 +16,7 @@ import { Plus, Rocket, Search, Zap } from "lucide-react";
 import SiteLayout from "@/components/layouts/SiteLayout";
 import QuickAccessDocumentList from "@/components/@workspace/quick-access-document-list";
 import { SearchResults } from "@/components/search/search-result";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Popover,
   PopoverTrigger,
@@ -24,12 +24,37 @@ import {
 } from "@/components/ui/popover";
 import clsx from "clsx";
 import PrivateRoute from "@/components/providers/PrivateRoute";
+import { WorkspaceSearchResponse } from "@/types/workspace";
+import { searchWorkspace } from "../lib/actions/workspace.actions";
 
 export default function Home() {
   const t = useTranslations();
   const [query, setQuery] = useState("");
-  const hasQuery = query.trim().length > 0;
   const [open, setOpen] = useState(false);
+  const [result, setResult] = useState<WorkspaceSearchResponse | null>(null);
+
+  const hasQuery = query.trim().length > 0;
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(async () => {
+      if (!hasQuery) {
+        setOpen(false);
+        return;
+      }
+
+      try {
+        const res = await searchWorkspace({ keyword: query });
+        setResult(res);
+        setOpen(true);
+      } catch (err) {
+        console.error("Search error", err);
+        setResult(null);
+        setOpen(false);
+      }
+    }, 200);
+
+    return () => clearTimeout(delayDebounce);
+  }, [query]);
 
   return (
     <PrivateRoute>
@@ -66,7 +91,6 @@ export default function Home() {
                   onChange={(e) => {
                     const value = e.target.value;
                     setQuery(value);
-                    setOpen(value.trim().length > 0);
                   }}
                   value={query}
                 />
@@ -76,12 +100,14 @@ export default function Home() {
               <div className="fixed inset-0 z-10 backdrop-blur-sm bg-black/10" />
             )}
 
-            <PopoverContent
-              align="center"
-              className="w-550 max-w-4xl mt-2 p-2 rounded-xl backdrop-blur-sm  border bg-background shadow-lg max-h-100 overflow-auto"
-            >
-              <SearchResults />
-            </PopoverContent>
+            {hasQuery && result && (
+              <PopoverContent
+                align="center"
+                className="w-550 max-w-4xl mt-2 p-2 rounded-xl backdrop-blur-sm  border bg-background shadow-lg max-h-100 overflow-auto"
+              >
+                <SearchResults data={result} />
+              </PopoverContent>
+            )}
           </Popover>
         </section>
         <main className="flex flex-col gap-10 p-6 max-w-7xl mx-auto">
