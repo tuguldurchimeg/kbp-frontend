@@ -14,6 +14,7 @@ export const URI = {
   S3_PRESIGNED_URL: "/v1/s3/presigned_url",
 
   WORKSPACES: "/v1/workspaces",
+  WORKSPACE_ROLE: "/v1/workspace_role_details",
   CATEGORIES: "/v1/documents/categories",
   DOCUMENTS: "/v1/documents/documents",
   FILES: "/v1/documents/files",

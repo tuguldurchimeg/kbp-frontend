@@ -3,8 +3,11 @@ import { URI } from "@/constants/uri.constants";
 import {
   WorkspaceCreateParams,
   WorkspaceItem,
+  WorkspaceRoleItem,
+  WorkspaceRoleUpdateParams,
   WorkspaceUpdateParams,
 } from "@/types/workspace";
+import { ListParams } from "@/types/document";
 
 export const getWorkspaces = async (): Promise<WorkspaceItem[]> => {
   const res = await api.get(URI.WORKSPACES);
@@ -31,5 +34,19 @@ export const deleteWorkspace = async (id: string): Promise<void> => {
 
 export const getWorkspace = async (id: string): Promise<WorkspaceItem> => {
   const res = await api.get(`${URI.WORKSPACES}/${id}`);
+  return res.data.data;
+};
+
+export const getWorkspaceUsers = async (
+  params: ListParams
+): Promise<WorkspaceRoleItem[]> => {
+  const res = await api.get(URI.WORKSPACE_ROLE, { params });
+  return res.data.data;
+};
+
+export const updateWorkspaceRole = async (
+  arg: WorkspaceRoleUpdateParams
+): Promise<WorkspaceRoleItem> => {
+  const res = await api.put(`${URI.WORKSPACE_ROLE}/${arg.id}`, arg.params);
   return res.data.data;
 };

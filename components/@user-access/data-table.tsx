@@ -8,11 +8,16 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { useParams } from "next/navigation";
 
 import { getColumns } from "./table-columns";
-import { ACCESS_PLACEHOLDERS } from "@/constants/kb-placeholder-data";
+import {
+  getWorkspaceUsers,
+  updateWorkspaceRole,
+} from "@/src/app/lib/actions/workspace.actions";
+import { WorkspaceRoleItem } from "@/types/workspace";
 
 import {
   Table,
@@ -22,23 +27,40 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { ChevronDownIcon } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+import { toast } from "sonner";
 
-export default function TemplateTable() {
+export default function WorkspaceUserTable() {
   const t = useTranslations("UserAccess");
+  const { workspaceId } = useParams() as { workspaceId: string };
 
+  const [data, setData] = useState<WorkspaceRoleItem[]>([]);
   const [rowSelection, setRowSelection] = useState({});
-  const columns = getColumns();
+  const fetchData = async () => {
+    try {
+      const result = await getWorkspaceUsers({ workspace_id: workspaceId });
+      setData(result);
+    } catch (err) {
+      console.error("Failed to fetch workspace users", err);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, [workspaceId]);
+
+  const handleUpdateRole = async (rowId: string, action: string) => {
+    try {
+      await updateWorkspaceRole({ id: rowId, params: { action } });
+      fetchData();
+      toast.success(t("role_update_success"));
+    } catch (err) {
+      console.error("Failed to update role", err);
+    }
+  };
+
+  const columns = getColumns(t, handleUpdateRole);
 
   const table = useReactTable({
-    data: ACCESS_PLACEHOLDERS,
+    data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -59,34 +81,11 @@ export default function TemplateTable() {
           <h2 className="text-2xl font-semibold">{t("title")}</h2>
           <p className="text-muted-foreground">{t("description")}</p>
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              {t("columns")} <ChevronDownIcon className="ml-1 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((col) => col.getCanHide())
-              .map((col) => (
-                <DropdownMenuCheckboxItem
-                  key={col.id}
-                  checked={col.getIsVisible()}
-                  onCheckedChange={(value) => col.toggleVisibility(!!value)}
-                >
-                  {typeof col.columnDef.header === "string"
-                    ? col.columnDef.header
-                    : col.id}
-                </DropdownMenuCheckboxItem>
-              ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
 
       <div className="overflow-x-auto rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-muted">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (

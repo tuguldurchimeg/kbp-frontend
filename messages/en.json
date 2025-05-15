@@ -301,7 +301,19 @@
     "title": "User access",
     "description": "Manage employee accesses",
     "columns": "Columns",
-    "noData": "No data"
+    "noData": "No data",
+    "table": {
+      "select_all": "Select all",
+      "select_row": "Select row",
+      "employee_name": "Employee",
+      "user_access": "User Access"
+    },
+    "roles": {
+      "write": "Editor",
+      "read": "Reader",
+      "admin": "Admin"
+    },
+    "role_update_success": "Role updated successfully"
   },
   "NewDocumentDialog": {
     "title": "Create New Document",

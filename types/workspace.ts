@@ -1,5 +1,6 @@
 import { CategoryItem, DocumentItem } from "./document";
 import { IssueItem } from "./issue";
+import { UserItem } from "./user";
 
 export type WorkspaceItem = {
   id: string;
@@ -23,4 +24,19 @@ export type WorkspaceCreateParams = {
 export type WorkspaceUpdateParams = {
   id: string;
   params: WorkspaceCreateParams;
+};
+
+export type WorkspaceRoleItem = {
+  id: string;
+  type: "workspace_role_detail";
+  attributes: {
+    action: string;
+    user: { data: UserItem };
+    workspace: { data: WorkspaceItem };
+  };
+};
+
+export type WorkspaceRoleUpdateParams = {
+  id: string;
+  params: { action: string };
 };

@@ -179,7 +179,7 @@ export default function TagTable() {
       <TagCreateForm onSubmit={handleTagCreate} loading={creating} />
       <div className="overflow-x-auto rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-muted">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (

@@ -17,7 +17,7 @@ import {
   SplitCellsButton,
 } from "./table-action-buttons";
 import { Editor } from "@tiptap/react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/tiptap-ui-primitive/button";
 import { ChevronsDown } from "lucide-react";
 
 const TableBubbleMenu = ({ editor }: { editor: Editor }) => {
@@ -25,7 +25,7 @@ const TableBubbleMenu = ({ editor }: { editor: Editor }) => {
   return (
     <Popover>
       <PopoverTrigger>
-        <Button size="xs">
+        <Button className="bg-primary-light">
           <ChevronsDown />
         </Button>
       </PopoverTrigger>

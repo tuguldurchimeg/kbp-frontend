@@ -1,17 +1,19 @@
-"use client";
-
 import { ColumnDef } from "@tanstack/react-table";
-import { AccessItem } from "@/types/document";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
-import RowActions from "./access-row-actions";
+import { WorkspaceRoleItem } from "@/types/workspace";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-export function getColumns(): ColumnDef<AccessItem>[] {
+export function getColumns(
+  t: (key: string) => string,
+  onRoleChange: (id: string, action: string) => void
+): ColumnDef<WorkspaceRoleItem>[] {
   return [
     {
       id: "select",
@@ -25,14 +27,14 @@ export function getColumns(): ColumnDef<AccessItem>[] {
               : false
           }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
+          aria-label={t("table.select_all")}
         />
       ),
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
+          aria-label={t("table.select_row")}
         />
       ),
       enableSorting: false,
@@ -40,44 +42,48 @@ export function getColumns(): ColumnDef<AccessItem>[] {
     },
     {
       accessorKey: "employeeName",
-      header: "Employee Name",
+      header: t("table.employee_name"),
       cell: ({ row }) => {
-        const name = row.original.attributes.user.data.attributes.firstname;
-        return <span>{name}</span>;
-      },
-    },
-    {
-      id: "userAccess",
-      header: "User Access",
-      cell: ({ row }) => {
-        const userAccess = row.original.attributes.role || "Reader";
+        const user = row.original.attributes.user.data;
+        const firstname = user.attributes.firstname;
+        const lastname = user.attributes.lastname;
         return (
-          <Select
-            value={userAccess}
-            onValueChange={(value: string) => {
-              row.original.attributes.role = value;
-            }}
-          >
-            <SelectTrigger>
-              <span>{userAccess}</span>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="editor">Editor</SelectItem>
-              <SelectItem value="reader">Reader</SelectItem>
-              <SelectItem value="admin">Admin</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex items-center gap-2">
+            <Avatar className="h-6 w-6 rounded-full ">
+              <AvatarImage src={user?.attributes.avatar} alt={firstname} />
+              <AvatarFallback className="text-xs ">
+                {`${firstname?.[0] ?? ""}${lastname?.[0] ?? ""}`.toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <span>
+              {lastname} {firstname}
+            </span>
+          </div>
         );
       },
     },
     {
-      id: "actions",
-      header: "",
+      id: "userAccess",
+      header: t("table.user_access"),
       cell: ({ row }) => {
-        return <RowActions item={row.original} />;
+        const userAccess = row.original.attributes.action;
+
+        return (
+          <Select
+            value={userAccess}
+            onValueChange={(value) => onRoleChange(row.original.id, value)}
+          >
+            <SelectTrigger>
+              <SelectValue>{t(`roles.${userAccess}`)}</SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="read">{t("roles.read")}</SelectItem>
+              <SelectItem value="write">{t("roles.write")}</SelectItem>
+              <SelectItem value="admin">{t("roles.admin")}</SelectItem>
+            </SelectContent>
+          </Select>
+        );
       },
-      enableSorting: false,
-      enableHiding: false,
     },
   ];
 }

@@ -94,8 +94,12 @@ export default function NewDocumentDialog({
       );
     } catch (err) {
       console.error("Failed to create document", err);
+    } finally {
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+      onOpenChange(false);
     }
-    onOpenChange(false);
   };
 
   return (
@@ -158,7 +162,12 @@ export default function NewDocumentDialog({
               <Button
                 type="button"
                 variant="ghost"
-                onClick={() => onOpenChange(false)}
+                onClick={() => {
+                  if (document.activeElement instanceof HTMLElement) {
+                    document.activeElement.blur();
+                  }
+                  onOpenChange(false);
+                }}
                 disabled={form.formState.isLoading}
               >
                 {t("cancel")}

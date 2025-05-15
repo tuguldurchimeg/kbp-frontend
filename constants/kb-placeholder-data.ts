@@ -8,6 +8,7 @@ import {
 } from "@/types/document";
 import { IssueItem } from "@/types/issue";
 import { UserItem } from "@/types/user";
+import { WorkspaceRoleItem } from "@/types/workspace";
 
 export const KB_CATEGORIES: CategoryItem[] = [
   {
@@ -527,12 +528,12 @@ export const GLOSSARY_PLACEHOLDERS: GlossaryItem[] = [
   },
 ];
 
-export const ACCESS_PLACEHOLDERS: AccessItem[] = [
+export const ACCESS_PLACEHOLDERS: WorkspaceRoleItem[] = [
   {
     id: "access-1",
-    type: "access",
+    type: "workspace_role_detail",
     attributes: {
-      role: "admin",
+      action: "admin",
       user: {
         data: {
           id: "user-1",
@@ -543,6 +544,16 @@ export const ACCESS_PLACEHOLDERS: AccessItem[] = [
             firstname: "Alice",
             lastname: "Smith",
             avatar: "https://example.com/avatar1.png",
+            company: {
+              data: {
+                id: "",
+                type: "company",
+                attributes: {
+                  name: "",
+                  uid: "",
+                },
+              },
+            },
           },
         },
       },
@@ -550,9 +561,9 @@ export const ACCESS_PLACEHOLDERS: AccessItem[] = [
   },
   {
     id: "access-2",
-    type: "access",
+    type: "workspace_role_detail",
     attributes: {
-      role: "editor",
+      action: "write",
       user: {
         data: {
           id: "user-2",
@@ -563,6 +574,30 @@ export const ACCESS_PLACEHOLDERS: AccessItem[] = [
             firstname: "Bob",
             lastname: "Johnson",
             avatar: "https://example.com/avatar2.png",
+            company: {
+              data: {
+                id: "",
+                type: "company",
+                attributes: {
+                  name: "",
+                  uid: "",
+                },
+              },
+            },
+          },
+        },
+      },
+      workspace: {
+        data: {
+          id: "",
+          type: "workspace",
+          attributes: {
+            name: "",
+            description: "",
+            image_url: undefined,
+            categories: undefined,
+            documents: undefined,
+            issues: undefined,
           },
         },
       },
@@ -570,9 +605,9 @@ export const ACCESS_PLACEHOLDERS: AccessItem[] = [
   },
   {
     id: "access-3",
-    type: "access",
+    type: "workspace_role_detail",
     attributes: {
-      role: "viewer",
+      action: "read",
       user: {
         data: {
           id: "user-3",
@@ -583,6 +618,30 @@ export const ACCESS_PLACEHOLDERS: AccessItem[] = [
             firstname: "Carol",
             lastname: "Davis",
             avatar: "https://example.com/avatar3.png",
+            company: {
+              data: {
+                id: "",
+                type: "company",
+                attributes: {
+                  name: "",
+                  uid: "",
+                },
+              },
+            },
+          },
+        },
+      },
+      workspace: {
+        data: {
+          id: "",
+          type: "workspace",
+          attributes: {
+            name: "",
+            description: "",
+            image_url: undefined,
+            categories: undefined,
+            documents: undefined,
+            issues: undefined,
           },
         },
       },
