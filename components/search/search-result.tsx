@@ -1,8 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { placeholderData } from "@/constants/search-data";
-import { CategoryResults } from "./search-result-tabs/category-results";
-import { FileResults } from "./search-result-tabs/file-results";
-import { DocumentResults } from "./search-result-tabs/document-results";
+import { CategoryResults } from "./category-results";
+import { FileResults } from "./file-results";
+import { DocumentResults } from "./document-results";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTranslations } from "next-intl";
 import { useState } from "react";

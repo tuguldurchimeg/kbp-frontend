@@ -1,5 +1,5 @@
 import { LoginForm } from "@/components/login-form";
-import PublicRoute from "@/components/PublicRoute";
+import PublicRoute from "@/components/providers/PublicRoute";
 
 export default function LoginPage() {
   return (

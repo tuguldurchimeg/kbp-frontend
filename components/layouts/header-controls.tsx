@@ -1,9 +1,9 @@
 "use client";
 
-import { ThemeToggle } from "../theme-toggle";
-import LanguageSwitcher from "./header-controls/LanguageSwitcher";
+import { ThemeToggle } from "./header-controls/theme-toggle";
+import LanguageSwitcher from "./header-controls/language-switcher";
 // import NotificationButton from "./header-controls/NotificationButton";
-import UserDropdown from "./header-controls/UserDropdown";
+import UserDropdown from "./header-controls/user-dropdown";
 
 export default function HeaderControls() {
   return (

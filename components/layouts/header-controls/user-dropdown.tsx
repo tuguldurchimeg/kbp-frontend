@@ -20,8 +20,8 @@ import { fetchProfile } from "@/src/app/lib/actions/user.actions";
 import { ROUTE } from "@/constants/route.constants";
 import { UserItem } from "@/types/user";
 import Link from "next/link";
-import LanguageSwitcher from "./LanguageSwitcher";
-import { ThemeToggle } from "@/components/theme-toggle";
+import LanguageSwitcher from "./language-switcher";
+import { ThemeToggle } from "@/components/layouts/header-controls/theme-toggle";
 import { useTheme } from "next-themes";
 
 export default function UserDropdown() {

@@ -12,7 +12,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { SearchDialog } from "../SearchDialog";
+import { SearchDialog } from "../search/search-dialog";
 import Link from "next/link";
 import { ROUTE } from "@/constants/route.constants";
 import { useTranslations } from "next-intl";

@@ -8,7 +8,7 @@ import { useParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FileCard } from "@/components/search-result-tabs/file-results";
+import { FileCard } from "@/components/search/file-results";
 
 import {
   getFiles,

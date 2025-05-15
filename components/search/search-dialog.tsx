@@ -11,9 +11,9 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Search } from "lucide-react";
 import clsx from "clsx";
-import { SidebarMenuButton } from "./ui/sidebar";
+import { SidebarMenuButton } from "../ui/sidebar";
 import { useTranslations } from "next-intl";
-import { SearchResults } from "./SearchResult";
+import { SearchResults } from "./search-result";
 
 export function SearchDialog() {
   const [isOpen, setIsOpen] = useState(false);

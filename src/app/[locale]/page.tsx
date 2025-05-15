@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Plus, Rocket, Search, Zap } from "lucide-react";
 import SiteLayout from "@/components/layouts/SiteLayout";
 import QuickAccessDocumentList from "@/components/@workspace/quick-access-document-list";
-import { SearchResults } from "@/components/SearchResult";
+import { SearchResults } from "@/components/search/search-result";
 import { useState } from "react";
 import {
   Popover,
@@ -23,7 +23,7 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import clsx from "clsx";
-import PrivateRoute from "@/components/PrivateRoute";
+import PrivateRoute from "@/components/providers/PrivateRoute";
 
 export default function Home() {
   const t = useTranslations();
