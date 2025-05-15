@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
-import { ChevronDownIcon } from "lucide-react";
+import { ChevronDownIcon, Tag } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -144,7 +144,10 @@ export default function TagTable() {
     <div className="p-6 space-y-6 max-w-screen-xl mx-auto">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-semibold">{t("Tags.title")}</h2>
+          <h2 className="text-2xl font-semibold flex items-center gap-3">
+            <Tag />
+            {t("Tags.title")}
+          </h2>
           <p className="text-muted-foreground">{t("Tags.description")}</p>
         </div>
         <DropdownMenu>

@@ -1,4 +1,4 @@
-import TemplateTable from "@/components/document_templates/template-data-table";
+import TemplateTable from "@/components/@doc-templates/data-table";
 
 export default function Page() {
   return (

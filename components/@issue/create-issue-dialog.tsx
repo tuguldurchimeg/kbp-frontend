@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/select";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
-import { createIssue } from "@/src/app/lib/actions/issue.actions";
 import { useStatusAndPriorityMaps } from "@/constants/issue.constants";
 import {
   Form,
@@ -32,10 +31,8 @@ import {
 } from "../ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { toast } from "sonner";
-import { ROUTE } from "@/constants/route.constants";
-import { useParams, useRouter } from "next/navigation";
 import { FileQuestion } from "lucide-react";
+import { IssueCreateParams } from "@/types/issue";
 
 const FormSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
@@ -47,30 +44,29 @@ const FormSchema = z.object({
   issue_type: z.enum(["problem", "question"], { message: "Invalid type" }),
 });
 
+type FormValues = z.infer<typeof FormSchema>;
+
 export function CreateIssueDialog({
   isOpen,
   onClose,
+  onCreate,
+  workspaceId,
 }: {
   isOpen: boolean;
   onClose: () => void;
+  onCreate: (item: IssueCreateParams) => void;
+  workspaceId: string;
 }) {
   const t = useTranslations();
-  const router = useRouter();
-  const params = useParams();
   const { STATUS_MAP, PRIORITY_MAP, TYPE_MAP } = useStatusAndPriorityMaps();
-  const workspaceId = params.workspaceId as string;
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    createIssue({ ...data, workspace_id: workspaceId }).then((res) => {
-      toast.success(t("SYSCOMMON.created_successfully"));
-      router.push(
-        ROUTE.BASE.ISSUES.DETAIL(res.attributes.workspace_id, res.id)
-      );
-    });
+  const handleSubmit = (values: FormValues) => {
+    onCreate({ ...values, workspace_id: workspaceId });
+    form.reset();
     onClose();
-  }
+  };
 
-  const form = useForm<z.infer<typeof FormSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
   });
 
@@ -88,7 +84,7 @@ export function CreateIssueDialog({
 
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(handleSubmit)}
             className="w-full space-y-6"
           >
             <FormField
@@ -125,7 +121,7 @@ export function CreateIssueDialog({
                 </FormItem>
               )}
             />
-            <div className="mt-4 flex gap-2">
+            <div className="flex gap-4">
               <FormField
                 control={form.control}
                 name="status"
@@ -134,29 +130,34 @@ export function CreateIssueDialog({
                     <FormLabel>{t("SYSCOMMON.status.title")}</FormLabel>
                     <FormControl>
                       <Select
+                        value={field.value}
                         onValueChange={field.onChange}
-                        defaultValue={field.value}
                       >
                         <SelectTrigger>
                           <SelectValue
                             placeholder={t("SYSCOMMON.status.title")}
                           />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="min-w-full">
                           {Object.entries(STATUS_MAP).map(
-                            ([key, { label }]) => (
-                              <SelectItem key={key} value={key}>
-                                {label}
+                            ([k, { label, icon, textColor }]) => (
+                              <SelectItem key={k} value={k}>
+                                <div className="flex items-center gap-2">
+                                  {React.createElement(icon, {
+                                    className: `w-4 h-4 ${textColor}`,
+                                  })}
+                                  {label}
+                                </div>
                               </SelectItem>
                             )
                           )}
                         </SelectContent>
                       </Select>
                     </FormControl>
-                    <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="priority"
@@ -165,29 +166,34 @@ export function CreateIssueDialog({
                     <FormLabel>{t("SYSCOMMON.priority.title")}</FormLabel>
                     <FormControl>
                       <Select
+                        value={field.value}
                         onValueChange={field.onChange}
-                        defaultValue={field.value}
                       >
                         <SelectTrigger>
                           <SelectValue
                             placeholder={t("SYSCOMMON.priority.title")}
                           />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="min-w-full">
                           {Object.entries(PRIORITY_MAP).map(
-                            ([key, { label }]) => (
-                              <SelectItem key={key} value={key}>
-                                {label}
+                            ([k, { label, icon }]) => (
+                              <SelectItem key={k} value={k}>
+                                <div className="flex items-center gap-2">
+                                  {React.createElement(icon, {
+                                    className: "w-4 h-4",
+                                  })}
+                                  {label}
+                                </div>
                               </SelectItem>
                             )
                           )}
                         </SelectContent>
                       </Select>
                     </FormControl>
-                    <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="issue_type"
@@ -196,28 +202,44 @@ export function CreateIssueDialog({
                     <FormLabel>{t("SYSCOMMON.type")}</FormLabel>
                     <FormControl>
                       <Select
+                        value={field.value}
                         onValueChange={field.onChange}
-                        defaultValue={field.value}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder={t("SYSCOMMON.type")} />
                         </SelectTrigger>
-                        <SelectContent>
-                          {Object.entries(TYPE_MAP).map(([key, { label }]) => (
-                            <SelectItem key={key} value={key}>
-                              {label}
-                            </SelectItem>
-                          ))}
+                        <SelectContent className="min-w-full">
+                          {Object.entries(TYPE_MAP).map(
+                            ([k, { label, icon }]) => (
+                              <SelectItem key={k} value={k}>
+                                <div className="flex items-center gap-2">
+                                  {React.createElement(icon, {
+                                    className: "w-4 h-4",
+                                  })}
+                                  {label}
+                                </div>
+                              </SelectItem>
+                            )
+                          )}
                         </SelectContent>
                       </Select>
                     </FormControl>
-                    <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-
-            <Button type="submit">{t("SYSCOMMON.save")}</Button>
+            <div className="flex justify-between">
+              <Button
+                variant={"outline"}
+                onClick={() => {
+                  form.reset();
+                  onClose();
+                }}
+              >
+                {t("SYSCOMMON.cancel")}
+              </Button>
+              <Button type="submit">{t("SYSCOMMON.create")}</Button>
+            </div>
           </form>
         </Form>
       </DialogContent>

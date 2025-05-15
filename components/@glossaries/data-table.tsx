@@ -24,7 +24,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { ChevronDownIcon } from "lucide-react";
+import { BookOpen, ChevronDownIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -139,7 +139,10 @@ export default function GlossaryTable() {
     <div className="p-6 space-y-6 max-w-screen-xl mx-auto">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-semibold">{t("Glossaries.title")}</h2>
+          <h2 className="text-2xl font-semibold flex items-center gap-3">
+            <BookOpen />
+            {t("Glossaries.title")}
+          </h2>
           <p className="text-muted-foreground">{t("Glossaries.description")}</p>
         </div>
         <DropdownMenu>

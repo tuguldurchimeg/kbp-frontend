@@ -57,7 +57,7 @@ import {
   Plus,
 } from "lucide-react";
 import { formatDistanceToNowStrict } from "date-fns";
-import { IssueItem } from "@/types/issue";
+import { IssueCreateParams, IssueItem } from "@/types/issue";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useParams, usePathname } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -68,12 +68,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { CreateIssueDialog } from "./create-edit-dialog";
-import { deleteIssue, getIssues } from "@/src/app/lib/actions/issue.actions";
+import { CreateIssueDialog } from "./create-issue-dialog";
+import {
+  createIssue,
+  deleteIssue,
+  getIssues,
+} from "@/src/app/lib/actions/issue.actions";
 import { enUS, mn } from "date-fns/locale";
 import { Checkbox } from "@radix-ui/react-checkbox";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ConfirmDialog from "../confirm-dialog";
 
 function DraggableRow({ row }: { row: Row<IssueItem> }) {
@@ -108,17 +112,16 @@ export function DataTable() {
   const params = useParams();
   const workspaceId = params.workspaceId as string;
   const [data, setData] = React.useState<IssueItem[]>([]);
+  const fetchData = async () => {
+    try {
+      const res = await getIssues({ workspace_id: workspaceId });
+      setData(res);
+    } catch (error) {
+      console.error("Failed to fetch issues:", error);
+    }
+  };
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await getIssues({ workspace_id: workspaceId });
-        setData(res);
-      } catch (error) {
-        console.error("Failed to fetch issues:", error);
-      }
-    };
-
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -131,6 +134,7 @@ export function DataTable() {
   const dataIds = React.useMemo(() => data.map((d) => d.id.toString()), [data]);
   const { STATUS_MAP, PRIORITY_MAP, TYPE_MAP } = useStatusAndPriorityMaps();
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+
   const handleOpenDialog = () => {
     setIsDialogOpen(true);
   };
@@ -140,6 +144,46 @@ export function DataTable() {
     pageSize: 5,
   });
   const locale = useLocale();
+
+  const handleIssueCreate = async (data: IssueCreateParams) => {
+    try {
+      await createIssue({ ...data });
+      toast.success(t("SYSCOMMON.created_successfully"));
+      await fetchData();
+    } catch {
+      toast.error(t("SYSCOMMON.create_failed"));
+    }
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (active && over && active.id !== over.id) {
+      const oldIndex = dataIds.indexOf(active.id.toString());
+      const newIndex = dataIds.indexOf(over.id.toString());
+      const newData = arrayMove(data, oldIndex, newIndex);
+      console.log("Reordered data:", newData);
+    }
+  };
+
+  const [deleteItem, setDeleteItem] = useState<IssueItem | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleIssueDelete = async () => {
+    if (!deleteItem) return;
+    setDeleting(true);
+    try {
+      await deleteIssue(deleteItem.id.toString());
+      toast.success(t("SYSCOMMON.deleted_successfully"));
+      const updated = await getIssues({ workspace_id: workspaceId });
+      setData(updated);
+    } catch (error) {
+      toast.error(t("SYSCOMMON.delete_failed"));
+      console.error("Issue delete failed:", error);
+    } finally {
+      setDeleting(false);
+      setDeleteItem(null);
+    }
+  };
 
   const columns: ColumnDef<IssueItem>[] = [
     {
@@ -354,35 +398,6 @@ export function DataTable() {
     enableRowSelection: true,
   });
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    if (active && over && active.id !== over.id) {
-      const oldIndex = dataIds.indexOf(active.id.toString());
-      const newIndex = dataIds.indexOf(over.id.toString());
-      const newData = arrayMove(data, oldIndex, newIndex);
-      console.log("Reordered data:", newData);
-    }
-  };
-
-  const [deleteItem, setDeleteItem] = useState<IssueItem | null>(null);
-  const [deleting, setDeleting] = useState(false);
-  const handleIssueDelete = async () => {
-    if (!deleteItem) return;
-    setDeleting(true);
-    try {
-      await deleteIssue(deleteItem.id.toString());
-      toast.success(t("SYSCOMMON.deleted_successfully"));
-      const updated = await getIssues({ workspace_id: workspaceId });
-      setData(updated);
-    } catch (error) {
-      toast.error(t("SYSCOMMON.delete_failed"));
-      console.error("Issue delete failed:", error);
-    } finally {
-      setDeleting(false);
-      setDeleteItem(null);
-    }
-  };
-
   return (
     <div className="w-full space-y-4">
       <Button
@@ -394,6 +409,8 @@ export function DataTable() {
       <CreateIssueDialog
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
+        onCreate={handleIssueCreate}
+        workspaceId={workspaceId}
       />
       <ConfirmDialog
         open={!!deleteItem}
