@@ -1,4 +1,4 @@
-import { CategoryItem, DocumentItem, FileItem } from "./document";
+import { CategoryItem, DocumentItem, FileItem, TagItem } from "./document";
 import { IssueItem } from "./issue";
 import { UserItem } from "./user";
 
@@ -12,6 +12,7 @@ export type WorkspaceItem = {
     categories?: { data: CategoryItem[] };
     documents?: { data: DocumentItem[] };
     issues?: { data: IssueItem[] };
+    tags?: { data: TagItem[] };
   };
 };
 
@@ -19,6 +20,11 @@ export type WorkspaceCreateParams = {
   name: string;
   description?: string;
   image_url?: string;
+};
+
+export type WorkspaceFilterParams = {
+  tag_ids?: string[];
+  keyword?: string;
 };
 
 export type WorkspaceUpdateParams = {

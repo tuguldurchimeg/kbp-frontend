@@ -29,11 +29,16 @@ export default function WorkspaceSummary({
   const totalDocs = (categoryDocsCount ?? 0) + workspaceDocsCount;
 
   const issues = workspace.attributes.issues?.data;
-
+  const applyAlpha = (hex: string, alpha: number) => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
   return (
     <Card>
-      <CardContent className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 sm:gap-10 p-4 sm:p-6">
-        <div className="flex-1">
+      <CardContent className="flex flex-wrap sm:items-center sm:justify-between gap-6 sm:gap-10 p-4 sm:p-6">
+        <div className="flex flex-col">
           <CardTitle className="text-xl sm:text-2xl">
             {workspace.attributes.name}
             <WorkspaceEditForm
