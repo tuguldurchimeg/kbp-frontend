@@ -24,7 +24,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { BookOpen, ChevronDownIcon } from "lucide-react";
+import {
+  BookOpen,
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronsLeftIcon,
+  ChevronsRightIcon,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -112,6 +119,10 @@ export default function GlossaryTable() {
       setDeleteItem(null);
     }
   };
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
 
   const columns = getColumns(
     t,
@@ -127,8 +138,10 @@ export default function GlossaryTable() {
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
     state: {
       rowSelection,
+      pagination,
     },
     onRowSelectionChange: setRowSelection,
     enableRowSelection: true,
@@ -215,6 +228,52 @@ export default function GlossaryTable() {
             )}
           </TableBody>
         </Table>
+      </div>
+      <div className="flex items-center justify-end">
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-muted-foreground">
+            {t("Main.page")} {table.getState().pagination.pageIndex + 1} {" / "}
+            {table.getPageCount()}
+          </span>
+          <div className="flex gap-1">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => table.setPageIndex(0)}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ChevronsLeftIcon className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ChevronLeftIcon className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              <ChevronRightIcon className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              disabled={!table.getCanNextPage()}
+            >
+              <ChevronsRightIcon className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
       </div>
 
       {editItem && (
