@@ -5,6 +5,7 @@ export const URI = {
   LOGIN: "/v1/login",
   LOGOUT: "/v1/logout",
   REFRESH: "/v1/refresh_token",
+  GOOGLE_LOGIN: "/v1/google_login",
   FORGOT_PASSWORD: "/v1/passwords/forgot",
   CONFIRM_PASSWORD: "/v1/passwords/confirm",
   RESET_PASSWORD: "/v1/passwords/reset",

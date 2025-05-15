@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import {
+  googleLoginService,
   loginService,
   logoutService,
   refreshTokenService,
@@ -12,6 +13,7 @@ type AuthContextType = {
   user: CurrentUser | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  googleLogin: (access_token: string) => Promise<void>;
   logout: () => void;
   refresh: () => Promise<void>;
   isAuthenticated: boolean;
@@ -27,6 +29,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     const data = await loginService({ email, password });
+    setUser(data);
+
+    if (isClient) {
+      localStorage.setItem("authUser", JSON.stringify(data));
+    }
+  };
+
+  const googleLogin = async (access_token: string) => {
+    const data = await googleLoginService({ access_token });
     setUser(data);
 
     if (isClient) {
@@ -80,6 +91,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         login,
         logout,
         refresh,
+        googleLogin,
         isAuthenticated: !!user,
         loading,
       }}

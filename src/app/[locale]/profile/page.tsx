@@ -40,7 +40,6 @@ import { toast } from "sonner";
 export const schema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
-  email: z.string().email(),
   avatarUrl: z.string().url().optional(),
 });
 
@@ -55,7 +54,6 @@ export default function ProfliePage() {
     defaultValues: {
       firstName: currentUser?.attributes.firstname,
       lastName: currentUser?.attributes.lastname,
-      email: currentUser?.attributes.email,
       avatarUrl: currentUser?.attributes.avatar,
     },
   });
@@ -67,7 +65,6 @@ export default function ProfliePage() {
       form.reset({
         firstName: data.attributes.firstname,
         lastName: data.attributes.lastname,
-        email: data.attributes.email,
         avatarUrl: data.attributes.avatar,
       });
     } catch (error) {
@@ -111,9 +108,9 @@ export default function ProfliePage() {
       await updateUser({
         id: currentUser.id,
         params: {
+          ...currentUser.attributes,
           firstname: values.firstName,
           lastname: values.lastName,
-          email: values.email,
         },
       });
 
@@ -124,6 +121,9 @@ export default function ProfliePage() {
       toast.error(t("profile.updateError"));
     }
   };
+  if (!currentUser) {
+    return null;
+  }
 
   return (
     <SiteLayout>
@@ -193,18 +193,10 @@ export default function ProfliePage() {
                         </FormItem>
                       )}
                     />
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{t("form.email")}</FormLabel>
-                          <FormControl>
-                            <Input placeholder="john@example.com" {...field} />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
+                    <div className="space-y-1">
+                      <Label>{t("form.email")}</Label>
+                      <Input disabled value={currentUser?.attributes.email} />
+                    </div>
                     <div className="space-y-1">
                       <Label>{t("form.company")}</Label>
                       <Input

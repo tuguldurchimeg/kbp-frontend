@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { routing } from "@/src/i18n/routing";
 import { notFound } from "next/navigation";
 import { notoSans, roboto } from "@/styles/fonts";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export const metadata: Metadata = {
   title: "KBP",
@@ -33,14 +34,18 @@ export default async function LocaleLayout({
       >
         <NextIntlClientProvider locale={locale}>
           <AuthProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
+            <GoogleOAuthProvider
+              clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}
             >
-              {children}
-            </ThemeProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                {children}
+              </ThemeProvider>
+            </GoogleOAuthProvider>
           </AuthProvider>
           <Toaster />
         </NextIntlClientProvider>

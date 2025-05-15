@@ -34,6 +34,10 @@ export type UserLoginParams = {
   password: string;
 };
 
+export type SocialLoginParams = {
+  access_token: string;
+};
+
 export interface CreateUserParams {
   email: string;
   firstname: string;
