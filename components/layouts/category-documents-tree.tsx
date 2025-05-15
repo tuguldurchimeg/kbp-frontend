@@ -16,6 +16,7 @@ import {
   Ellipsis,
   Edit,
   Trash2,
+  ChevronDown,
 } from "lucide-react";
 import Link from "next/link";
 import { MenuItemChildren } from "@/constants/menu";
@@ -28,74 +29,55 @@ import {
 } from "@/components/ui/dropdown-menu";
 import clsx from "clsx";
 import { useParams } from "next/navigation";
-import {
-  createCategory,
-  updateCategory,
-} from "@/src/app/lib/actions/category.actions";
-import { toast } from "sonner";
 import { Input } from "../ui/input";
 import { useState } from "react";
-import NewDocumentDialog from "../@documents/new-document-dialog";
 import { useTranslations } from "next-intl";
+import { JSONContent } from "@tiptap/react";
 
 interface CategoryDocumentsProps {
   item: MenuItemChildren;
+  setNewDocDialogOpen: (value: boolean) => void;
+  onCategoryCreate: (parent_id?: string) => void;
+  onCategoryRename: (id: string, name: string) => void;
+  setSelectedCategoryId: (id: string) => void;
+  onDocumentCreate: (
+    title: string,
+    category_id: string,
+    content?: JSONContent
+  ) => void;
+  onCategoryDelete: (id: string) => void;
 }
 
-const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
+const CategoryDocuments = ({
+  item,
+  setNewDocDialogOpen,
+  setSelectedCategoryId,
+  onCategoryCreate,
+  onCategoryRename,
+  onDocumentCreate,
+  onCategoryDelete,
+}: CategoryDocumentsProps) => {
   const params = useParams();
-  const workspaceId = params.workspaceId as string;
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState(item.label);
-  const [newDocDialogOpen, setNewDocDialogOpen] = useState(false);
   const documentIdFromUrl = params.docId as string;
   const isActive =
     !!documentIdFromUrl &&
     item.id?.toString() === documentIdFromUrl &&
     !item.collapsible;
   const t = useTranslations("SYSCOMMON");
-  const handleRename = async () => {
-    if (!newName || newName === item.label) return;
-    try {
-      if (item.id) {
-        const updatedCategory = await updateCategory(item.id, {
-          name: newName,
-        });
-        toast.success(
-          `Category renamed to "${updatedCategory.attributes.name}"`
-        );
-        setIsEditing(false);
-      }
-    } catch (err) {
-      console.error("Error renaming category", err);
-      toast.error("Failed to rename category");
-    }
-  };
+  const [itemCollapsed, setItemCollapse] = useState(item.isCollapsed);
 
-  const handleCreateDocument = () => {
-    setNewDocDialogOpen(true);
-  };
-
-  // Handler to create a new category under this one
-  const handleCreateCategory = async () => {
-    try {
-      const newCategory = await createCategory({
-        name: "Untitled Category",
-        parent_id: item.id,
-        workspace_id: workspaceId,
-      });
-      toast.success(`Category created: "${newCategory.attributes.name}"`);
-      // Optionally trigger refresh or reload of category tree
-    } catch (err) {
-      console.error("Error creating category", err);
-      toast.error("Failed to create category");
-    }
+  const handleRename = () => {
+    if (item.id) onCategoryRename(item.id, newName);
+    setIsEditing(false);
   };
 
   return (
     <Collapsible
       key={item.label}
-      defaultOpen={item.isCollapsed}
+      defaultOpen={itemCollapsed}
+      onOpenChange={() => setItemCollapse(!itemCollapsed)}
       className="group/collapsible"
     >
       <div className="flex flex-col">
@@ -112,54 +94,47 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
             >
               {item.collapsible && (
                 <>
-                  <div
-                    className="transition-transform duration-200"
-                    style={{
-                      transform: item.isCollapsed
-                        ? "rotate(90deg)"
-                        : "rotate(0deg)",
-                    }}
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </div>
-                  <span>{item.label}</span>
+                  {itemCollapsed ? (
+                    <ChevronDown className="size-4" />
+                  ) : (
+                    <ChevronRight className="size-4" />
+                  )}
+                  {isEditing ? (
+                    <div className="flex items-center gap-2">
+                      <Input
+                        value={newName}
+                        onChange={(e) => setNewName(e.target.value)}
+                        className="text-sm border-0"
+                        autoFocus
+                        onBlur={handleRename}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") handleRename();
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <span>{item.label}</span>
+                  )}
                 </>
               )}
-              {isEditing ? (
-                <div className="flex items-center gap-2">
-                  <Input
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
-                    className="text-sm border-0"
-                    autoFocus
-                    onBlur={() => {
-                      handleRename();
-                      setIsEditing(false);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") handleRename();
-                    }}
-                  />
-                </div>
-              ) : (
-                <div className="flex items-center gap-1">
-                  {item.uri && (
-                    <Link
-                      href={item.uri || "#"}
-                      className="flex items-center gap-1"
-                    >
-                      {item.icon && (
-                        <item.icon
-                          className={clsx(
-                            isActive ? "text-primary" : "text-transparent"
-                          )}
-                        />
-                      )}
-                      <span>{item.label}</span>
-                    </Link>
-                  )}
-                </div>
-              )}
+
+              <div className="flex items-center gap-1">
+                {item.uri && (
+                  <Link
+                    href={item.uri || "#"}
+                    className="flex items-center gap-1"
+                  >
+                    {item.icon && (
+                      <item.icon
+                        className={clsx(
+                          isActive ? "text-primary" : "text-transparent"
+                        )}
+                      />
+                    )}
+                    <span>{item.label}</span>
+                  </Link>
+                )}
+              </div>
             </SidebarMenuButton>
           </CollapsibleTrigger>
 
@@ -177,17 +152,26 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
                   {t("rename")}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleCreateCategory}>
+                <DropdownMenuItem
+                  onClick={() => item.id && onCategoryCreate(item.id)}
+                >
                   <FolderPlus className="w-4 h-4 mr-2 text-blue-600" />
                   {t("new_category")}
                 </DropdownMenuItem>
 
-                <DropdownMenuItem onClick={handleCreateDocument}>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setNewDocDialogOpen(true);
+                    setSelectedCategoryId(item.id || "");
+                  }}
+                >
                   <FileText className="w-4 h-4 mr-2 text-indigo-600" />
                   {t("new_document")}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => console.log("Delete item")}>
+                <DropdownMenuItem
+                  onClick={() => item.id && onCategoryDelete(item.id)}
+                >
                   <Trash2 className="w-4 h-4 mr-2 text-red-600" />
                   {t("delete")}
                 </DropdownMenuItem>
@@ -198,27 +182,28 @@ const CategoryDocuments = ({ item }: CategoryDocumentsProps) => {
 
         {item.collapsible && (
           <CollapsibleContent>
-            {item.children && item.children.length > 0 ? (
+            {item.children && item.children.length > 0 && (
               <SidebarMenuSub className="px-0 ml-1.5 mr-0">
                 {item.children.map((child) => (
                   <SidebarMenuSubItem
                     key={child.id || `${child.label}-${child.uri ?? "no-uri"}`}
                   >
-                    <CategoryDocuments item={child} />
+                    <CategoryDocuments
+                      item={child}
+                      setNewDocDialogOpen={setNewDocDialogOpen}
+                      onCategoryCreate={onCategoryCreate}
+                      onCategoryRename={onCategoryRename}
+                      onDocumentCreate={onDocumentCreate}
+                      setSelectedCategoryId={setSelectedCategoryId}
+                      onCategoryDelete={onCategoryDelete}
+                    />
                   </SidebarMenuSubItem>
                 ))}
               </SidebarMenuSub>
-            ) : (
-              <div className="ml-4 text-muted text-sm py-2">{t("loading")}</div>
             )}
           </CollapsibleContent>
         )}
       </div>
-      <NewDocumentDialog
-        open={newDocDialogOpen}
-        onOpenChange={setNewDocDialogOpen}
-        categoryId={item.id || ""}
-      />
     </Collapsible>
   );
 };

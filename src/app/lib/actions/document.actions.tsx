@@ -52,23 +52,6 @@ export const getTemplateDocuments = async (
   return res.data.data;
 };
 
-export const createDocumentFromTemplate = async (
-  templateId: string,
-  overrides?: Partial<DocumentCreateParams>
-): Promise<DocumentItem> => {
-  const template = await getDocument(templateId);
-
-  const payload: DocumentCreateParams = {
-    title: overrides?.title || `${template.attributes.title} (Copy)`,
-    content: template.attributes.content,
-    workspace_id: template.attributes.workspace_id,
-    ...overrides,
-  };
-
-  const res = await api.post(URI.DOCUMENTS, payload);
-  return res.data.data;
-};
-
 export const setDocumentTag = async (
   params: DocumentTagSetParams
 ): Promise<DocumentItem> => {

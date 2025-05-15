@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { BookOpen } from "lucide-react";
+import { BookOpen, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import {
@@ -24,7 +24,6 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { useState } from "react";
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -47,8 +46,6 @@ export default function GlossaryEditForm({
   onEdit: (item: GlossaryUpdateParams) => void | Promise<void>;
 }) {
   const params = useParams();
-  const [loading, setLoading] = useState(false);
-
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -58,20 +55,15 @@ export default function GlossaryEditForm({
   });
 
   const handleSubmit = async (values: FormValues) => {
-    setLoading(true);
-    try {
-      await onEdit({
-        id: glossaryItem.id,
-        params: {
-          ...values,
-          content: values.content || "",
-          workspace_id: params.workspaceId as string,
-        },
-      });
-      setOpen(false);
-    } finally {
-      setLoading(false);
-    }
+    await onEdit({
+      id: glossaryItem.id,
+      params: {
+        ...values,
+        content: values.content || "",
+        workspace_id: params.workspaceId as string,
+      },
+    });
+    setOpen(false);
   };
 
   return (
@@ -118,8 +110,15 @@ export default function GlossaryEditForm({
             />
 
             <div className="flex justify-end">
-              <Button type="submit" disabled={loading}>
-                {loading ? t("SYSCOMMON.loading") : t("SYSCOMMON.update")}
+              <Button
+                type="submit"
+                disabled={!form.formState.isDirty || form.formState.isLoading}
+              >
+                {form.formState.isLoading ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  t("SYSCOMMON.update")
+                )}
               </Button>
             </div>
           </form>

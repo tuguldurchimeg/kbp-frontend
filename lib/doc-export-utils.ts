@@ -1,5 +1,4 @@
 import * as htmlDocx from "html-docx-js/dist/html-docx";
-import html2pdf from "html2pdf.js";
 
 export const exportToDocx = (html: string, title: string) => {
   const fullHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${title}</title></head><body>${html}</body></html>`;
@@ -13,7 +12,8 @@ export const exportToDocx = (html: string, title: string) => {
   URL.revokeObjectURL(url);
 };
 
-export const exportToPdf = (html: string, title: string) => {
+export const exportToPdf = async (html: string, title: string) => {
+  const html2pdf = (await import("html2pdf.js")).default;
   const wrapper = document.createElement("div");
   wrapper.style.padding = "20px";
   wrapper.style.fontFamily = "Arial, sans-serif";

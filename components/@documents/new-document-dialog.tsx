@@ -1,50 +1,76 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import {
   Select,
+  SelectTrigger,
   SelectContent,
   SelectItem,
-  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import {
-  getTemplateDocuments,
-  createDocumentFromTemplate,
-  createDocument,
-} from "@/src/app/lib/actions/document.actions";
-import { useParams, useRouter } from "next/navigation";
-import { DocumentItem } from "@/types/document";
-import { ROUTE } from "@/constants/route.constants";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { getTemplateDocuments } from "@/src/app/lib/actions/document.actions";
+import { useParams } from "next/navigation";
+import { DocumentItem } from "@/types/document";
+import { JSONContent } from "@tiptap/react";
+import { Loader2 } from "lucide-react";
+
+const schema = z.object({
+  title: z.string().min(1, "Title is required"),
+  templateId: z.string().nullable().optional(),
+});
+
+type FormValues = z.infer<typeof schema>;
 
 export default function NewDocumentDialog({
   open,
   onOpenChange,
   categoryId,
+  onDocumentCreate,
 }: {
   open: boolean;
   onOpenChange: (value: boolean) => void;
   categoryId: string;
+  onDocumentCreate: (
+    title: string,
+    category_id: string,
+    content?: JSONContent
+  ) => void;
 }) {
   const t = useTranslations("NewDocumentDialog");
-
-  const [title, setTitle] = useState("");
-  const [templates, setTemplates] = useState<DocumentItem[]>([]);
-  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const params = useParams();
-  const router = useRouter();
   const workspaceId = params.workspaceId as string;
+  const [templates, setTemplates] = useState<DocumentItem[]>([]);
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      title: "",
+      templateId: undefined,
+    },
+  });
+
+  const { handleSubmit, reset } = form;
 
   useEffect(() => {
     if (open) {
@@ -52,34 +78,24 @@ export default function NewDocumentDialog({
         .then(setTemplates)
         .catch(console.error);
     } else {
-      setTitle("");
-      setSelectedTemplate(null);
+      reset();
     }
   }, [open]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const onSubmit = async (values: FormValues) => {
     try {
-      const res = selectedTemplate
-        ? await createDocumentFromTemplate(selectedTemplate, {
-            title,
-            category_id: categoryId,
-            workspace_id: workspaceId,
-          })
-        : await createDocument({
-            title,
-            category_id: categoryId,
-            workspace_id: workspaceId,
-          });
-
-      onOpenChange(false);
-      router.push(ROUTE.BASE.DOCUMENT.DETAIL(workspaceId, res.id));
+      const selectedTemplate = templates.find(
+        (t) => t.id === values.templateId
+      );
+      onDocumentCreate(
+        values.title,
+        categoryId,
+        selectedTemplate?.attributes.content
+      );
     } catch (err) {
       console.error("Failed to create document", err);
-    } finally {
-      setLoading(false);
     }
+    onOpenChange(false);
   };
 
   return (
@@ -88,57 +104,78 @@ export default function NewDocumentDialog({
         <DialogHeader>
           <DialogTitle>{t("title")}</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="title">{t("field_title")}</Label>
-            <Input
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder={t("field_title_placeholder")}
-              required
-              className="mt-1"
+        <Form {...form}>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("field_title")}</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={t("field_title_placeholder")}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
 
-          <div>
-            <Label htmlFor="template" className="mb-1">
-              {t("field_template")}
-            </Label>
-            <Select
-              value={selectedTemplate || "blank"}
-              onValueChange={(value) =>
-                setSelectedTemplate(value === "blank" ? null : value)
-              }
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder={t("template_placeholder")} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="blank">{t("blank_option")}</SelectItem>
-                {templates.map((template) => (
-                  <SelectItem key={template.id} value={template.id}>
-                    {template.attributes.title}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+            <FormField
+              control={form.control}
+              name="templateId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("field_template")}</FormLabel>
+                  <Select
+                    value={field.value ?? "blank"}
+                    onValueChange={(value) =>
+                      field.onChange(value === "blank" ? null : value)
+                    }
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t("template_placeholder")} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="blank">{t("blank_option")}</SelectItem>
+                      {templates.map((template) => (
+                        <SelectItem key={template.id} value={template.id}>
+                          {template.attributes.title}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <div className="flex justify-end gap-2">
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => onOpenChange(false)}
-              disabled={loading}
-            >
-              {t("cancel")}
-            </Button>
-            <Button type="submit" disabled={loading}>
-              {loading ? t("creating") : t("create")}
-            </Button>
-          </div>
-        </form>
+            <DialogFooter className="flex justify-end">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => onOpenChange(false)}
+                disabled={form.formState.isLoading}
+              >
+                {t("cancel")}
+              </Button>
+              <Button
+                type="submit"
+                disabled={form.formState.isLoading || !form.formState.isDirty}
+              >
+                {form.formState.isLoading ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  t("create")
+                )}
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

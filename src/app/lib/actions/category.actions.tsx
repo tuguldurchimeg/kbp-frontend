@@ -1,6 +1,10 @@
 import api from "../../../../utils/api";
 import { URI } from "@/constants/uri.constants";
-import { CategoryItem, CategoryCreateParams } from "@/types/document";
+import {
+  CategoryItem,
+  CategoryCreateParams,
+  CategoryUpdateParams,
+} from "@/types/document";
 
 export const getCategories = async (
   workspaceId: string
@@ -19,10 +23,9 @@ export const createCategory = async (
 };
 
 export const updateCategory = async (
-  id: string,
-  params: Partial<CategoryCreateParams>
+  arg: CategoryUpdateParams
 ): Promise<CategoryItem> => {
-  const res = await api.put(`${URI.CATEGORIES}/${id}`, params);
+  const res = await api.put(`${URI.CATEGORIES}/${arg.id}`, arg.params);
   return res.data.data;
 };
 

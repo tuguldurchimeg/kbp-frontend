@@ -67,10 +67,6 @@ import Table from "@tiptap/extension-table";
 import TableRow from "@tiptap/extension-table-row";
 import TableHeader from "@tiptap/extension-table-header";
 import TableCell from "@tiptap/extension-table-cell";
-import Document from "@tiptap/extension-document";
-import Gapcursor from "@tiptap/extension-gapcursor";
-import Paragraph from "@tiptap/extension-paragraph";
-import Text from "@tiptap/extension-text";
 
 // --- Icons ---
 import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon";
@@ -360,10 +356,6 @@ export function SimpleEditor({ document }: Props) {
       TableRow,
       TableHeader,
       TableCell,
-      Document,
-      Text,
-      Gapcursor,
-      Paragraph,
     ],
     content: "",
   });

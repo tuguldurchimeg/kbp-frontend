@@ -56,6 +56,11 @@ export type CategoryCreateParams = {
   workspace_id: string;
 };
 
+export type CategoryUpdateParams = {
+  id: string;
+  params: CategoryCreateParams;
+};
+
 export type DocumentCreateParams = {
   title: string;
   content?: JSONContent;

@@ -30,7 +30,7 @@ import { Plus, FolderPlus, FileText, ArrowBigLeftDash } from "lucide-react";
 import Link from "next/link";
 import CategoryDocuments from "./category-documents-tree";
 import { NavHeader } from "./app-sidebar-header";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import {
   useSidebarMenus,
   generateDocumentMenus,
@@ -39,24 +39,32 @@ import {
 import clsx from "clsx";
 import { ROUTE } from "@/constants/route.constants";
 import NewDocumentDialog from "@/components/@documents/new-document-dialog";
-import { createCategory } from "@/src/app/lib/actions/category.actions";
+import {
+  createCategory,
+  deleteCategory,
+  updateCategory,
+} from "@/src/app/lib/actions/category.actions";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { getWorkspace } from "@/src/app/lib/actions/workspace.actions";
 import { WorkspaceItem } from "@/types/workspace";
+import { createDocument } from "@/src/app/lib/actions/document.actions";
+import { JSONContent } from "@tiptap/react";
 
 export function AppSidebar() {
   const params = useParams();
   const workspaceId = params.workspaceId as string;
   const pathname = usePathname();
+  const router = useRouter();
   const [workspace, setWorkspace] = useState<WorkspaceItem>();
   const [newDocDialogOpen, setNewDocDialogOpen] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
   const [documentMenus, setDocumentMenus] = useState<MenuItemChildren[]>([]);
   const t = useTranslations("SYSCOMMON");
   const { staticMenus, dynamicMenu } = useSidebarMenus(workspaceId);
 
-  const fetchDocumentMenus = async () => {
+  const fetchWorkspace = async () => {
     try {
       const ws = await getWorkspace(workspaceId);
       setWorkspace(ws);
@@ -71,9 +79,68 @@ export function AppSidebar() {
   const cleanPath = pathname.replace(/^\/(en|mn)/, "");
 
   useEffect(() => {
-    fetchDocumentMenus();
+    fetchWorkspace();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceId]);
+
+  const handleCategoryRename = async (id: string, name: string) => {
+    try {
+      await updateCategory({
+        id,
+        params: { name, workspace_id: workspaceId },
+      });
+      toast.success(t("updated_successfully"));
+      fetchWorkspace();
+    } catch {
+      toast.success(t("update_failed"));
+    }
+  };
+
+  const handleCreateDocument = async (
+    title: string,
+    category_id: string,
+    content?: JSONContent
+  ) => {
+    try {
+      const res = await createDocument({
+        title,
+        category_id,
+        content,
+        workspace_id: workspaceId,
+      });
+      toast.success(t("created_successfully"));
+      router.push(ROUTE.BASE.DOCUMENT.DETAIL(workspaceId, res.id));
+      fetchWorkspace();
+    } catch (err) {
+      console.error("Failed to create document", err);
+      toast.success(t("create_failed"));
+    }
+  };
+
+  const handleCreateCategory = async (category_id?: string) => {
+    try {
+      await createCategory({
+        name: "Untitled Category",
+        workspace_id: workspaceId,
+        parent_id: category_id,
+      });
+      toast.success(t("created_successfully"));
+      fetchWorkspace();
+    } catch (err) {
+      console.error("Error creating category", err);
+      toast.success(t("create_failed"));
+    }
+  };
+
+  const handleCategoryDelete = async (cat_id: string) => {
+    try {
+      await deleteCategory(cat_id);
+      toast.success(t("deleted_successfully"));
+      fetchWorkspace();
+    } catch {
+      toast.error(t("delete_failed"));
+    }
+  };
 
   return (
     <Sidebar
@@ -133,8 +200,7 @@ export function AppSidebar() {
                   item.collapsible ? (
                     <Collapsible
                       key={item.label}
-                      asChild
-                      defaultOpen={item.isCollapsed}
+                      open={item.isCollapsed}
                       className="group/collapsible"
                     >
                       <SidebarMenuItem>
@@ -164,18 +230,7 @@ export function AppSidebar() {
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
                                 <DropdownMenuItem
-                                  onClick={async () => {
-                                    try {
-                                      await createCategory({
-                                        name: "Untitled Category",
-                                        workspace_id: workspaceId,
-                                      });
-                                      toast.success("Category created");
-                                      fetchDocumentMenus();
-                                    } catch {
-                                      toast.error("Failed to create category");
-                                    }
-                                  }}
+                                  onClick={() => handleCreateCategory()}
                                 >
                                   <FolderPlus className="w-4 h-4 mr-2 text-blue-600" />
                                   {t("new_category")}
@@ -194,7 +249,15 @@ export function AppSidebar() {
                           <SidebarMenuSub className="ml-1.5 px-0 mr-0">
                             {documentMenus.map((child) => (
                               <SidebarMenuSubItem key={child.id}>
-                                <CategoryDocuments item={child} />
+                                <CategoryDocuments
+                                  item={child}
+                                  setNewDocDialogOpen={setNewDocDialogOpen}
+                                  onCategoryCreate={handleCreateCategory}
+                                  onCategoryRename={handleCategoryRename}
+                                  onDocumentCreate={handleCreateDocument}
+                                  setSelectedCategoryId={setSelectedCategoryId}
+                                  onCategoryDelete={handleCategoryDelete}
+                                />
                               </SidebarMenuSubItem>
                             ))}
                           </SidebarMenuSub>
@@ -243,8 +306,12 @@ export function AppSidebar() {
 
       <NewDocumentDialog
         open={newDocDialogOpen}
-        onOpenChange={setNewDocDialogOpen}
-        categoryId=""
+        onOpenChange={(isOpen) => {
+          setNewDocDialogOpen(isOpen);
+          if (!isOpen) setSelectedCategoryId("");
+        }}
+        categoryId={selectedCategoryId}
+        onDocumentCreate={handleCreateDocument}
       />
     </Sidebar>
   );
