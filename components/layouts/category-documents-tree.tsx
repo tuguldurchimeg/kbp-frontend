@@ -17,6 +17,7 @@ import {
   Edit,
   Trash2,
   ChevronDown,
+  Pencil,
 } from "lucide-react";
 import Link from "next/link";
 import { MenuItemChildren } from "@/constants/menu";
@@ -46,6 +47,8 @@ interface CategoryDocumentsProps {
     content?: JSONContent
   ) => void;
   onCategoryDelete: (id: string) => void;
+  onDocumentDelete: (id: string) => void;
+  onDocumentEdit: (id: string) => void;
 }
 
 const CategoryDocuments = ({
@@ -56,6 +59,8 @@ const CategoryDocuments = ({
   onCategoryRename,
   onDocumentCreate,
   onCategoryDelete,
+  onDocumentDelete,
+  onDocumentEdit,
 }: CategoryDocumentsProps) => {
   const params = useParams();
   const [isEditing, setIsEditing] = useState(false);
@@ -87,7 +92,7 @@ const CategoryDocuments = ({
               className={clsx(
                 "peer flex gap-2 px-3 py-2 rounded-lg transition-colors",
                 isActive
-                  ? "bg-primary-light text-primary font-medium pointer-events-none"
+                  ? "bg-primary-light text-primary font-medium"
                   : "text-foreground-2 hover:bg-muted"
               )}
               data-state-open={item.isCollapsed}
@@ -138,6 +143,7 @@ const CategoryDocuments = ({
             </SidebarMenuButton>
           </CollapsibleTrigger>
 
+          {/* Category drop */}
           {item.collapsible && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -178,6 +184,32 @@ const CategoryDocuments = ({
               </DropdownMenuContent>
             </DropdownMenu>
           )}
+
+          {/* Document drop */}
+          {!item.collapsible && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuAction className="invisible peer-hover:visible hover:visible transition-all duration-200">
+                  <Ellipsis className="w-4 h-4 text-foreground" />
+                </SidebarMenuAction>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={() => item.id && onDocumentEdit(item.id)}
+                >
+                  <Pencil className="w-4 h-4 mr-2 text-indigo-600" />
+                  {t("edit")}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => item.id && onDocumentDelete(item.id)}
+                >
+                  <Trash2 className="w-4 h-4 mr-2 text-red-600" />
+                  {t("delete")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
 
         {item.collapsible && (
@@ -196,6 +228,8 @@ const CategoryDocuments = ({
                       onDocumentCreate={onDocumentCreate}
                       setSelectedCategoryId={setSelectedCategoryId}
                       onCategoryDelete={onCategoryDelete}
+                      onDocumentDelete={onDocumentDelete}
+                      onDocumentEdit={onDocumentEdit}
                     />
                   </SidebarMenuSubItem>
                 ))}

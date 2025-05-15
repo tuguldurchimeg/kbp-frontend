@@ -87,13 +87,21 @@ import {
   TextColorContent,
   TextColorPopover,
 } from "@/components/tiptap-ui/textcolor-popover/textcolor-popover";
-import { FileCheck, Palette, Pencil, Plus } from "lucide-react";
+import {
+  FileCheck,
+  Palette,
+  Pencil,
+  Plus,
+  MoreVertical,
+  Trash,
+} from "lucide-react";
 import { DocumentItem, TagCreateParams, TagItem } from "@/types/document";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { formatDistanceToNowStrict } from "date-fns";
 import { Button as CNButton } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  deleteDocument,
   setDocumentTag,
   updateDocument,
 } from "@/src/app/lib/actions/document.actions";
@@ -122,6 +130,16 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 import { enUS, mn } from "date-fns/locale";
 import ExportButton from "@/components/tiptap-ui/export-button";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { ROUTE } from "@/constants/route.constants";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 type Props = {
   document: DocumentItem;
@@ -263,10 +281,10 @@ const getEditorContent = (type: "highlighter" | "link" | "textcolor") => {
 export function SimpleEditor({ document }: Props) {
   const isMobile = useIsMobile();
   const windowSize = useWindowSize();
-  const [mobileView, setMobileView] = React.useState<
+  const [mobileView, setMobileView] = useState<
     "main" | "highlighter" | "link" | "textcolor"
   >("main");
-  const [rect, setRect] = React.useState<
+  const [rect, setRect] = useState<
     Pick<DOMRect, "x" | "y" | "width" | "height">
   >({
     x: 0,
@@ -274,11 +292,10 @@ export function SimpleEditor({ document }: Props) {
     width: 0,
     height: 0,
   });
-  const toolbarRef = React.useRef<HTMLDivElement>(null);
+  const toolbarRef = useRef<HTMLDivElement>(null);
+  const editorContainerRef = useRef<HTMLDivElement>(null);
 
-  const editorContainerRef = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
+  useEffect(() => {
     const updateRect = () => {
       if (editorContainerRef.current) {
         const bounds = editorContainerRef.current.getBoundingClientRect();
@@ -306,10 +323,12 @@ export function SimpleEditor({ document }: Props) {
     };
   }, []);
 
-  const [isEditable, setEditable] = React.useState(false);
-  const [isTitleEditing, setIsTitleEditing] = React.useState(false);
-  const [title, setTitle] = React.useState<string>("");
+  const [isEditable, setEditable] = useState(false);
+  const [isTitleEditing, setIsTitleEditing] = useState(false);
+  const [title, setTitle] = useState<string>("");
   const t = useTranslations("SYSCOMMON");
+  const router = useRouter();
+
   const editor = useEditor({
     editable: isEditable,
     immediatelyRender: false,
@@ -360,7 +379,7 @@ export function SimpleEditor({ document }: Props) {
     content: "",
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const checkCursorVisibility = () => {
       if (!editor || !toolbarRef.current) return;
 
@@ -392,14 +411,14 @@ export function SimpleEditor({ document }: Props) {
     checkCursorVisibility();
   }, [editor, rect.height, windowSize.height]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isMobile && mobileView !== "main") {
       setMobileView("main");
     }
   }, [isMobile, mobileView]);
-  const hasInitializedContent = React.useRef(false);
+  const hasInitializedContent = useRef(false);
 
-  const initializeEditorContent = React.useCallback(() => {
+  const initializeEditorContent = useCallback(() => {
     if (!document?.attributes || !editor || hasInitializedContent.current)
       return;
 
@@ -408,7 +427,7 @@ export function SimpleEditor({ document }: Props) {
     hasInitializedContent.current = true;
   }, [document, editor]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     initializeEditorContent();
   }, [initializeEditorContent]);
 
@@ -430,20 +449,32 @@ export function SimpleEditor({ document }: Props) {
       });
       editor.setEditable(false);
       setEditable(false);
+      toast.success(t("updated_successfully"));
     } catch (error) {
       console.error("Failed to update document", error);
+      toast.error(t("update_failed"));
     }
   };
 
-  const [tagOpen, setTagOpen] = React.useState(false);
-  const [tagInputValue, setTagInputValue] = React.useState("");
-  const [selectedValue, setSelectedValue] = React.useState<string | null>(null);
+  const handleDocumentDelete = async (doc_id: string) => {
+    try {
+      await deleteDocument(doc_id);
+      toast.success(t("deleted_successfully"));
+      router.push(ROUTE.WORKSPACES.WORKSPACE(document.attributes.workspace_id));
+    } catch {
+      toast.error(t("delete_failed"));
+    }
+  };
+
+  const [tagOpen, setTagOpen] = useState(false);
+  const [tagInputValue, setTagInputValue] = useState("");
+  const [selectedValue, setSelectedValue] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedTag, setSelectedTag] = React.useState<TagItem>();
-  const [allTags, setAllTags] = React.useState<TagItem[]>();
+  const [selectedTag, setSelectedTag] = useState<TagItem>();
+  const [allTags, setAllTags] = useState<TagItem[]>();
   const locale = useLocale();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchTags = async () => {
       try {
         const tags = await getTags({
@@ -534,30 +565,50 @@ export function SimpleEditor({ document }: Props) {
         </Toolbar>
       )}
 
-      {isEditable ? (
+      {isEditable && (
         <CNButton
           onClick={() => handleDocUpdate()}
           size="lg"
           className={clsx(
-            "fixed bottom-15 right-15 h-12 w-12 rounded-xl z-99",
+            "fixed bottom-15 right-15 h-12 w-12 shadow-lg rounded-xl z-10",
             isMobile && "right-5 bottom-13"
           )}
           aria-label="Update document"
         >
           <FileCheck className="w-5 h-5 " />
         </CNButton>
-      ) : (
-        <CNButton
-          onClick={() => handleToggleEditable()}
-          size="lg"
-          className={clsx(
-            "fixed bottom-15 right-15 h-12 w-12 rounded-xl",
-            isMobile && "right-5 bottom-13"
-          )}
-          aria-label="Toggle edit mode"
-        >
-          <Pencil className="w-5 h-5 " />
-        </CNButton>
+      )}
+      {!isEditable && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <CNButton
+              size="icon"
+              className={clsx(
+                "fixed bottom-15 right-15 z-10 h-12 w-12 rounded-xl shadow-lg",
+                isMobile && "right-5 bottom-13"
+              )}
+              aria-label="Open document menu"
+            >
+              <MoreVertical className="w-5 h-5" />
+            </CNButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="top" align="end" className="w-40">
+            <DropdownMenuItem
+              onClick={handleToggleEditable}
+              className="flex items-center gap-3"
+            >
+              <Pencil className="w-4 h-4 text-indigo-600" />
+              {t("edit")}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => handleDocumentDelete(document.id)}
+              className="flex items-center gap-3"
+            >
+              <Trash className="w-4 h-4  text-red-600" />
+              {t("delete")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
 
       <div className="simple-editor-title">

@@ -49,7 +49,10 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { getWorkspace } from "@/src/app/lib/actions/workspace.actions";
 import { WorkspaceItem } from "@/types/workspace";
-import { createDocument } from "@/src/app/lib/actions/document.actions";
+import {
+  createDocument,
+  deleteDocument,
+} from "@/src/app/lib/actions/document.actions";
 import { JSONContent } from "@tiptap/react";
 
 export function AppSidebar() {
@@ -135,6 +138,20 @@ export function AppSidebar() {
   const handleCategoryDelete = async (cat_id: string) => {
     try {
       await deleteCategory(cat_id);
+      toast.success(t("deleted_successfully"));
+      fetchWorkspace();
+    } catch {
+      toast.error(t("delete_failed"));
+    }
+  };
+
+  const handleEditDocument = (doc_id: string) => {
+    router.push(ROUTE.BASE.DOCUMENT.DETAIL(workspaceId, doc_id));
+  };
+
+  const handleDocumentDelete = async (doc_id: string) => {
+    try {
+      await deleteDocument(doc_id);
       toast.success(t("deleted_successfully"));
       fetchWorkspace();
     } catch {
@@ -257,6 +274,8 @@ export function AppSidebar() {
                                   onDocumentCreate={handleCreateDocument}
                                   setSelectedCategoryId={setSelectedCategoryId}
                                   onCategoryDelete={handleCategoryDelete}
+                                  onDocumentDelete={handleDocumentDelete}
+                                  onDocumentEdit={handleEditDocument}
                                 />
                               </SidebarMenuSubItem>
                             ))}
