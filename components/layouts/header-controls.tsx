@@ -2,7 +2,7 @@
 
 import { ThemeToggle } from "../theme-toggle";
 import LanguageSwitcher from "./header-controls/LanguageSwitcher";
-import NotificationButton from "./header-controls/NotificationButton";
+// import NotificationButton from "./header-controls/NotificationButton";
 import UserDropdown from "./header-controls/UserDropdown";
 
 export default function HeaderControls() {
@@ -14,7 +14,7 @@ export default function HeaderControls() {
       <div className="hidden md:block">
         <LanguageSwitcher />
       </div>
-      <NotificationButton />
+      {/* <NotificationButton /> */}
       <UserDropdown />
     </div>
   );

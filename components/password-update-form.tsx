@@ -18,10 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  updatePassword,
-  forgotPassword,
-} from "@/src/app/lib/actions/user.actions";
+import { updatePassword } from "@/src/app/lib/actions/user.actions";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,6 +27,8 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { UserItem } from "@/types/user";
 import { toast } from "sonner";
+import { ROUTE } from "@/constants/route.constants";
+import { useRouter } from "next/navigation";
 
 // Optional: Your password update API call
 // import { updatePassword } from "@/lib/actions/user.actions";
@@ -51,12 +50,13 @@ interface PasswordUpdateFormProps {
   currentUser: UserItem;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function PasswordUpdateForm({ currentUser }: PasswordUpdateFormProps) {
   const t = useTranslations("Account");
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-
+  const router = useRouter();
   const form = useForm<PasswordFormValues>({
     resolver: zodResolver(passwordSchema),
     defaultValues: {
@@ -78,18 +78,6 @@ export function PasswordUpdateForm({ currentUser }: PasswordUpdateFormProps) {
     } catch (error) {
       console.error("Failed to update password", error);
       toast.error(t("security.updateError"));
-    }
-  };
-
-  const handleForgotPassword = async () => {
-    const email = currentUser?.attributes.email;
-    if (!email) return;
-    try {
-      await forgotPassword(email);
-      alert("Password reset instructions sent.");
-    } catch (err) {
-      console.error("Error requesting password reset", err);
-      alert("Failed to send reset email.");
     }
   };
 
@@ -205,7 +193,7 @@ export function PasswordUpdateForm({ currentUser }: PasswordUpdateFormProps) {
         <CardFooter className="justify-between">
           <Button
             variant="ghost"
-            onClick={handleForgotPassword}
+            onClick={() => router.push(ROUTE.RESET_PASS)}
             className="flex items-center gap-2 text-sm text-muted-foreground"
           >
             <MailWarning className="h-4 w-4" />

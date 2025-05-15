@@ -19,7 +19,7 @@ import { DocumentItem } from "@/types/document";
 import { useStatusAndPriorityMaps } from "@/constants/issue.constants";
 import { useTranslations } from "next-intl";
 
-import { SettingsIcon, Plus, Pencil } from "lucide-react";
+import { Plus, Pencil } from "lucide-react";
 import { format } from "date-fns";
 
 import { Button } from "@/components/ui/button";
@@ -162,7 +162,7 @@ export default function IssuePage() {
                 {t("priority")}
               </Label>
               <Button variant="outline">
-                <SettingsIcon className={`text-${prio.color}`} />
+                <prio.icon className={`text-${prio.color}`} />
                 {prio.label}
               </Button>
             </div>
