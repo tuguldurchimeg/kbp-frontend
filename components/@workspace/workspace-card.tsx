@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Star } from "lucide-react";
 import Image from "next/image";
 import { WorkspaceItem } from "@/types/workspace";
 import Link from "next/link";
@@ -48,7 +47,7 @@ export default function WorkspaceCard({ item, onUpdate }: WorkspaceCardProps) {
           />
         </div>
 
-        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-3">
           <WorkspaceEditForm workspace={item} onSubmit={handleSubmit} />
         </div>
       </CardHeader>
@@ -70,7 +69,7 @@ export default function WorkspaceCard({ item, onUpdate }: WorkspaceCardProps) {
               {description}
             </CardDescription>
           </div>
-          <Star className="size-5 text-muted-foreground hover:text-yellow-500 cursor-pointer flex-shrink-0 mt-1" />
+          {/* <Star className="size-5 text-muted-foreground hover:text-yellow-500 cursor-pointer flex-shrink-0 mt-1" /> */}
         </CardContent>
         <CardFooter />
       </Link>

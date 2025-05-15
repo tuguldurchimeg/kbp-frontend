@@ -9,6 +9,7 @@ import {
 import { WorkspaceItem } from "@/types/workspace";
 import { useTranslations } from "next-intl";
 import WorkspaceEditForm from "./workspace-edit-form";
+import Image from "next/image";
 
 export default function WorkspaceSummary({
   workspace,
@@ -29,26 +30,34 @@ export default function WorkspaceSummary({
   const totalDocs = (categoryDocsCount ?? 0) + workspaceDocsCount;
 
   const issues = workspace.attributes.issues?.data;
-  const applyAlpha = (hex: string, alpha: number) => {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-  };
+
   return (
     <Card>
       <CardContent className="flex flex-wrap sm:items-center sm:justify-between gap-6 sm:gap-10 p-4 sm:p-6">
-        <div className="flex flex-col">
-          <CardTitle className="text-xl sm:text-2xl">
-            {workspace.attributes.name}
-            <WorkspaceEditForm
-              workspace={workspace}
-              onSubmit={onUpdateWorkspace}
-            />
-          </CardTitle>
-          <CardDescription className="text-sm sm:text-base">
-            {workspace.attributes.description}
-          </CardDescription>
+        <div className="flex items-center gap-3">
+          {workspace.attributes.image_url && (
+            <div className="w-14 h-14 rounded-md overflow-hidden border flex-shrink-0">
+              <Image
+                src={workspace.attributes.image_url}
+                alt={workspace.attributes.name}
+                width={80}
+                height={80}
+                className="object-cover w-full h-full"
+              />
+            </div>
+          )}
+          <div className="flex flex-col">
+            <CardTitle className="text-xl sm:text-2xl">
+              {workspace.attributes.name}
+              <WorkspaceEditForm
+                workspace={workspace}
+                onSubmit={onUpdateWorkspace}
+              />
+            </CardTitle>
+            <CardDescription className="text-sm sm:text-base">
+              {workspace.attributes.description}
+            </CardDescription>
+          </div>
         </div>
 
         <div className="flex flex-col items-start sm:items-center">
