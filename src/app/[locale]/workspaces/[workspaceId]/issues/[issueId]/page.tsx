@@ -4,7 +4,13 @@ import * as React from "react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { getIssue, updateIssue } from "@/src/app/lib/actions/issue.actions";
+import {
+  assignUserToIssue,
+  attachDocumentToIssue,
+  deleteIssueAssignee,
+  getIssue,
+  updateIssue,
+} from "@/src/app/lib/actions/issue.actions";
 import { getUsers } from "@/src/app/lib/actions/user.actions";
 import { IssueItem, IssueUpdateParams } from "@/types/issue";
 import { UserItem } from "@/types/user";
@@ -24,6 +30,7 @@ import { Label } from "@/components/ui/label";
 import { EditIssueDialog } from "@/components/@issue/edit-issue-dialog";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
+import DocumentAttachDialog from "@/components/@issue/document-attach-dialog";
 
 export default function IssuePage() {
   const params = useParams();
@@ -33,24 +40,23 @@ export default function IssuePage() {
   const [issue, setIssue] = useState<IssueItem | null>(null);
   const [users, setUsers] = useState<UserItem[]>([]);
   const [editOpen, setEditOpen] = useState(false);
+  const [docDialogOpen, setDocDialogOpen] = useState(false);
 
   const { STATUS_MAP, PRIORITY_MAP, TYPE_MAP } = useStatusAndPriorityMaps();
-
+  const fetchData = async (id: string) => {
+    try {
+      const [issueRes, userList] = await Promise.all([
+        getIssue(id),
+        getUsers(),
+      ]);
+      setIssue(issueRes);
+      setUsers(userList);
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [issueRes, userList] = await Promise.all([
-          getIssue(id),
-          getUsers(),
-        ]);
-        setIssue(issueRes);
-        setUsers(userList);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      }
-    };
-
-    if (id) fetchData();
+    if (id) fetchData(id);
   }, [id]);
 
   if (!issue) return null;
@@ -80,6 +86,35 @@ export default function IssuePage() {
     } catch (error) {
       toast.error(t("SYSCOMMON.update_failed"));
       console.error("Tag update failed:", error);
+    }
+  };
+
+  const handleAssign = async (userId: string) => {
+    try {
+      const res = await assignUserToIssue(userId, issue.id);
+      toast.success("User assigned", res);
+    } catch {
+      toast.error("Failed to assign user");
+    }
+  };
+
+  const handleAssigneeRemove = async (userId: string) => {
+    try {
+      await deleteIssueAssignee(userId, issue.id);
+      toast.success(t("SYSCOMMON.updated_successfully"));
+    } catch (error) {
+      toast.error(t("SYSCOMMON.update_failed"));
+      console.error("Failed to unassign:", error);
+    }
+  };
+
+  const handleAttach = async (documentId: string) => {
+    try {
+      const res = await attachDocumentToIssue(documentId, issue.id);
+      toast.success("Document attached", res);
+      fetchData(id);
+    } catch {
+      toast.error("Failed to attach document");
     }
   };
 
@@ -196,7 +231,11 @@ export default function IssuePage() {
           <h3 className="text-lg font-medium">
             {t("documents")} ({documents_count})
           </h3>
-          <Button variant="outline" size="sm">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setDocDialogOpen(true)}
+          >
             <Plus className="w-4 h-4 mr-2" />
             {t("connect_document")}
           </Button>
@@ -210,13 +249,20 @@ export default function IssuePage() {
 
       <CommentSection issue={issue} />
 
-      {/* Edit Dialog */}
       <EditIssueDialog
         isOpen={editOpen}
         onClose={() => setEditOpen(false)}
         issue={issue}
         users={users}
         onUpdate={handleUpdatedIssue}
+        onAssign={handleAssign}
+        onUnassign={handleAssigneeRemove}
+      />
+      <DocumentAttachDialog
+        isOpen={docDialogOpen}
+        onClose={() => setDocDialogOpen(false)}
+        onAttach={handleAttach}
+        workspaceId={issue.attributes.workspace_id}
       />
     </div>
   );

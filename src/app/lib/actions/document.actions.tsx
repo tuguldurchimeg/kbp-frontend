@@ -7,9 +7,11 @@ import {
   ListParams,
 } from "@/types/document";
 
-export async function getDocuments(): Promise<DocumentItem[]> {
-  const res = await api.get(URI.DOCUMENTS);
-  return res.data;
+export async function getDocuments(
+  params: ListParams
+): Promise<DocumentItem[]> {
+  const res = await api.get(URI.DOCUMENTS, { params });
+  return res.data.data;
 }
 
 export async function getDocument(id: string): Promise<DocumentItem> {

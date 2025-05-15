@@ -1,6 +1,6 @@
 import api from "../../../../utils/api";
 import { URI } from "@/constants/uri.constants";
-import { ListParams } from "@/types/document";
+import { DocumentItem, ListParams } from "@/types/document";
 import {
   IssueCommentCreateParams,
   IssueCommentItem,
@@ -12,6 +12,7 @@ import {
   ReportParams,
   ReportResponse,
 } from "@/types/issue";
+import { UserItem } from "@/types/user";
 
 export async function getIssues(params: ListParams): Promise<IssueItem[]> {
   const res = await api.get(URI.ISSUES, { params });
@@ -47,6 +48,36 @@ export const updateIssue = async (
 export async function deleteIssue(id: string): Promise<void> {
   await api.delete(`${URI.ISSUES}/${id}`);
 }
+
+export const assignUserToIssue = async (
+  userId: string,
+  issueId: string
+): Promise<UserItem> => {
+  const res = await api.post(`${URI.ISSUES}/assign`, {
+    user_id: userId,
+    issue_id: issueId,
+  });
+  return res.data.data;
+};
+export async function deleteIssueAssignee(
+  user_id: string,
+  issue_id: string
+): Promise<void> {
+  await api.delete(`${URI.ISSUES}/unassign`, {
+    params: { user_id, issue_id },
+  });
+}
+
+export const attachDocumentToIssue = async (
+  documentId: string,
+  issueId: string
+): Promise<DocumentItem> => {
+  const res = await api.post(`${URI.ISSUES}/set_document`, {
+    document_id: documentId,
+    issue_id: issueId,
+  });
+  return res.data.data;
+};
 
 export async function getIssueComments(
   params: IssueCommentListParams

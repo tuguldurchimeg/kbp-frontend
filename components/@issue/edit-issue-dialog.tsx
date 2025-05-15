@@ -53,6 +53,8 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   onUpdate: (updated: IssueUpdateParams) => void;
+  onAssign: (user_id: string) => void;
+  onUnassign: (user_id: string) => void;
 };
 
 export function EditIssueDialog({
@@ -61,6 +63,8 @@ export function EditIssueDialog({
   isOpen,
   onClose,
   onUpdate,
+  onAssign,
+  onUnassign,
 }: Props) {
   const t = useTranslations();
   const { STATUS_MAP, PRIORITY_MAP, TYPE_MAP } = useStatusAndPriorityMaps();
@@ -253,11 +257,13 @@ export function EditIssueDialog({
                             variant="ghost"
                             size="icon"
                             className="p-0 text-xs"
-                            onClick={() =>
-                              field.onChange(
-                                field.value?.filter((id) => id !== user.id)
-                              )
-                            }
+                            onClick={() => {
+                              const updated = field.value?.filter(
+                                (id) => id !== user.id
+                              );
+                              field.onChange(updated);
+                              onUnassign(user.id);
+                            }}
                           >
                             <XIcon className="size-2.5" />
                           </Button>
@@ -269,6 +275,7 @@ export function EditIssueDialog({
                     onValueChange={(val) => {
                       if (!field.value?.includes(val)) {
                         field.onChange([...(field.value || []), val]);
+                        onAssign(val);
                       }
                     }}
                   >

@@ -410,14 +410,20 @@
     "created": "Created",
     "assignees": "Assignees",
     "documents": "Related Documents",
-    "connect_document": "Connect Document",
+    "connect_document": "Attach Document",
     "author": "Author",
     "last_updated": "Last updated",
     "edit_issue": "Edit issue",
     "add_assignee": "Add assignee",
     "status": "Status",
     "priority": "Priority",
-    "type": "Type"
+    "type": "Type",
+    "select_document": "Select Existing Document",
+    "attach": "Attach",
+    "or_create_new": "Or Create New",
+    "enter_title": "Enter document title",
+    "create_and_attach": "Create & Attach",
+    "creating": "Creating"
   },
   "comment": {
     "write": "Write a comment...",
