@@ -19,7 +19,7 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [loading, user, router]);
 
-  if (loading)
+  if (loading || (!user && typeof window !== "undefined")) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <p className="text-sm text-muted-foreground">
@@ -27,8 +27,9 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({
         </p>
       </div>
     );
+  }
 
-  return user ? <>{children}</> : null;
+  return <>{children}</>;
 };
 
 export default PrivateRoute;

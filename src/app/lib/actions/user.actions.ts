@@ -1,19 +1,9 @@
 import { URI } from "@/constants/uri.constants";
-import {
-  CreateUserParams,
-  PasswordChangeParams,
-  UpdateUserParams,
-  UserItem,
-} from "@/types/user";
+import { PasswordChangeParams, UpdateUserParams, UserItem } from "@/types/user";
 import api from "@/utils/api";
 
 export async function fetchProfile(): Promise<UserItem> {
   const res = await api.get(URI.PROFILE);
-  return res.data.data;
-}
-
-export async function createUser(params: CreateUserParams): Promise<UserItem> {
-  const res = await api.post(URI.USERS, { data: params });
   return res.data.data;
 }
 

@@ -176,6 +176,26 @@
       "E000001": "Login Failed"
     }
   },
+  "SignUp": {
+    "title": "Sign Up",
+    "fields": {
+      "firstname": "Firstname",
+      "lastname": "Lastname",
+      "email": "Email",
+      "company": "Company"
+    },
+    "placeholders": {
+      "name": "Enter your firstname",
+      "lastname": "Enter your lastname",
+      "email": "Enter your email",
+      "company": "Your company name"
+    },
+    "newPassword": "{assword",
+    "confirmPassword": "Confirm password",
+    "signup_success": "Signup success",
+    "signup_failed": "Signup failed",
+    "goToLogin": "Go to Login"
+  },
   "MENUS": {
     "tools": "Tools",
     "user_access": "User Access",

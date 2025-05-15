@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import clsx from "clsx";
 import { SidebarMenuButton } from "../ui/sidebar";
 import { SearchResults } from "./search-result";
 import { searchWorkspace } from "@/src/app/lib/actions/workspace.actions";
@@ -52,8 +51,7 @@ export function SearchDialog() {
           {t("title")}
         </SidebarMenuButton>
       </DialogTrigger>
-
-      <DialogContent className={clsx("w-full max-w-10xl p-0 transition-all")}>
+      <DialogContent className="w-full max-w-4xl p-0 transition-all">
         <div className="space-y-4 p-4">
           <DialogHeader>
             <DialogTitle className="text-lg font-semibold">

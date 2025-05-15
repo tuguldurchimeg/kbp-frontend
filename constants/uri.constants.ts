@@ -6,6 +6,7 @@ export const URI = {
   LOGOUT: "/v1/logout",
   REFRESH: "/v1/refresh_token",
   GOOGLE_LOGIN: "/v1/google_login",
+  SIGNUP: "/v1/signup",
   FORGOT_PASSWORD: "/v1/passwords/forgot",
   CONFIRM_PASSWORD: "/v1/passwords/confirm",
   RESET_PASSWORD: "/v1/passwords/reset",
@@ -33,4 +34,7 @@ export const excludeURI = [
   URI.CONFIRM_PASSWORD,
   URI.FORGOT_PASSWORD,
   URI.REFRESH,
+  URI.SIGNUP,
+  URI.GOOGLE_LOGIN,
+  URI.S3_PRESIGNED_URL,
 ];

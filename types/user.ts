@@ -56,3 +56,12 @@ export interface PasswordChangeParams {
   new_password: string;
   confirm_new_password: string;
 }
+
+export interface SignupParams {
+  email: string;
+  firstname: string;
+  lastname: string;
+  company: string;
+  password: string;
+  password_confirm: string;
+}

@@ -1,6 +1,11 @@
 import { URI } from "@/constants/uri.constants";
 import api from "../../../../utils/api";
-import { CurrentUser, SocialLoginParams, UserLoginParams } from "@/types/user";
+import {
+  CurrentUser,
+  SignupParams,
+  SocialLoginParams,
+  UserLoginParams,
+} from "@/types/user";
 
 export const loginService = async (
   params: UserLoginParams
@@ -25,5 +30,12 @@ export const googleLoginService = async (
   params: SocialLoginParams
 ): Promise<CurrentUser> => {
   const { data } = await api.post<CurrentUser>(URI.GOOGLE_LOGIN, params);
+  return data;
+};
+
+export const signupService = async (
+  params: SignupParams
+): Promise<{ success: string }> => {
+  const { data } = await api.post(URI.SIGNUP, params);
   return data;
 };

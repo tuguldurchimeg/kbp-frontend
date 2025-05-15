@@ -17,7 +17,7 @@ const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     }
   }, [loading, user, router]);
 
-  if (loading)
+  if (loading || user) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <p className="text-sm text-muted-foreground">
@@ -25,8 +25,9 @@ const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </p>
       </div>
     );
+  }
 
-  return !user ? <>{children}</> : null;
+  return <>{children}</>;
 };
 
 export default PublicRoute;
