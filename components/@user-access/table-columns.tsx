@@ -41,12 +41,17 @@ export function getColumns(
       enableHiding: false,
     },
     {
-      accessorKey: "employeeName",
+      id: "name",
       header: t("table.employee_name"),
+      accessorFn: (row) => {
+        const user = row.attributes.user.data.attributes;
+        return `${user.lastname} ${user.firstname}`;
+      },
       cell: ({ row }) => {
         const user = row.original.attributes.user.data;
         const firstname = user.attributes.firstname;
         const lastname = user.attributes.lastname;
+
         return (
           <div className="flex items-center gap-2">
             <Avatar className="h-6 w-6 rounded-full ">
@@ -61,6 +66,7 @@ export function getColumns(
           </div>
         );
       },
+      filterFn: "includesString",
     },
     {
       id: "userAccess",

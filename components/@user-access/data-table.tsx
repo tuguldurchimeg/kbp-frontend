@@ -5,8 +5,8 @@ import {
   getCoreRowModel,
   useReactTable,
   getSortedRowModel,
-  getPaginationRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
@@ -27,7 +27,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronsLeftIcon,
+  ChevronsRightIcon,
+  Search,
+} from "lucide-react";
 
 export default function WorkspaceUserTable() {
   const t = useTranslations("UserAccess");
@@ -35,6 +44,8 @@ export default function WorkspaceUserTable() {
 
   const [data, setData] = useState<WorkspaceRoleItem[]>([]);
   const [rowSelection, setRowSelection] = useState({});
+  const [globalFilter, setGlobalFilter] = useState("");
+
   const fetchData = async () => {
     try {
       const result = await getWorkspaceUsers({ workspace_id: workspaceId });
@@ -43,6 +54,7 @@ export default function WorkspaceUserTable() {
       console.error("Failed to fetch workspace users", err);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, [workspaceId]);
@@ -54,8 +66,13 @@ export default function WorkspaceUserTable() {
       toast.success(t("role_update_success"));
     } catch (err) {
       console.error("Failed to update role", err);
+      toast.error(t("role_update_failed"));
     }
   };
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 6,
+  });
 
   const columns = getColumns(t, handleUpdateRole);
 
@@ -65,22 +82,39 @@ export default function WorkspaceUserTable() {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     state: {
       rowSelection,
+      globalFilter,
+      pagination,
     },
     onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter,
+    onPaginationChange: setPagination,
+    getPaginationRowModel: getPaginationRowModel(),
     enableRowSelection: true,
     getRowId: (row) => row.id.toString(),
+    globalFilterFn: "includesString",
   });
 
   return (
-    <div className="p-6 space-y-6 max-w-screen-xl mx-auto">
+    <div className="p-6 space-y-4 max-w-screen-xl mx-auto">
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-semibold">{t("title")}</h2>
           <p className="text-muted-foreground">{t("description")}</p>
         </div>
+      </div>
+
+      <div className="relative max-w-sm">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder={t("filter_placeholder")}
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
+          className="pl-10"
+        />
       </div>
 
       <div className="overflow-x-auto rounded-md border">
@@ -121,12 +155,59 @@ export default function WorkspaceUserTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  {t("noTemplates")}
+                  {t("noData")}
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
+      </div>
+
+      <div className="flex items-center justify-end pt-4">
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-muted-foreground">
+            {t("page")} {table.getState().pagination.pageIndex + 1} {" / "}
+            {table.getPageCount()}
+          </span>
+          <div className="flex gap-1">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => table.setPageIndex(0)}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ChevronsLeftIcon className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ChevronLeftIcon className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              <ChevronRightIcon className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              disabled={!table.getCanNextPage()}
+            >
+              <ChevronsRightIcon className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );

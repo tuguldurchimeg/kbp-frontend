@@ -313,7 +313,10 @@
       "read": "Reader",
       "admin": "Admin"
     },
-    "role_update_success": "Role updated successfully"
+    "filter_placeholder": "Filter by name...",
+    "role_update_success": "Role updated successfully",
+    "role_update_failed": "Failed to update role",
+    "page": "Page"
   },
   "NewDocumentDialog": {
     "title": "Create New Document",
