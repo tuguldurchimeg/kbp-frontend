@@ -143,6 +143,7 @@ import {
 
 type Props = {
   document: DocumentItem;
+  fetchDoc: () => void;
 };
 
 const MainToolbarContent = ({
@@ -278,7 +279,7 @@ const getEditorContent = (type: "highlighter" | "link" | "textcolor") => {
   }
 };
 
-export function SimpleEditor({ document }: Props) {
+export function MyTextEditor({ document, fetchDoc }: Props) {
   const isMobile = useIsMobile();
   const windowSize = useWindowSize();
   const [mobileView, setMobileView] = useState<
@@ -468,25 +469,22 @@ export function SimpleEditor({ document }: Props) {
 
   const [tagOpen, setTagOpen] = useState(false);
   const [tagInputValue, setTagInputValue] = useState("");
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedTag, setSelectedTag] = useState<TagItem>();
   const [allTags, setAllTags] = useState<TagItem[]>();
   const locale = useLocale();
 
+  const fetchTags = async () => {
+    try {
+      const tags = await getTags({
+        workspace_id: document.attributes.workspace_id,
+      });
+      setAllTags(tags);
+    } catch (error) {
+      console.error("Failed to fetch tags", error);
+    }
+  };
   useEffect(() => {
-    const fetchTags = async () => {
-      try {
-        const tags = await getTags({
-          workspace_id: document.attributes.workspace_id,
-        });
-        setAllTags(tags);
-      } catch (error) {
-        console.error("Failed to fetch tags", error);
-      }
-    };
     fetchTags();
-  }, [document.attributes.workspace_id]);
+  }, [document.id]);
 
   const handleSelectTag = async (tag: TagItem) => {
     try {
@@ -495,10 +493,9 @@ export function SimpleEditor({ document }: Props) {
         tag_id: tag.id,
       });
 
-      setSelectedTag(tag);
-      setSelectedValue(tag.attributes?.name);
       setTagInputValue("");
       setTagOpen(false);
+      fetchDoc();
     } catch (error) {
       console.error("Failed to set document tag:", error);
     }
@@ -513,8 +510,8 @@ export function SimpleEditor({ document }: Props) {
 
     try {
       const created = await createTag(newTag);
-      setAllTags((prev) => [...(prev || []), created]);
       await handleSelectTag(created);
+      fetchTags();
     } catch (error) {
       console.error("Failed to create tag:", error);
     }
@@ -710,7 +707,7 @@ export function SimpleEditor({ document }: Props) {
                 size="xs"
                 className="text-xs font-medium rounded-lg px-4 bg-muted hover:bg-muted/80"
               >
-                {selectedValue || `+ ${t("tag")}`}
+                {`+ ${t("tag")}`}
               </CNButton>
             </PopoverTrigger>
             <PopoverContent className="w-[240px] py-1 px-0">
