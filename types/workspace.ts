@@ -1,4 +1,4 @@
-import { CategoryItem, DocumentItem } from "./document";
+import { CategoryItem, DocumentItem, FileItem } from "./document";
 import { IssueItem } from "./issue";
 import { UserItem } from "./user";
 
@@ -39,4 +39,15 @@ export type WorkspaceRoleItem = {
 export type WorkspaceRoleUpdateParams = {
   id: string;
   params: { action: string };
+};
+
+export type WorkspaceSearchParams = {
+  workspace_id?: string;
+  keyword: string;
+};
+
+export type WorkspaceSearchResponse = {
+  documents: { data: DocumentItem[] };
+  categories: { data: CategoryItem[] };
+  files: { data: FileItem[] };
 };

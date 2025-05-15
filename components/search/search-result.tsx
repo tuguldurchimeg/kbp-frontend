@@ -1,13 +1,17 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { placeholderData } from "@/constants/search-data";
 import { CategoryResults } from "./category-results";
 import { FileResults } from "./file-results";
 import { DocumentResults } from "./document-results";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { WorkspaceSearchResponse } from "@/types/workspace";
 
-export function SearchResults() {
+type Props = {
+  data: WorkspaceSearchResponse;
+};
+
+export function SearchResults({ data }: Props) {
   const t = useTranslations("Search");
   const [tab, setTab] = useState("all");
 
@@ -28,7 +32,7 @@ export function SearchResults() {
               <h4 className="text-sm font-semibold text-muted-foreground mb-3">
                 {t("sections.categories")}
               </h4>
-              <CategoryResults data={placeholderData.categories} />
+              <CategoryResults data={data.categories.data} />
             </div>
             <div className="border-t" />
 
@@ -36,7 +40,7 @@ export function SearchResults() {
               <h4 className="text-sm font-semibold text-muted-foreground mb-3">
                 {t("sections.documents")}
               </h4>
-              <DocumentResults data={placeholderData.documents} />
+              <DocumentResults data={data.documents.data} />
             </div>
             <div className="border-t" />
 
@@ -45,7 +49,7 @@ export function SearchResults() {
                 {t("sections.files")}
               </h4>
 
-              <FileResults data={placeholderData.files} />
+              <FileResults data={data.files.data} />
             </div>
           </div>
         </ScrollArea>
@@ -54,20 +58,20 @@ export function SearchResults() {
       {/* DOCUMENTS */}
       <TabsContent value="documents">
         <ScrollArea className="h-[400px] mt-4 pr-2">
-          <DocumentResults data={placeholderData.documents} />
+          <DocumentResults data={data.documents.data} />
         </ScrollArea>
       </TabsContent>
 
       {/* CATEGORIES */}
       <TabsContent value="categories">
         <ScrollArea className="h-[400px] mt-4 pr-2">
-          <CategoryResults data={placeholderData.categories} />
+          <CategoryResults data={data.categories.data} />
         </ScrollArea>
       </TabsContent>
       {/* FILES */}
       <TabsContent value="files">
         <ScrollArea className="h-[400px] mt-4 pr-2">
-          <FileResults data={placeholderData.files} />
+          <FileResults data={data.files.data} />
         </ScrollArea>
       </TabsContent>
     </Tabs>

@@ -5,6 +5,8 @@ import {
   WorkspaceItem,
   WorkspaceRoleItem,
   WorkspaceRoleUpdateParams,
+  WorkspaceSearchParams,
+  WorkspaceSearchResponse,
   WorkspaceUpdateParams,
 } from "@/types/workspace";
 import { ListParams } from "@/types/document";
@@ -49,4 +51,11 @@ export const updateWorkspaceRole = async (
 ): Promise<WorkspaceRoleItem> => {
   const res = await api.put(`${URI.WORKSPACE_ROLE}/${arg.id}`, arg.params);
   return res.data.data;
+};
+
+export const searchWorkspace = async (
+  params: WorkspaceSearchParams
+): Promise<WorkspaceSearchResponse> => {
+  const res = await api.get(`${URI.WORKSPACES}/search`, { params });
+  return res.data;
 };
