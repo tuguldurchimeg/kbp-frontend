@@ -71,14 +71,15 @@ export default function Home() {
           <Popover
             open={open}
             onOpenChange={(isOpen) => {
-              setOpen(isOpen);
-              if (!isOpen) setQuery("");
+              if (!hasQuery) {
+                setOpen(isOpen);
+              }
             }}
           >
             <PopoverTrigger asChild>
               <div
                 className={clsx(
-                  "relative mt-4 mx-auto w-full",
+                  "relative mt-4 mx-auto w-full transition-all duration-300 ease-in-out",
                   hasQuery ? "max-w-4xl z-30" : "max-w-md"
                 )}
               >
@@ -87,7 +88,10 @@ export default function Home() {
                 </span>
                 <Input
                   placeholder={t("Home.search_placeholder")}
-                  className="pl-10 pr-20 py-6 text-sm bg-background text-foreground placeholder:text-muted-foreground rounded-xl"
+                  className={clsx(
+                    "pl-10 pr-20 py-6 text-sm transition-all duration-500 ease-in-out",
+                    "bg-background text-foreground placeholder:text-muted-foreground rounded-xl"
+                  )}
                   onChange={(e) => {
                     const value = e.target.value;
                     setQuery(value);
@@ -103,7 +107,11 @@ export default function Home() {
             {hasQuery && result && (
               <PopoverContent
                 align="center"
-                className="w-550 max-w-4xl mt-2 p-2 rounded-xl backdrop-blur-sm  border bg-background shadow-lg max-h-100 overflow-auto"
+                className={clsx(
+                  "w-550 max-w-4xl mt-2 p-2 rounded-xl border bg-background shadow-lg max-h-100 overflow-auto",
+                  "transition-all duration-300 ease-in-out transform opacity-0 scale-95",
+                  open && hasQuery ? "opacity-100 scale-100" : ""
+                )}
               >
                 <SearchResults data={result} />
               </PopoverContent>
