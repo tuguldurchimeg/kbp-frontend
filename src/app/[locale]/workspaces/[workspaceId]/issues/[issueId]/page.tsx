@@ -31,6 +31,11 @@ import { EditIssueDialog } from "@/components/@issue/edit-issue-dialog";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import DocumentAttachDialog from "@/components/@issue/document-attach-dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function IssuePage() {
   const params = useParams();
@@ -80,8 +85,8 @@ export default function IssuePage() {
 
   const handleUpdatedIssue = async (updated: IssueUpdateParams) => {
     try {
-      await updateIssue(updated).then((res) => {
-        setIssue(res);
+      await updateIssue(updated).then(() => {
+        fetchData(id);
       });
     } catch (error) {
       toast.error(t("SYSCOMMON.update_failed"));
@@ -101,7 +106,7 @@ export default function IssuePage() {
   const handleAssigneeRemove = async (userId: string) => {
     try {
       await deleteIssueAssignee(userId, issue.id);
-      toast.success(t("SYSCOMMON.updated_successfully"));
+      toast.success("User unassigned ");
     } catch (error) {
       toast.error(t("SYSCOMMON.update_failed"));
       console.error("Failed to unassign:", error);
@@ -208,16 +213,23 @@ export default function IssuePage() {
               </Label>
               <div className="flex items-center gap-2">
                 {assignees.data.map((user: UserItem) => (
-                  <Avatar
-                    key={user.id}
-                    className="size-8"
-                    title={`${user.attributes.firstname} ${user.attributes.lastname}`}
-                  >
-                    <AvatarImage src={user.attributes.avatar} />
-                    <AvatarFallback>
-                      {user.attributes.firstname[0]}
-                    </AvatarFallback>
-                  </Avatar>
+                  <Tooltip key={user.id}>
+                    <TooltipTrigger asChild>
+                      <Avatar
+                        key={user.id}
+                        className="size-8"
+                        title={`${user.attributes.firstname} ${user.attributes.lastname}`}
+                      >
+                        <AvatarImage src={user.attributes.avatar} />
+                        <AvatarFallback>
+                          {user.attributes.firstname[0]}
+                        </AvatarFallback>
+                      </Avatar>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      {user.attributes.lastname} {user.attributes.firstname}
+                    </TooltipContent>
+                  </Tooltip>
                 ))}
               </div>
             </div>

@@ -33,7 +33,7 @@ export function CommentSection({ issue }: { issue: IssueItem }) {
     } finally {
       setIsLoading(false);
     }
-  }, [issue]);
+  }, [issue.id]);
 
   useEffect(() => {
     fetchComments();
