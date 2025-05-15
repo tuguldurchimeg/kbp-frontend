@@ -2,6 +2,7 @@ import api from "../../../../utils/api";
 import { URI } from "@/constants/uri.constants";
 import {
   DocumentCreateParams,
+  DocumentFileSetParams,
   DocumentItem,
   DocumentTagSetParams,
   ListParams,
@@ -56,5 +57,30 @@ export const setDocumentTag = async (
   params: DocumentTagSetParams
 ): Promise<DocumentItem> => {
   const res = await api.post(`${URI.DOCUMENTS}/set_document_tag`, params);
+  return res.data.data;
+};
+
+export const delDocumentTag = async (
+  params: DocumentTagSetParams
+): Promise<DocumentItem> => {
+  const res = await api.delete(`${URI.DOCUMENTS}/del_document_tag`, {
+    params,
+  });
+  return res.data.data;
+};
+
+export const setDocumentFile = async (
+  params: DocumentFileSetParams
+): Promise<DocumentItem> => {
+  const res = await api.post(`${URI.DOCUMENTS}/set_document_file`, params);
+  return res.data.data;
+};
+
+export const delDocumentFile = async (
+  params: DocumentFileSetParams
+): Promise<DocumentItem> => {
+  const res = await api.delete(`${URI.DOCUMENTS}/del_document_file`, {
+    params,
+  });
   return res.data.data;
 };

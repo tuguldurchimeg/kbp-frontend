@@ -94,6 +94,7 @@ import {
   Plus,
   MoreVertical,
   Trash,
+  XIcon,
 } from "lucide-react";
 import { DocumentItem, TagCreateParams, TagItem } from "@/types/document";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -101,6 +102,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { Button as CNButton } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  delDocumentTag,
   deleteDocument,
   setDocumentTag,
   updateDocument,
@@ -501,10 +503,19 @@ export function MyTextEditor({ document, fetchDoc }: Props) {
     }
   };
 
+  const handleDeleteTagDoc = async (tag: TagItem) => {
+    try {
+      await delDocumentTag({ document_id: document.id, tag_id: tag.id });
+      fetchDoc();
+    } catch (error) {
+      console.error("Failed to del document tag:", error);
+    }
+  };
+
   const handleCreateTag = async (name: string) => {
     const newTag: TagCreateParams = {
       name,
-      color: "#8b5cf6",
+      color: TAG_COLORS[Math.floor(Math.random() * TAG_COLORS.length)],
       workspace_id: document.attributes.workspace_id,
     };
 
@@ -527,6 +538,7 @@ export function MyTextEditor({ document, fetchDoc }: Props) {
           color: newColor,
         },
       });
+      fetchDoc();
       console.log("Color updated");
     } catch (err) {
       console.error("Failed to update color", err);
@@ -689,13 +701,23 @@ export function MyTextEditor({ document, fetchDoc }: Props) {
           document.attributes.tags.data.map((tag) => (
             <Badge
               key={tag.id}
-              className="text-xs font-medium rounded-lg px-4"
+              className="text-xs font-medium rounded-lg px-4 justify-between items-center"
               style={{
                 backgroundColor: applyAlpha(tag.attributes?.color, 0.2),
                 color: tag.attributes?.color,
               }}
             >
               {tag.attributes?.name}
+              {isEditable && (
+                <CNButton
+                  variant="ghost"
+                  size="xs"
+                  onClick={() => handleDeleteTagDoc(tag)}
+                  className="p-0 hover:bg-transparent hover:font-bold h-2 mt-0.5"
+                >
+                  <XIcon className="size-2.5" />
+                </CNButton>
+              )}
             </Badge>
           ))}
 
@@ -735,7 +757,7 @@ export function MyTextEditor({ document, fetchDoc }: Props) {
                           {TAG_COLORS.map((color) => (
                             <Button
                               key={color}
-                              className={`w-6 h-6 rounded-sm border hover:ring-2 hover:ring-offset-2 transition-colors p-0`}
+                              className={`w-4 h-4 rounded-sm border hover:ring-2 hover:ring-offset-2 transition-colors p-0`}
                               style={{ backgroundColor: color }}
                               onClick={() => handleTagColorChange(tag, color)}
                             />
@@ -762,7 +784,9 @@ export function MyTextEditor({ document, fetchDoc }: Props) {
                         className="pl-3.5"
                       >
                         <Plus className="w-3 h-3" />
-                        <span>Create tag “{tagInputValue}”</span>
+                        <span>
+                          {t("create")} “{tagInputValue}”
+                        </span>
                       </CommandItem>
                     )}
                 </CommandList>

@@ -79,6 +79,11 @@ export type DocumentTagSetParams = {
   tag_id: string;
 };
 
+export type DocumentFileSetParams = {
+  document_id: string;
+  file_id: string;
+};
+
 export type TagItem = {
   id: string;
   type: "tag";
