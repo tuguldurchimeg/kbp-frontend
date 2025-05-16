@@ -18,6 +18,7 @@ import { ROUTE } from "@/constants/route.constants";
 import { useTranslations } from "next-intl";
 import { WorkspaceItem } from "@/types/workspace";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export function NavHeader({ workspace }: { workspace: WorkspaceItem }) {
   const { isMobile } = useSidebar();
@@ -32,8 +33,19 @@ export function NavHeader({ workspace }: { workspace: WorkspaceItem }) {
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
           onClick={() => router.push(ROUTE.WORKSPACES.WORKSPACE(workspace.id))}
         >
-          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-primary-foreground">
+          {/* <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-primary-foreground">
             <Building className="size-4" />
+          </div> */}
+          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-primary-foreground">
+            <Image
+              src={
+                workspace.attributes.image_url || "/workspace_placeholder.jpg"
+              }
+              alt={workspace.attributes.name}
+              width={80}
+              height={80}
+              className="object-cover w-full h-full rounded-lg"
+            />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-semibold">

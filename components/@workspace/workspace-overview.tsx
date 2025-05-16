@@ -35,17 +35,17 @@ export default function WorkspaceSummary({
     <Card>
       <CardContent className="flex flex-wrap sm:items-center sm:justify-between gap-6 sm:gap-10 p-4 sm:p-6">
         <div className="flex items-center gap-3">
-          {workspace.attributes.image_url && (
-            <div className="w-14 h-14 rounded-md overflow-hidden border flex-shrink-0">
-              <Image
-                src={workspace.attributes.image_url}
-                alt={workspace.attributes.name}
-                width={80}
-                height={80}
-                className="object-cover w-full h-full"
-              />
-            </div>
-          )}
+          <div className="w-14 h-14 rounded-md overflow-hidden border flex-shrink-0">
+            <Image
+              src={
+                workspace.attributes.image_url || "/workspace_placeholder.jpg"
+              }
+              alt={workspace.attributes.name}
+              width={80}
+              height={80}
+              className="object-cover w-full h-full"
+            />
+          </div>
           <div className="flex flex-col">
             <CardTitle className="text-xl sm:text-2xl">
               {workspace.attributes.name}

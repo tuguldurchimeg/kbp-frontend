@@ -109,8 +109,8 @@ export default function WorkspaceDetailPage() {
           <ToggleGroupItem
             value="__all__"
             className={clsx(
-              "text-sm font-medium rounded-lg px-4 py-0 border-2",
-              selectedTagIds.length === 0 && "border-muted-foreground"
+              "text-sm font-medium rounded-lg px-6 py-0 border-2",
+              selectedTagIds.length === 0 && "border-muted-foreground bg-muted"
             )}
             onClick={clearTags}
           >
@@ -126,7 +126,7 @@ export default function WorkspaceDetailPage() {
               <ToggleGroupItem
                 key={tag.id}
                 value={tag.id}
-                className="text-sm font-medium rounded-lg px-4 py-0 border-2 cursor-pointer"
+                className="text-sm font-medium rounded-lg px-6 py-0 border-2 cursor-pointer"
                 style={{
                   backgroundColor: isSelected
                     ? applyAlpha(tagColor, 0.2)

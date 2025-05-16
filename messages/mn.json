@@ -144,7 +144,7 @@
     "delete_failed": "Устгахад алдаа гарлаа",
     "upload_click": "Зураг сонгоно уу",
     "upload_click_or_drag": "Дарж эсвэл чирж оруулна уу",
-    "upload_max_size": "Дээд файл хэмжээ {size}MB.",
+    "upload_max_size": "",
     "upload_no_file_selected": "Файл сонгогдоогүй байна",
     "upload_too_many_files": "Хамгийн ихдээ {limit} файл оруулж болно",
     "upload_too_large": "Файлын хэмжээ хэтэрсэн ({size}MB)",
