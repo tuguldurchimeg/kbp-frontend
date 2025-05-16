@@ -60,7 +60,11 @@ export function getColumns(
       header: t("Main.table.issues"),
       cell: ({ row }) => {
         const issues = row.original.attributes.issues;
-        return <Badge variant="outline">{issues}</Badge>;
+        return (
+          <Badge className="bg-red-100 text-red-800" variant="outline">
+            {issues}
+          </Badge>
+        );
       },
     },
     {
