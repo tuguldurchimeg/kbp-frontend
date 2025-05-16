@@ -45,15 +45,19 @@ import {
   updateCategory,
 } from "@/src/app/lib/actions/category.actions";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { getWorkspace } from "@/src/app/lib/actions/workspace.actions";
+import {
+  getUserRole,
+  getWorkspace,
+} from "@/src/app/lib/actions/workspace.actions";
 import {
   createDocument,
   deleteDocument,
 } from "@/src/app/lib/actions/document.actions";
 import { JSONContent } from "@tiptap/react";
 import { useWorkspaceStore } from "@/src/stores/workspace.store";
+import { useUserStore } from "@/src/stores/user.store";
 
 export function AppSidebar() {
   const params = useParams();
@@ -65,8 +69,8 @@ export function AppSidebar() {
   const [documentMenus, setDocumentMenus] = useState<MenuItemChildren[]>([]);
   const t = useTranslations("SYSCOMMON");
   const { staticMenus, dynamicMenu } = useSidebarMenus(workspaceId);
-
-  const { workspace, setWorkspace, role } = useWorkspaceStore();
+  const { user } = useUserStore();
+  const { workspace, setWorkspace, role, setRole } = useWorkspaceStore();
   const fetchWorkspace = async () => {
     try {
       const ws = await getWorkspace(workspaceId);
@@ -79,10 +83,30 @@ export function AppSidebar() {
       toast.error("Failed to load documents");
     }
   };
+  const fetchUserRole = useCallback(async () => {
+    if (!workspaceId || !user?.id) return;
+
+    try {
+      const res = await getUserRole({
+        id: workspaceId,
+        params: { user_id: user.id },
+      });
+
+      if (!res || !res.attributes) {
+        console.warn("User role not found or response invalid:", res);
+        return;
+      }
+      setRole(res.attributes.action, workspaceId);
+    } catch (err) {
+      console.error("Role fetch failed", err);
+    }
+  }, [workspaceId, user?.id, setRole]);
+
   const cleanPath = pathname.replace(/^\/(en|mn)/, "");
 
   useEffect(() => {
     fetchWorkspace();
+    fetchUserRole();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceId]);
 
@@ -239,30 +263,29 @@ export function AppSidebar() {
                                 </span>
                               </div>
                             </SidebarMenuButton>
-                            {role == "admin" ||
-                              (role == "write" && (
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <SidebarMenuAction>
-                                      <Plus className="w-4 h-4" />
-                                    </SidebarMenuAction>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end">
-                                    <DropdownMenuItem
-                                      onClick={() => handleCreateCategory()}
-                                    >
-                                      <FolderPlus className="w-4 h-4 mr-2 text-blue-600" />
-                                      {t("new_category")}
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                      onClick={() => setNewDocDialogOpen(true)}
-                                    >
-                                      <FileText className="w-4 h-4 mr-2 text-indigo-600" />
-                                      {t("new_document")}
-                                    </DropdownMenuItem>
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                              ))}
+                            {(role == "admin" || role == "write") && (
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <SidebarMenuAction>
+                                    <Plus className="w-4 h-4" />
+                                  </SidebarMenuAction>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem
+                                    onClick={() => handleCreateCategory()}
+                                  >
+                                    <FolderPlus className="w-4 h-4 mr-2 text-blue-600" />
+                                    {t("new_category")}
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    onClick={() => setNewDocDialogOpen(true)}
+                                  >
+                                    <FileText className="w-4 h-4 mr-2 text-indigo-600" />
+                                    {t("new_document")}
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            )}
                           </div>
                         </CollapsibleTrigger>
                         <CollapsibleContent>
