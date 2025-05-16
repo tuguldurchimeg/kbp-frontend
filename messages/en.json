@@ -158,7 +158,8 @@
     "theme_toggle": "Switch to {mode} mode",
     "theme_light": "light",
     "theme_dark": "dark",
-    "tag": "Tag"
+    "tag": "Tag",
+    "default_password_note": "The password will be set to the default value: Test@123"
   },
   "LOGIN": {
     "title": "Sign In",
@@ -174,7 +175,9 @@
     "ask_registration": "Don't have an account? ",
     "ERROR": {
       "E000001": "Login Failed"
-    }
+    },
+    "login_success": "Login success",
+    "login_failed": "Login Failed"
   },
   "SignUp": {
     "title": "Sign Up",

@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -75,6 +76,9 @@ export default function EmployeeAddForm({
             <User className="size-4" />
             {t("SYSCOMMON.add")}
           </DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground">
+            {t("SYSCOMMON.default_password_note")}
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={handleSubmit(submitHandler)} className="space-y-4">

@@ -14,6 +14,7 @@ import { useTranslations } from "next-intl";
 import { Loader } from "lucide-react";
 import Link from "next/link";
 import { useGoogleLogin } from "@react-oauth/google";
+import { toast } from "sonner";
 
 export function LoginForm({
   className,
@@ -31,8 +32,10 @@ export function LoginForm({
     try {
       await login(email, password);
       router.push(ROUTE.ROOT);
+      toast.success(t("login_success"));
     } catch (error) {
       console.error("Login failed", error);
+      toast.error(t("login_failed"));
     }
   };
 
@@ -41,8 +44,10 @@ export function LoginForm({
       try {
         await googleLogin(tokenResponse.access_token);
         router.push(ROUTE.ROOT);
+        toast.success(t("login_success"));
       } catch (error) {
         console.error("Google login failed", error);
+        toast.error(t("login_failed"));
       }
     },
     onError: () => {
