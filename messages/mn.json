@@ -218,6 +218,7 @@
     "total_issues": "Нийт асуудал"
   },
   "Main": {
+    "noData": "Хоосон",
     "issues": "Асуудал, шийдэл",
     "overview": "Тойм",
     "total_issues": "Нийт асуудлууд",

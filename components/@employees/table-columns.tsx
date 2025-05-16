@@ -1,5 +1,4 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import EmployeeRowActions from "./employee-row-actions";
 import { useTranslations } from "next-intl";
@@ -7,7 +6,9 @@ import { UserItem } from "@/types/user";
 import { Badge } from "../ui/badge";
 
 export function getColumns(
-  t: ReturnType<typeof useTranslations>
+  t: ReturnType<typeof useTranslations>,
+  onUpdate: (item: UserItem) => void,
+  onDelete: (item: UserItem) => void
 ): ColumnDef<UserItem>[] {
   return [
     {
@@ -29,7 +30,7 @@ export function getColumns(
     },
     {
       id: "firstname",
-      header: t("table.firstname"),
+      header: t("Main.table.firstname"),
       accessorFn: (row) => row.attributes.firstname,
       cell: ({ row }) => {
         const user = row.original.attributes;
@@ -38,7 +39,7 @@ export function getColumns(
     },
     {
       id: "lastname",
-      header: t("table.lastname"),
+      header: t("Main.table.lastname"),
       accessorFn: (row) => row.attributes.lastname,
       cell: ({ row }) => {
         const user = row.original.attributes;
@@ -47,7 +48,7 @@ export function getColumns(
     },
     {
       id: "email",
-      header: t("table.email"),
+      header: t("Main.table.email"),
       accessorFn: (row) => row.attributes.email,
       cell: ({ row }) => {
         const user = row.original.attributes;
@@ -56,7 +57,7 @@ export function getColumns(
     },
     {
       id: "issues",
-      header: t("table.issues"),
+      header: t("Main.table.issues"),
       cell: ({ row }) => {
         const issues = row.original.attributes.issues;
         return <Badge variant="outline">{issues}</Badge>;
@@ -65,12 +66,11 @@ export function getColumns(
     {
       id: "actions",
       header: "",
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       cell: ({ row }) => (
         <EmployeeRowActions
           t={t}
-          // onEditClick={() => onUpdate(row.original)}
-          // onDeleteClick={() => onDelete(row.original)}
+          onEditClick={() => onUpdate(row.original)}
+          onDeleteClick={() => onDelete(row.original)}
         />
       ),
       enableSorting: false,

@@ -27,18 +27,43 @@ import {
   ChevronRightIcon,
   ChevronsLeftIcon,
   ChevronsRightIcon,
+  Ellipsis,
+  Plus,
   Search,
 } from "lucide-react";
-import { getUsers } from "@/src/app/lib/actions/user.actions";
-import { UserItem } from "@/types/user";
+import {
+  createEmployee,
+  deleteUser,
+  getUsers,
+  updateEmployee,
+} from "@/src/app/lib/actions/user.actions";
+import {
+  EmployeeCreateParams,
+  EmployeeUpdateParams,
+  UserItem,
+} from "@/types/user";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import EmployeeEditForm from "./employee-edit-form";
+import ConfirmDialog from "../confirm-dialog";
+import { toast } from "sonner";
+import EmployeeAddForm from "./employee-add-form";
 
 export default function EmployeesTable() {
-  const t = useTranslations("Main");
+  const t = useTranslations();
   const { workspaceId } = useParams() as { workspaceId: string };
 
   const [data, setData] = useState<UserItem[]>([]);
   const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState("");
+  const [editItem, setEditItem] = useState<UserItem | null>(null);
+  const [deleteItem, setDeleteItem] = useState<UserItem | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -58,7 +83,52 @@ export default function EmployeesTable() {
     pageSize: 6,
   });
 
-  const columns = getColumns(t);
+  const columns = getColumns(
+    t,
+    (item) => setEditItem(item),
+    (item) => setDeleteItem(item)
+  );
+
+  const handleEmployeeCreate = async (data: EmployeeCreateParams) => {
+    try {
+      await createEmployee(data);
+      toast.success(t("SYSCOMMON.created_successfully"));
+      await fetchData();
+    } catch (err) {
+      toast.error(t("SYSCOMMON.create_failed"));
+      console.error(err);
+      setCreateDialogOpen(false);
+    }
+  };
+
+  const handleUpdate = async (data: EmployeeUpdateParams) => {
+    try {
+      await updateEmployee(data);
+      toast.success(t("SYSCOMMON.updated_successfully"));
+      setEditItem(null);
+      fetchData();
+    } catch (error) {
+      toast.error(t("SYSCOMMON.update_failed"));
+      console.error("Employee update failed:", error);
+    }
+    setEditItem(null);
+  };
+
+  const handleEmployeeDelete = async () => {
+    if (!deleteItem) return;
+    setDeleting(true);
+    try {
+      await deleteUser(deleteItem.id.toString());
+      toast.success(t("SYSCOMMON.deleted_successfully"));
+      fetchData();
+    } catch (error) {
+      toast.error(t("SYSCOMMON.delete_failed"));
+      console.error("Employee delete failed:", error);
+    } finally {
+      setDeleting(false);
+      setDeleteItem(null);
+    }
+  };
 
   const table = useReactTable({
     data,
@@ -82,18 +152,33 @@ export default function EmployeesTable() {
 
   return (
     <div className="space-y-4 max-w-screen-xl mx-auto">
-      <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder={t("filter_placeholder")}
-          value={
-            (table.getColumn("firstname")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table.getColumn("firstname")?.setFilterValue(event.target.value)
-          }
-          className="pl-10"
-        />
+      <div className="flex justify-between">
+        <div className="relative max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder={t("Main.filter_placeholder")}
+            value={
+              (table.getColumn("firstname")?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn("firstname")?.setFilterValue(event.target.value)
+            }
+            className="pl-10"
+          />
+        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              <Ellipsis className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setCreateDialogOpen(true)}>
+              <Plus className="mr-2 size-4 text-green-600" />
+              {t("SYSCOMMON.add")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <div className="overflow-x-auto rounded-md border">
@@ -134,7 +219,7 @@ export default function EmployeesTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  {t("noData")}
+                  {t("Main.noData")}
                 </TableCell>
               </TableRow>
             )}
@@ -145,7 +230,7 @@ export default function EmployeesTable() {
       <div className="flex items-center justify-end pt-4">
         <div className="flex items-center gap-4">
           <span className="text-sm text-muted-foreground">
-            {t("page")} {table.getState().pagination.pageIndex + 1} {" / "}
+            {t("Main.page")} {table.getState().pagination.pageIndex + 1} {" / "}
             {table.getPageCount()}
           </span>
           <div className="flex gap-1">
@@ -188,6 +273,30 @@ export default function EmployeesTable() {
           </div>
         </div>
       </div>
+
+      {editItem && (
+        <EmployeeEditForm
+          open={!!editItem}
+          setOpen={(open) => !open && setEditItem(null)}
+          userItem={editItem}
+          onUpdate={handleUpdate}
+        />
+      )}
+      <EmployeeAddForm
+        open={createDialogOpen}
+        setOpen={setCreateDialogOpen}
+        onCreate={handleEmployeeCreate}
+      />
+      <ConfirmDialog
+        open={!!deleteItem}
+        onOpenChange={(confirmOpen) => !confirmOpen && setDeleteItem(null)}
+        title={t("SYSCOMMON.confirm_delete")}
+        description={t("SYSCOMMON.confirm_delete_message")}
+        confirmText={t("SYSCOMMON.confirm")}
+        cancelText={t("SYSCOMMON.cancel")}
+        onConfirm={handleEmployeeDelete}
+        loading={deleting}
+      />
     </div>
   );
 }

@@ -1,5 +1,11 @@
 import { URI } from "@/constants/uri.constants";
-import { PasswordChangeParams, UpdateUserParams, UserItem } from "@/types/user";
+import {
+  EmployeeCreateParams,
+  EmployeeUpdateParams,
+  PasswordChangeParams,
+  UpdateUserParams,
+  UserItem,
+} from "@/types/user";
 import api from "@/utils/api";
 
 export async function fetchProfile(): Promise<UserItem> {
@@ -9,6 +15,20 @@ export async function fetchProfile(): Promise<UserItem> {
 
 export async function getEmployees(): Promise<UserItem> {
   const res = await api.get(URI.USERS);
+  return res.data.data;
+}
+
+export async function createEmployee(
+  params: EmployeeCreateParams
+): Promise<UserItem> {
+  const res = await api.post(URI.USERS, params);
+  return res.data.data;
+}
+
+export async function updateEmployee(
+  arg: EmployeeUpdateParams
+): Promise<UserItem> {
+  const res = await api.put(`${URI.USERS}/${arg.id}`, arg.params);
   return res.data.data;
 }
 

@@ -20,6 +20,17 @@ export type UserItem = {
   };
 };
 
+export type EmployeeUpdateParams = {
+  id: string;
+  params: EmployeeCreateParams;
+};
+
+export type EmployeeCreateParams = {
+  firstname: string;
+  lastname: string;
+  email: string;
+};
+
 export interface CurrentUser {
   id: number;
   uid: string;
@@ -44,7 +55,6 @@ export interface CreateUserParams {
   firstname: string;
   lastname: string;
   avatar?: string;
-  company_id?: string;
 }
 
 export interface UpdateUserParams {

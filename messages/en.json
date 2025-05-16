@@ -218,6 +218,7 @@
     "total_issues": "Total Issues"
   },
   "Main": {
+    "noData": "No data",
     "issues": "Issues",
     "overview": "Overview",
     "total_issues": "Total Issues",

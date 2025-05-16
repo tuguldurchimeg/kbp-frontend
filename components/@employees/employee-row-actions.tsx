@@ -27,11 +27,11 @@ export default function EmployeeRowActions({
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={onEditClick}>
           <Pencil className="mr-2 size-4 text-sky-500" />
-          {t("edit")}
+          {t("SYSCOMMON.edit")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onDeleteClick}>
           <Trash2 className="mr-2 size-4 text-red-600" />
-          {t("delete")}
+          {t("SYSCOMMON.delete")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
