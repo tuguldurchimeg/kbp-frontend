@@ -128,7 +128,7 @@ export function LoginForm({
               src="/login.png"
               alt="Image"
               fill
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.8]"
+              className="absolute inset-0 h-full w-full object-cover brightness-[1.5] dark:brightness-[0.8]"
             />
           </div>
         </CardContent>
