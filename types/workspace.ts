@@ -32,6 +32,11 @@ export type WorkspaceUpdateParams = {
   params: WorkspaceCreateParams;
 };
 
+export type UserRoleParams = {
+  id: string;
+  params: { user_id: string };
+};
+
 export type WorkspaceRoleItem = {
   id: string;
   type: "workspace_role_detail";

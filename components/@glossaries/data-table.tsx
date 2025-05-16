@@ -50,6 +50,7 @@ import { toast } from "sonner";
 import GlossaryCreateForm from "./glossary-create-form";
 import GlossaryEditForm from "./glossary-edit-form";
 import ConfirmDialog from "../confirm-dialog";
+import { useWorkspaceStore } from "@/src/stores/workspace.store";
 
 export default function GlossaryTable() {
   const [data, setData] = useState<GlossaryItem[]>([]);
@@ -123,12 +124,14 @@ export default function GlossaryTable() {
     pageIndex: 0,
     pageSize: 10,
   });
+  const { role } = useWorkspaceStore();
 
   const columns = getColumns(
     t,
     locale,
     (item) => setEditItem(item),
-    (item) => setDeleteItem(item)
+    (item) => setDeleteItem(item),
+    role
   );
 
   const table = useReactTable({
@@ -183,7 +186,9 @@ export default function GlossaryTable() {
         </DropdownMenu>
       </div>
 
-      <GlossaryCreateForm onSubmit={handleCreate} loading={creating} />
+      {(role == "admin" || role == "write") && (
+        <GlossaryCreateForm onSubmit={handleCreate} loading={creating} />
+      )}
       <div className="overflow-x-auto rounded-md border">
         <Table>
           <TableHeader className="bg-muted">

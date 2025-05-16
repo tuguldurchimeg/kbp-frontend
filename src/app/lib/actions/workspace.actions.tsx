@@ -1,6 +1,7 @@
 import api from "@/utils/api";
 import { URI } from "@/constants/uri.constants";
 import {
+  UserRoleParams,
   WorkspaceCreateParams,
   WorkspaceFilterParams,
   WorkspaceItem,
@@ -47,6 +48,15 @@ export const getWorkspaceUsers = async (
   params: ListParams
 ): Promise<WorkspaceRoleItem[]> => {
   const res = await api.get(URI.WORKSPACE_ROLE, { params });
+  return res.data.data;
+};
+
+export const getUserRole = async (
+  arg: UserRoleParams
+): Promise<WorkspaceRoleItem> => {
+  const res = await api.get(`${URI.WORKSPACES}/${arg.id}/user_role`, {
+    params: arg.params,
+  });
   return res.data.data;
 };
 

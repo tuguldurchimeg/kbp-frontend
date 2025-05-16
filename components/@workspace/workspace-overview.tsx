@@ -10,6 +10,7 @@ import { WorkspaceItem } from "@/types/workspace";
 import { useTranslations } from "next-intl";
 import WorkspaceEditForm from "./workspace-edit-form";
 import Image from "next/image";
+import { useWorkspaceStore } from "@/src/stores/workspace.store";
 
 export default function WorkspaceSummary({
   workspace,
@@ -19,7 +20,7 @@ export default function WorkspaceSummary({
   onUpdateWorkspace: (values: { name: string; description?: string }) => void;
 }) {
   const t = useTranslations("Workspace");
-
+  const { role } = useWorkspaceStore();
   const categories = workspace.attributes.categories?.data;
   const categoryDocsCount = categories?.reduce((sum, cat) => {
     const docs = cat.attributes.documents?.data ?? [];
@@ -49,10 +50,12 @@ export default function WorkspaceSummary({
           <div className="flex flex-col">
             <CardTitle className="text-xl sm:text-2xl">
               {workspace.attributes.name}
-              <WorkspaceEditForm
-                workspace={workspace}
-                onSubmit={onUpdateWorkspace}
-              />
+              {role != "read" && (
+                <WorkspaceEditForm
+                  workspace={workspace}
+                  onSubmit={onUpdateWorkspace}
+                />
+              )}
             </CardTitle>
             <CardDescription className="text-sm sm:text-base">
               {workspace.attributes.description}

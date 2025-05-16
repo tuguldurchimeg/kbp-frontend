@@ -48,25 +48,25 @@ import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { getWorkspace } from "@/src/app/lib/actions/workspace.actions";
-import { WorkspaceItem } from "@/types/workspace";
 import {
   createDocument,
   deleteDocument,
 } from "@/src/app/lib/actions/document.actions";
 import { JSONContent } from "@tiptap/react";
+import { useWorkspaceStore } from "@/src/stores/workspace.store";
 
 export function AppSidebar() {
   const params = useParams();
   const workspaceId = params.workspaceId as string;
   const pathname = usePathname();
   const router = useRouter();
-  const [workspace, setWorkspace] = useState<WorkspaceItem>();
   const [newDocDialogOpen, setNewDocDialogOpen] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
   const [documentMenus, setDocumentMenus] = useState<MenuItemChildren[]>([]);
   const t = useTranslations("SYSCOMMON");
   const { staticMenus, dynamicMenu } = useSidebarMenus(workspaceId);
 
+  const { workspace, setWorkspace, role } = useWorkspaceStore();
   const fetchWorkspace = async () => {
     try {
       const ws = await getWorkspace(workspaceId);
@@ -239,27 +239,30 @@ export function AppSidebar() {
                                 </span>
                               </div>
                             </SidebarMenuButton>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <SidebarMenuAction>
-                                  <Plus className="w-4 h-4" />
-                                </SidebarMenuAction>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem
-                                  onClick={() => handleCreateCategory()}
-                                >
-                                  <FolderPlus className="w-4 h-4 mr-2 text-blue-600" />
-                                  {t("new_category")}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={() => setNewDocDialogOpen(true)}
-                                >
-                                  <FileText className="w-4 h-4 mr-2 text-indigo-600" />
-                                  {t("new_document")}
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
+                            {role == "admin" ||
+                              (role == "write" && (
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <SidebarMenuAction>
+                                      <Plus className="w-4 h-4" />
+                                    </SidebarMenuAction>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem
+                                      onClick={() => handleCreateCategory()}
+                                    >
+                                      <FolderPlus className="w-4 h-4 mr-2 text-blue-600" />
+                                      {t("new_category")}
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                      onClick={() => setNewDocDialogOpen(true)}
+                                    >
+                                      <FileText className="w-4 h-4 mr-2 text-indigo-600" />
+                                      {t("new_document")}
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              ))}
                           </div>
                         </CollapsibleTrigger>
                         <CollapsibleContent>

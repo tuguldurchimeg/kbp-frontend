@@ -142,6 +142,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import { useWorkspaceStore } from "@/src/stores/workspace.store";
 
 type Props = {
   document: DocumentItem;
@@ -552,6 +553,8 @@ export function MyTextEditor({ document, fetchDoc }: Props) {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   };
 
+  const { role } = useWorkspaceStore();
+
   return (
     <EditorContext.Provider value={{ editor }}>
       {isEditable && (
@@ -587,7 +590,7 @@ export function MyTextEditor({ document, fetchDoc }: Props) {
           <FileCheck className="w-5 h-5 " />
         </CNButton>
       )}
-      {!isEditable && (
+      {!isEditable && (role == "admin" || role == "write") && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <CNButton

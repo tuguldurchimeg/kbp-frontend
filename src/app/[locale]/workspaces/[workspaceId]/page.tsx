@@ -5,54 +5,66 @@ import { useParams } from "next/navigation";
 import { FolderOpen, Tag } from "lucide-react";
 import DocumentCard from "@/components/@documents/document-card";
 import {
+  getUserRole,
   getWorkspace,
   updateWorkspace,
 } from "@/src/app/lib/actions/workspace.actions";
-import { WorkspaceItem } from "@/types/workspace";
 import WorkspaceSummary from "@/components/@workspace/workspace-overview";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import clsx from "clsx";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Label } from "@/components/ui/label";
+import { useWorkspaceStore } from "@/src/stores/workspace.store";
+import { useUserStore } from "@/src/stores/user.store";
 
 export default function WorkspaceDetailPage() {
-  const params = useParams();
-  const id = params.workspaceId;
-  const [workspace, setWorkspace] = useState<WorkspaceItem | null>(null);
+  const { workspaceId } = useParams() as { workspaceId: string };
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
-
   const t = useTranslations();
+
+  const { workspace, setRole, setWorkspace } = useWorkspaceStore();
+  const { user } = useUserStore();
 
   const fetchWorkspace = useCallback(
     async (tagIds: string[] = []) => {
-      if (!id || typeof id !== "string") return;
+      if (!workspaceId) return;
       try {
         const filters = tagIds.length > 0 ? { tag_ids: tagIds } : {};
-        const data = await getWorkspace(id, filters);
+        const data = await getWorkspace(workspaceId, filters);
         setWorkspace(data);
       } catch (error) {
         console.error("Failed to load workspace", error);
       }
     },
-    [id]
+    [workspaceId, setWorkspace]
   );
+
+  const fetchUserRole = useCallback(async () => {
+    if (!workspaceId || !user?.id) return;
+
+    try {
+      const res = await getUserRole({
+        id: workspaceId,
+        params: { user_id: user.id },
+      });
+
+      if (!res || !res.attributes) {
+        console.warn("User role not found or response invalid:", res);
+        return;
+      }
+      setRole(res.attributes.action, workspaceId);
+    } catch (err) {
+      console.error("Role fetch failed", err);
+    }
+  }, [workspaceId, user?.id, setRole]);
 
   useEffect(() => {
     fetchWorkspace(selectedTagIds);
-  }, [fetchWorkspace, selectedTagIds]);
+    fetchUserRole();
+  }, [fetchWorkspace, fetchUserRole, selectedTagIds]);
 
-  // const toggleTag = (tagId: string) => {
-  //   setSelectedTagIds((prev) =>
-  //     prev.includes(tagId)
-  //       ? prev.filter((id) => id !== tagId)
-  //       : [...prev, tagId]
-  //   );
-  // };
-
-  const clearTags = () => {
-    setSelectedTagIds([]);
-  };
+  const clearTags = () => setSelectedTagIds([]);
 
   const handleWorkspaceUpdate = async (updatedValues: {
     name: string;

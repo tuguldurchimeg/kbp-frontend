@@ -34,6 +34,7 @@ import { Input } from "../ui/input";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { JSONContent } from "@tiptap/react";
+import { useWorkspaceStore } from "@/src/stores/workspace.store";
 
 interface CategoryDocumentsProps {
   item: MenuItemChildren;
@@ -72,6 +73,7 @@ const CategoryDocuments = ({
     !item.collapsible;
   const t = useTranslations("SYSCOMMON");
   const [itemCollapsed, setItemCollapse] = useState(item.isCollapsed);
+  const { role } = useWorkspaceStore();
 
   const handleRename = () => {
     if (item.id) onCategoryRename(item.id, newName);
@@ -144,7 +146,7 @@ const CategoryDocuments = ({
           </CollapsibleTrigger>
 
           {/* Category drop */}
-          {item.collapsible && (
+          {item.collapsible && (role == "admin" || role == "write") && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuAction className="invisible peer-hover:visible hover:visible transition-all duration-200">
@@ -186,7 +188,7 @@ const CategoryDocuments = ({
           )}
 
           {/* Document drop */}
-          {!item.collapsible && (
+          {!item.collapsible && (role == "admin" || role == "write") && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuAction className="invisible peer-hover:visible hover:visible transition-all duration-200">

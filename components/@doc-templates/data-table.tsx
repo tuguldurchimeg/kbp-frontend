@@ -47,6 +47,7 @@ import { DocumentItem } from "@/types/document";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import ConfirmDialog from "../confirm-dialog";
+import { useWorkspaceStore } from "@/src/stores/workspace.store";
 
 export default function TemplateTable() {
   const [rowSelection, setRowSelection] = useState({});
@@ -57,8 +58,13 @@ export default function TemplateTable() {
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations();
-  const columns = getColumns(pathname, t, locale, (item) =>
-    setDeleteItem(item)
+  const { role } = useWorkspaceStore();
+  const columns = getColumns(
+    pathname,
+    t,
+    locale,
+    (item) => setDeleteItem(item),
+    role
   );
   const params = useParams();
 
@@ -146,13 +152,15 @@ export default function TemplateTable() {
           <p className="text-muted-foreground">{t("Templates.description")}</p>
         </div>
 
-        <Button
-          className="fixed bottom-15 right-15 h-12 w-12 rounded-xl hover:bg-purple-700"
-          onClick={handleCreateTemplate}
-          aria-label={t("SYSCOMMON.new")}
-        >
-          <Plus />
-        </Button>
+        {(role == "admin" || role == "write") && (
+          <Button
+            className="fixed bottom-15 right-15 h-12 w-12 rounded-xl hover:bg-purple-700"
+            onClick={handleCreateTemplate}
+            aria-label={t("SYSCOMMON.new")}
+          >
+            <Plus />
+          </Button>
+        )}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

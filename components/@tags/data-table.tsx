@@ -46,6 +46,7 @@ import TagCreateForm from "./tag-create-form";
 import { toast } from "sonner";
 import TagEditForm from "./tag-edit-form";
 import ConfirmDialog from "../confirm-dialog";
+import { useWorkspaceStore } from "@/src/stores/workspace.store";
 
 export default function TagTable() {
   const [tags, setTags] = useState<TagItem[]>([]);
@@ -128,12 +129,15 @@ export default function TagTable() {
     pageIndex: 0,
     pageSize: 10,
   });
+  const { role } = useWorkspaceStore();
+  console.log("role here ", role);
 
   const columns = getColumns(
     t,
     locale,
     (item) => setEditItem(item),
-    (item) => setDeleteItem(item)
+    (item) => setDeleteItem(item),
+    role
   );
 
   const table = useReactTable({
@@ -188,8 +192,9 @@ export default function TagTable() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-
-      <TagCreateForm onSubmit={handleTagCreate} loading={creating} />
+      {(role == "admin" || role == "write") && (
+        <TagCreateForm onSubmit={handleTagCreate} loading={creating} />
+      )}
       <div className="overflow-x-auto rounded-md border">
         <Table>
           <TableHeader className="bg-muted">

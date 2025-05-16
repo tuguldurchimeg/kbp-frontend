@@ -62,7 +62,7 @@ export default function TagCreateForm({ onSubmit, loading }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="fixed bottom-15 right-15 h-12 w-12 rounded-xl hover:bg-purple-700 shadow-lg">
+        <Button className="fixed bottom-15 right-15 h-12 w-12 rounded-xl hover:bg-purple-700 shadow-lg z-10">
           <Plus />
         </Button>
       </DialogTrigger>

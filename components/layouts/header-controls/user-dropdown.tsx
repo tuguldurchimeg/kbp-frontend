@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -18,16 +18,17 @@ import { Button } from "@/components/ui/button";
 import { logoutService } from "@/src/app/lib/actions/auth.actions";
 import { fetchProfile } from "@/src/app/lib/actions/user.actions";
 import { ROUTE } from "@/constants/route.constants";
-import { UserItem } from "@/types/user";
 import Link from "next/link";
 import LanguageSwitcher from "./language-switcher";
 import { ThemeToggle } from "@/components/layouts/header-controls/theme-toggle";
 import { useTheme } from "next-themes";
+import { useUserStore } from "@/src/stores/user.store";
+import { useWorkspaceStore } from "@/src/stores/workspace.store";
 
 export default function UserDropdown() {
   const t = useTranslations("SYSCOMMON");
   const router = useRouter();
-  const [user, setUser] = useState<UserItem | null>(null);
+  const { clearUser, setUser, user } = useUserStore();
 
   useEffect(() => {
     const loadUser = async () => {
@@ -46,6 +47,8 @@ export default function UserDropdown() {
     try {
       await logoutService();
       router.push(ROUTE.HOME);
+      clearUser();
+      useWorkspaceStore.getState().clear();
     } catch (err) {
       console.error("Logout failed:", err);
     }

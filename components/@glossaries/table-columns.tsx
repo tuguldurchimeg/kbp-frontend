@@ -10,7 +10,8 @@ export function getColumns(
   t: ReturnType<typeof useTranslations>,
   locale: string,
   onEditClick: (item: GlossaryItem) => void,
-  onDelete: (item: GlossaryItem) => void
+  onDelete: (item: GlossaryItem) => void,
+  role: string | null
 ): ColumnDef<GlossaryItem>[] {
   return [
     {
@@ -69,13 +70,19 @@ export function getColumns(
     {
       id: "actions",
       header: "",
-      cell: ({ row }) => (
-        <GlossaryRowActions
-          t={t}
-          onEditClick={() => onEditClick(row.original)}
-          onDeleteClick={() => onDelete(row.original)}
-        />
-      ),
+      cell: ({ row }) => {
+        if (!role) return null;
+
+        if (["admin", "write"].includes(role)) {
+          return (
+            <GlossaryRowActions
+              t={t}
+              onEditClick={() => onEditClick(row.original)}
+              onDeleteClick={() => onDelete(row.original)}
+            />
+          );
+        }
+      },
       enableSorting: false,
       enableHiding: false,
     },

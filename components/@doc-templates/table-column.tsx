@@ -21,7 +21,8 @@ export function getColumns(
   pathname: string,
   t: ReturnType<typeof useTranslations>,
   locale: string,
-  onDeleteClick: (item: DocumentItem) => void
+  onDeleteClick: (item: DocumentItem) => void,
+  role: string | null
 ): ColumnDef<DocumentItem>[] {
   return [
     {
@@ -103,28 +104,32 @@ export function getColumns(
       id: "actions",
       header: "",
       cell: ({ row }) => {
+        if (!role) return null;
+
         const item = row.original;
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <MoreVerticalIcon className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <Link href={`${pathname}/${item.id}`} passHref>
-                <DropdownMenuItem>
-                  <Pencil className="mr-2 h-4 w-4" />
-                  {t("SYSCOMMON.edit")}
+        if (["admin", "write"].includes(role)) {
+          return (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <MoreVerticalIcon className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <Link href={`${pathname}/${item.id}`} passHref>
+                  <DropdownMenuItem>
+                    <Pencil className="mr-2 h-4 w-4" />
+                    {t("SYSCOMMON.edit")}
+                  </DropdownMenuItem>
+                </Link>
+                <DropdownMenuItem onClick={() => onDeleteClick(item)}>
+                  <Trash2 className="mr-2 h-4 w-4 text-red-600" />
+                  {t("SYSCOMMON.delete")}
                 </DropdownMenuItem>
-              </Link>
-              <DropdownMenuItem onClick={() => onDeleteClick(item)}>
-                <Trash2 className="mr-2 h-4 w-4 text-red-600" />
-                {t("SYSCOMMON.delete")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
+              </DropdownMenuContent>
+            </DropdownMenu>
+          );
+        }
       },
       enableSorting: false,
       enableHiding: false,

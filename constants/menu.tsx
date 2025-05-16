@@ -15,6 +15,7 @@ import {
 import { CategoryItem } from "@/types/document";
 import { useTranslations } from "next-intl";
 import { WorkspaceItem } from "@/types/workspace";
+import { useWorkspaceStore } from "@/src/stores/workspace.store";
 
 export type MenuItemChildren = {
   id?: string;
@@ -44,16 +45,21 @@ export type MenuSection = {
 
 export function useSidebarMenus(workspaceId: string) {
   const t = useTranslations("MENUS");
+  const { role } = useWorkspaceStore();
 
   const staticMenus: MenuSection[] = [
     {
       label: t("tools"),
       children: [
-        {
-          label: t("user_access"),
-          uri: ROUTE.TOOLS.USER_ACCESS.ROOT(workspaceId),
-          icon: User,
-        },
+        ...(role === "admin"
+          ? [
+              {
+                label: t("user_access"),
+                uri: ROUTE.TOOLS.USER_ACCESS.ROOT(workspaceId),
+                icon: User,
+              },
+            ]
+          : []),
         {
           label: t("templates"),
           uri: ROUTE.TOOLS.TEMPLATES.ROOT(workspaceId),
