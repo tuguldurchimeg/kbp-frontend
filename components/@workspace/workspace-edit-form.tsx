@@ -25,7 +25,7 @@ import {
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Building, Pencil } from "lucide-react";
+import { Building, Loader2, Pencil } from "lucide-react";
 import {
   getPresignedUploadUrl,
   uploadFileToS3,
@@ -53,7 +53,6 @@ export default function WorkspaceEditForm({ workspace, onSubmit }: Props) {
     },
   });
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const t = useTranslations("SYSCOMMON");
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(
@@ -88,14 +87,11 @@ export default function WorkspaceEditForm({ workspace, onSubmit }: Props) {
   };
 
   const handleSubmit = async (values: FormValues) => {
-    setLoading(true);
     try {
       await onSubmit(values);
       setOpen(false);
     } catch (error) {
       console.error("Update failed", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -200,8 +196,15 @@ export default function WorkspaceEditForm({ workspace, onSubmit }: Props) {
               )}
             />
             <DialogFooter className="pt-4">
-              <Button type="submit" loading={loading}>
-                {t("save")}
+              <Button
+                type="submit"
+                disabled={!form.formState.isDirty || form.formState.isLoading}
+              >
+                {form.formState.isLoading ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  t("save")
+                )}
               </Button>
             </DialogFooter>
           </form>

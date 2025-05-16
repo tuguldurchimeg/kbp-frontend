@@ -232,7 +232,13 @@
     "by_status": "Төлөвөөр",
     "by_priority": "Зэрэглэлээр",
     "issue": "асуудал",
+    "filter_placeholder": "Нэрээр шүүх...",
+    "delete": "Устгах",
+    "edit": "Засах",
     "table": {
+      "firstname": "Нэр",
+      "lastname": "Овог",
+      "email": "Цахим шуудан",
       "name": "Гарчиг",
       "status": "Төлөв",
       "priority": "Зэрэглэл",
@@ -240,6 +246,7 @@
       "created_by": "Үүсгэсэн",
       "assignees": "Хариуцагч",
       "docs": "Нийтлэл",
+      "issues": "Тулгамдсан асуудал",
       "created_at": "Үүссэн огноо",
       "updated_at": "Шинэчилсэн огноо",
       "description": "Тайлбар"

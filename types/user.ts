@@ -16,6 +16,7 @@ export type UserItem = {
     lastname: string;
     avatar: string;
     company: { data: CompanyItem };
+    issues?: string;
   };
 };
 

@@ -18,6 +18,7 @@ import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import { ROUTE } from "@/constants/route.constants";
 import { useTranslations } from "next-intl";
+import { Loader2 } from "lucide-react";
 
 const schema = z.object({
   name: z.string().min(1, "Workspace name is required"),
@@ -84,7 +85,16 @@ export default function CreateWorkspaceForm() {
               {t("cancel")}
             </Button>
           </DialogClose>
-          <Button type="submit">{t("create")}</Button>
+          <Button
+            disabled={!form.formState.isValid || form.formState.isLoading}
+            type="submit"
+          >
+            {form.formState.isLoading ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              t("create")
+            )}
+          </Button>
         </DialogFooter>
       </form>
     </Form>

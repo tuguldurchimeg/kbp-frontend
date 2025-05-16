@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Rocket, Search, Zap } from "lucide-react";
+import { Plus, Rocket, Search, Users, Zap } from "lucide-react";
 import SiteLayout from "@/components/layouts/SiteLayout";
 import QuickAccessDocumentList from "@/components/@workspace/quick-access-document-list";
 import { SearchResults } from "@/components/search/search-result";
@@ -26,6 +26,8 @@ import clsx from "clsx";
 import PrivateRoute from "@/components/providers/PrivateRoute";
 import { WorkspaceSearchResponse } from "@/types/workspace";
 import { searchWorkspace } from "../lib/actions/workspace.actions";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import DataTable from "@/components/@employees/data-table";
 
 export default function Home() {
   const t = useTranslations();
@@ -145,14 +147,26 @@ export default function Home() {
             <WorkspaceCardList />
           </section>
 
-          {/* Popular Topics */}
-          <section className="space-y-4">
-            <h2 className="text-lg font-medium text-muted-foreground flex items-center gap-2">
-              <Zap className="w-4 h-4" />
-              {t("SYSCOMMON.quick_access")}
-            </h2>
-            <QuickAccessDocumentList />
-          </section>
+          <Tabs defaultValue="quick" className="space-y-6">
+            <TabsList className="gap-2">
+              <TabsTrigger value="quick">
+                <Zap className="w-4 h-4" />
+                {t("SYSCOMMON.quick_access")}
+              </TabsTrigger>
+              <TabsTrigger value="employees">
+                <Users className="w-4 h-4" />
+                {t("SYSCOMMON.employees")}
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="quick">
+              <QuickAccessDocumentList />
+            </TabsContent>
+
+            <TabsContent value="employees">
+              <DataTable />
+            </TabsContent>
+          </Tabs>
         </main>
       </SiteLayout>
     </PrivateRoute>

@@ -7,6 +7,11 @@ export async function fetchProfile(): Promise<UserItem> {
   return res.data.data;
 }
 
+export async function getEmployees(): Promise<UserItem> {
+  const res = await api.get(URI.USERS);
+  return res.data.data;
+}
+
 export async function updateUser(arg: UpdateUserParams): Promise<UserItem> {
   const res = await api.put(`${URI.USERS}/${arg.id}`, arg.params);
   return res.data.data;
