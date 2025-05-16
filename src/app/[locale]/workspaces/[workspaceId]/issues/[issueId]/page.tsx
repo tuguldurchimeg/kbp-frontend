@@ -205,30 +205,32 @@ export default function IssuePage() {
               </div>
             </div>
           </div>
-          <Label className="text-sm text-muted-foreground font-medium my-2">
-            {t("assignees")}
-          </Label>
+
           {assignees?.data?.length > 0 && (
-            <div className="flex items-center gap-2">
-              {assignees.data.map((user: UserItem) => (
-                <Tooltip key={user.id}>
-                  <TooltipTrigger asChild>
-                    <Avatar
-                      key={user.id}
-                      className="size-8"
-                      title={`${user.attributes.firstname} ${user.attributes.lastname}`}
-                    >
-                      <AvatarImage src={user.attributes.avatar} />
-                      <AvatarFallback>
-                        {user.attributes.firstname[0]}
-                      </AvatarFallback>
-                    </Avatar>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    {user.attributes.lastname} {user.attributes.firstname}
-                  </TooltipContent>
-                </Tooltip>
-              ))}
+            <div>
+              <Label className="text-sm text-muted-foreground font-medium my-2">
+                {t("assignees")}
+              </Label>
+              <div className="flex items-center gap-2">
+                {assignees.data.map((user: UserItem) => (
+                  <Tooltip key={user.id}>
+                    <TooltipTrigger asChild>
+                      <Avatar
+                        className="size-8"
+                        title={`${user.attributes.firstname} ${user.attributes.lastname}`}
+                      >
+                        <AvatarImage src={user.attributes.avatar} />
+                        <AvatarFallback>
+                          {user.attributes.firstname[0]}
+                        </AvatarFallback>
+                      </Avatar>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      {user.attributes.lastname} {user.attributes.firstname}
+                    </TooltipContent>
+                  </Tooltip>
+                ))}
+              </div>
             </div>
           )}
         </div>
