@@ -8,7 +8,6 @@ export const URI = {
   GOOGLE_LOGIN: "/v1/google_login",
   SIGNUP: "/v1/signup",
   FORGOT_PASSWORD: "/v1/passwords/forgot",
-  CONFIRM_PASSWORD: "/v1/passwords/confirm",
   RESET_PASSWORD: "/v1/passwords/reset",
   CHANGE_PASSWORD: "/v1/passwords/change",
   PROFILE: "/v1/profile",
@@ -24,14 +23,12 @@ export const URI = {
   ISSUE_COMMENTS: "/v1/documents/issue_comments",
   TAGS: "/v1/tools/tags",
   GLOSSARIES: "/v1/tools/glossaries",
-  SEOS: "/v1/tools/seos",
 };
 
 export const excludeURI = [
   URI.LOGIN,
   URI.LOGOUT,
   URI.RESET_PASSWORD,
-  URI.CONFIRM_PASSWORD,
   URI.FORGOT_PASSWORD,
   URI.REFRESH,
   URI.SIGNUP,

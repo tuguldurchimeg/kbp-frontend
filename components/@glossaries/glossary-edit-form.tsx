@@ -27,7 +27,7 @@ import {
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
-  content: z.string().optional(),
+  content: z.string().min(1, "Content is required"),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -100,9 +100,12 @@ export default function GlossaryEditForm({
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("SYSCOMMON.content")}</FormLabel>
+                  <FormLabel>{t("SYSCOMMON.description")}</FormLabel>
                   <FormControl>
-                    <Textarea placeholder={t("SYSCOMMON.content")} {...field} />
+                    <Textarea
+                      placeholder={t("SYSCOMMON.description")}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

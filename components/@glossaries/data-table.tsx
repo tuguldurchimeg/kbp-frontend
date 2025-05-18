@@ -31,6 +31,7 @@ import {
   ChevronRightIcon,
   ChevronsLeftIcon,
   ChevronsRightIcon,
+  Search,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -51,11 +52,11 @@ import GlossaryCreateForm from "./glossary-create-form";
 import GlossaryEditForm from "./glossary-edit-form";
 import ConfirmDialog from "../confirm-dialog";
 import { useWorkspaceStore } from "@/src/stores/workspace.store";
+import { Input } from "../ui/input";
 
 export default function GlossaryTable() {
   const [data, setData] = useState<GlossaryItem[]>([]);
   const [rowSelection, setRowSelection] = useState({});
-  const [creating, setCreating] = useState(false);
   const [editItem, setEditItem] = useState<GlossaryItem | null>(null);
   const t = useTranslations();
   const params = useParams();
@@ -85,7 +86,6 @@ export default function GlossaryTable() {
         workspace_id: params.workspaceId as string,
       });
       toast.success(t("SYSCOMMON.created_successfully"));
-      setCreating(false);
       await fetchData();
     } catch {
       toast.error(t("SYSCOMMON.create_failed"));
@@ -161,33 +161,48 @@ export default function GlossaryTable() {
           </h2>
           <p className="text-muted-foreground">{t("Glossaries.description")}</p>
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              {t("Main.columns")} <ChevronDownIcon className="ml-1 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((col) => col.getCanHide())
-              .map((col) => (
-                <DropdownMenuCheckboxItem
-                  key={col.id}
-                  checked={col.getIsVisible()}
-                  onCheckedChange={(value) => col.toggleVisibility(!!value)}
-                >
-                  {typeof col.columnDef.header === "string"
-                    ? col.columnDef.header
-                    : col.id}
-                </DropdownMenuCheckboxItem>
-              ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex gap-2">
+          <div className="relative max-w-xs w-full">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder={t("Main.filter_placeholder")}
+              value={
+                (table.getColumn("name")?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn("name")?.setFilterValue(event.target.value)
+              }
+              className="pl-10"
+            />
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                <ChevronDownIcon className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((col) => col.getCanHide())
+                .map((col) => (
+                  <DropdownMenuCheckboxItem
+                    key={col.id}
+                    checked={col.getIsVisible()}
+                    onCheckedChange={(value) => col.toggleVisibility(!!value)}
+                  >
+                    {typeof col.columnDef.header === "string"
+                      ? col.columnDef.header
+                      : col.id}
+                  </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       {(role == "admin" || role == "write") && (
-        <GlossaryCreateForm onSubmit={handleCreate} loading={creating} />
+        <GlossaryCreateForm onSubmit={handleCreate} />
       )}
       <div className="overflow-x-auto rounded-md border">
         <Table>

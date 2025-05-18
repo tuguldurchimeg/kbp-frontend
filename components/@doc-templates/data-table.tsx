@@ -30,6 +30,7 @@ import {
   ChevronsRightIcon,
   FilePlus2,
   Plus,
+  Search,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -48,6 +49,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import ConfirmDialog from "../confirm-dialog";
 import { useWorkspaceStore } from "@/src/stores/workspace.store";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
 
 export default function TemplateTable() {
   const [rowSelection, setRowSelection] = useState({});
@@ -88,7 +91,7 @@ export default function TemplateTable() {
   const handleCreateTemplate = async () => {
     try {
       const newDoc = await createDocument({
-        title: "Untitled Template",
+        title: t("SYSCOMMON.untitled_template"),
         is_template: true,
         workspace_id: params.workspaceId as string,
       });
@@ -143,49 +146,63 @@ export default function TemplateTable() {
 
   return (
     <div className="p-6 space-y-6 max-w-screen-xl mx-auto">
+      {(role == "admin" || role == "write") && (
+        <Button
+          className="fixed bottom-5 right-10 h-12 w-12 rounded-xl"
+          onClick={handleCreateTemplate}
+          aria-label={t("SYSCOMMON.new")}
+        >
+          <Plus />
+        </Button>
+      )}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-semibold flex items-center gap-3">
+          <Label className="text-2xl font-semibold flex items-center gap-3">
             <FilePlus2 />
             {t("Templates.title")}
-          </h2>
-          <p className="text-muted-foreground">{t("Templates.description")}</p>
+          </Label>
+          <Label className="text-sm text-muted-foreground">
+            {t("Templates.description")}
+          </Label>
         </div>
-
-        {(role == "admin" || role == "write") && (
-          <Button
-            className="fixed bottom-15 right-15 h-12 w-12 rounded-xl hover:bg-purple-700"
-            onClick={handleCreateTemplate}
-            aria-label={t("SYSCOMMON.new")}
-          >
-            <Plus />
-          </Button>
-        )}
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              {t("SYSCOMMON.columns")}{" "}
-              <ChevronDownIcon className="ml-1 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((col) => col.getCanHide())
-              .map((col) => (
-                <DropdownMenuCheckboxItem
-                  key={col.id}
-                  checked={col.getIsVisible()}
-                  onCheckedChange={(value) => col.toggleVisibility(!!value)}
-                >
-                  {typeof col.columnDef.header === "string"
-                    ? col.columnDef.header
-                    : col.id}
-                </DropdownMenuCheckboxItem>
-              ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex gap-2">
+          <div className="relative max-w-xs w-full">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder={t("Main.filter_placeholder")}
+              value={
+                (table.getColumn("name")?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn("name")?.setFilterValue(event.target.value)
+              }
+              className="pl-10"
+            />
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                <ChevronDownIcon className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((col) => col.getCanHide())
+                .map((col) => (
+                  <DropdownMenuCheckboxItem
+                    key={col.id}
+                    checked={col.getIsVisible()}
+                    onCheckedChange={(value) => col.toggleVisibility(!!value)}
+                  >
+                    {typeof col.columnDef.header === "string"
+                      ? col.columnDef.header
+                      : col.id}
+                  </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       <div className="overflow-x-auto rounded-md border">

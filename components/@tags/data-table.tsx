@@ -27,6 +27,7 @@ import {
   ChevronRightIcon,
   ChevronsLeftIcon,
   ChevronsRightIcon,
+  Search,
   Tag,
 } from "lucide-react";
 import {
@@ -47,6 +48,8 @@ import { toast } from "sonner";
 import TagEditForm from "./tag-edit-form";
 import ConfirmDialog from "../confirm-dialog";
 import { useWorkspaceStore } from "@/src/stores/workspace.store";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 export default function TagTable() {
   const [tags, setTags] = useState<TagItem[]>([]);
@@ -161,36 +164,52 @@ export default function TagTable() {
     <div className="p-6 space-y-6 max-w-screen-xl mx-auto">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-semibold flex items-center gap-3">
+          <Label className="text-2xl font-semibold flex items-center gap-3">
             <Tag />
             {t("Tags.title")}
-          </h2>
-          <p className="text-muted-foreground">{t("Tags.description")}</p>
+          </Label>
+          <Label className="text-sm mt-0.5 text-muted-foreground">
+            {t("Tags.description")}
+          </Label>
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              {t("SYSCOMMON.columns")}
-              <ChevronDownIcon className="ml-1 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((col) => col.getCanHide())
-              .map((col) => (
-                <DropdownMenuCheckboxItem
-                  key={col.id}
-                  checked={col.getIsVisible()}
-                  onCheckedChange={(value) => col.toggleVisibility(!!value)}
-                >
-                  {typeof col.columnDef.header === "string"
-                    ? col.columnDef.header
-                    : col.id}
-                </DropdownMenuCheckboxItem>
-              ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex gap-2">
+          <div className="relative max-w-xs w-full">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder={t("Main.filter_placeholder")}
+              value={
+                (table.getColumn("title")?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn("title")?.setFilterValue(event.target.value)
+              }
+              className="pl-10"
+            />
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                <ChevronDownIcon className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((col) => col.getCanHide())
+                .map((col) => (
+                  <DropdownMenuCheckboxItem
+                    key={col.id}
+                    checked={col.getIsVisible()}
+                    onCheckedChange={(value) => col.toggleVisibility(!!value)}
+                  >
+                    {typeof col.columnDef.header === "string"
+                      ? col.columnDef.header
+                      : col.id}
+                  </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       {(role == "admin" || role == "write") && (
         <TagCreateForm onSubmit={handleTagCreate} loading={creating} />

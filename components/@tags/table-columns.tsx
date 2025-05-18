@@ -43,7 +43,8 @@ export function getColumns(
       enableHiding: false,
     },
     {
-      accessorKey: "attributes.title",
+      id: "title",
+      accessorKey: "attributes.name",
       header: t("SYSCOMMON.name"),
       cell: ({ row }) => {
         const tag = row.original.attributes;
@@ -61,6 +62,7 @@ export function getColumns(
       },
     },
     {
+      id: "description",
       accessorKey: "attributes.description",
       header: t("SYSCOMMON.description"),
       cell: ({ row }) => {

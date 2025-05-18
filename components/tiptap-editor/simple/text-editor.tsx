@@ -647,7 +647,7 @@ export function MyTextEditor({ document, fetchDoc }: Props) {
               editor?.commands.focus("start");
             }}
             className="text-black dark:text-white bg-transparent font-bold text-lg w-full resize-none border-none outline-none focus:ring-0 focus-visible:ring-0"
-            placeholder="Untitled document"
+            placeholder={t("untitled_document")}
           />
         ) : (
           <h1

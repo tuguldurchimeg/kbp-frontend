@@ -51,16 +51,14 @@ export function getColumns(
       enableHiding: false,
     },
     {
+      id: "name",
       accessorKey: "attributes.title",
       header: t("Main.table.name"),
       cell: ({ row }) => {
         const title = row.original.attributes.title;
         const id = row.original.id;
         return (
-          <Link
-            href={`${pathname}/${id}`}
-            className="text-blue-600 hover:underline"
-          >
+          <Link href={`${pathname}/${id}`} className="hover:underline">
             {title}
           </Link>
         );
@@ -76,7 +74,7 @@ export function getColumns(
           <div className="flex items-center space-x-2">
             <Avatar className="h-6 w-6 rounded-full">
               <AvatarImage src={user?.avatar} alt={user?.firstname} />
-              <AvatarFallback className="bg-green-200">
+              <AvatarFallback>
                 {`${user?.firstname?.[0] ?? ""}${
                   user?.lastname?.[0] ?? ""
                 }`.toUpperCase()}

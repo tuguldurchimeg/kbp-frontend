@@ -68,6 +68,14 @@ export interface PasswordChangeParams {
   confirm_new_password: string;
 }
 
+export interface PasswordResetParams {
+  email: string;
+  confirmation_code: string;
+  current_password: string;
+  new_password: string;
+  confirm_new_password: string;
+}
+
 export interface SignupParams {
   email: string;
   firstname: string;

@@ -31,16 +31,15 @@ import { GlossaryCreateParams } from "@/types/document";
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
-  content: z.string().optional(),
+  content: z.string().min(1, "Content is required"),
 });
 
 type FormValues = z.infer<typeof schema>;
 interface Props {
   onSubmit: (data: GlossaryCreateParams) => void;
-  loading: boolean;
 }
 
-export default function TagCreateForm({ onSubmit, loading }: Props) {
+export default function GlossaryCreateForm({ onSubmit }: Props) {
   const t = useTranslations("SYSCOMMON");
   const [open, setOpen] = useState(false);
   const params = useParams();
@@ -69,7 +68,7 @@ export default function TagCreateForm({ onSubmit, loading }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="fixed bottom-15 right-15 h-12 w-12 rounded-xl hover:bg-purple-700 shadow-lg">
+        <Button className="fixed bottom-15 right-15 h-12 w-12 rounded-xl hover:bg-purple-700 shadow-lg z-10">
           <Plus />
         </Button>
       </DialogTrigger>
@@ -105,9 +104,9 @@ export default function TagCreateForm({ onSubmit, loading }: Props) {
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("content")}</FormLabel>
+                  <FormLabel>{t("description")}</FormLabel>
                   <FormControl>
-                    <Textarea placeholder={t("content")} {...field} />
+                    <Textarea placeholder={t("description")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -115,8 +114,17 @@ export default function TagCreateForm({ onSubmit, loading }: Props) {
             />
 
             <DialogFooter className="flex justify-end">
-              <Button type="submit" disabled={loading}>
-                {loading ? <Loader className="animate-spin" /> : t("create")}
+              <Button
+                type="submit"
+                disabled={
+                  form.formState.isSubmitting || !form.formState.isValid
+                }
+              >
+                {form.formState.isSubmitting ? (
+                  <Loader className="animate-spin" />
+                ) : (
+                  t("create")
+                )}
               </Button>
             </DialogFooter>
           </form>

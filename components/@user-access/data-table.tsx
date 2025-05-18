@@ -36,7 +36,9 @@ import {
   ChevronsLeftIcon,
   ChevronsRightIcon,
   Search,
+  User,
 } from "lucide-react";
+import { Label } from "../ui/label";
 
 export default function WorkspaceUserTable() {
   const t = useTranslations("UserAccess");
@@ -71,7 +73,7 @@ export default function WorkspaceUserTable() {
   };
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 6,
+    pageSize: 8,
   });
 
   const columns = getColumns(t, handleUpdateRole);
@@ -100,21 +102,25 @@ export default function WorkspaceUserTable() {
     <div className="p-6 space-y-4 max-w-screen-xl mx-auto">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-semibold">{t("title")}</h2>
-          <p className="text-muted-foreground">{t("description")}</p>
+          <Label className="text-2xl font-semibold">
+            <User />
+            {t("title")}
+          </Label>
+          <Label className="text-sm mt-0.5 text-muted-foreground">
+            {t("description")}
+          </Label>
         </div>
-      </div>
-
-      <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder={t("filter_placeholder")}
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="pl-10"
-        />
+        <div className="relative max-w-xs w-full">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder={t("filter_placeholder")}
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="pl-10"
+          />
+        </div>
       </div>
 
       <div className="overflow-x-auto rounded-md border">

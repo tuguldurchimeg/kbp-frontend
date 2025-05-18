@@ -144,14 +144,26 @@ export function AppSidebar() {
     }
   };
 
-  const handleCreateCategory = async (category_id?: string) => {
+  const handleCreateCategory = async (parent_id?: string) => {
     try {
-      await createCategory({
-        name: "Untitled Category",
+      const res = await createCategory({
+        name: t("untitled_category"),
         workspace_id: workspaceId,
-        parent_id: category_id,
+        parent_id: parent_id,
       });
       toast.success(t("created_successfully"));
+      if (workspace) {
+        const updateCollapse = (
+          items: MenuItemChildren[]
+        ): MenuItemChildren[] =>
+          items.map((item) => ({
+            ...item,
+            isCollapsed: item.id == res.id,
+            children: item.children && updateCollapse(item.children),
+          }));
+
+        setDocumentMenus(updateCollapse(documentMenus));
+      }
       fetchWorkspace();
     } catch (err) {
       console.error("Error creating category", err);
@@ -229,7 +241,6 @@ export function AppSidebar() {
           </SidebarGroup>
         ))}
 
-        {/* Dynamic Menu (e.g. Documents & Categories) */}
         {dynamicMenu && (
           <SidebarGroup key="dynamic">
             <SidebarGroupLabel className="text-muted-foreground">

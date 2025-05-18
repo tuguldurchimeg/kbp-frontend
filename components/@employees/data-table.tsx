@@ -153,7 +153,7 @@ export default function EmployeesTable() {
   return (
     <div className="space-y-4 max-w-screen-xl mx-auto">
       <div className="flex justify-between">
-        <div className="relative max-w-sm">
+        <div className="relative max-w-sm w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder={t("Main.filter_placeholder")}

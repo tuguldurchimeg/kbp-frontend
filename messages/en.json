@@ -134,6 +134,9 @@
     "empty": "Not found.",
     "title": "Title",
     "created_at": "Created at",
+    "untitled_category": "Untitled Category",
+    "untitled_document": "Untitled document",
+    "untitled_template": "Untitled template",
     "created_successfully": "Created successfully",
     "create_failed": "Failed to create",
     "updated_successfully": "Updated successfully",
@@ -223,6 +226,7 @@
   "Main": {
     "noData": "No data",
     "issues": "Issues",
+    "issues_description": "Control employees issues",
     "overview": "Overview",
     "total_issues": "Total Issues",
     "total_issues_desc": "Total number of issues",
@@ -236,7 +240,7 @@
     "by_status": "By status",
     "by_priority": "By priority",
     "issue": "Issue",
-    "filter_placeholder": "Filter by name...",
+    "filter_placeholder": "Search by name...",
     "delete": "Delete",
     "edit": "Edit",
     "table": {

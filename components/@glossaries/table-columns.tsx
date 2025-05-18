@@ -40,6 +40,7 @@ export function getColumns(
       enableHiding: false,
     },
     {
+      id: "name",
       accessorKey: "attributes.name",
       header: t("Main.table.name"),
       cell: ({ row }) => (
@@ -47,6 +48,7 @@ export function getColumns(
       ),
     },
     {
+      id: "description",
       accessorKey: "attributes.description",
       header: t("Main.table.description"),
       cell: ({ row }) => (

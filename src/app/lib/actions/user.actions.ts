@@ -3,6 +3,7 @@ import {
   EmployeeCreateParams,
   EmployeeUpdateParams,
   PasswordChangeParams,
+  PasswordResetParams,
   UpdateUserParams,
   UserItem,
 } from "@/types/user";
@@ -43,6 +44,12 @@ export async function deleteUser(id: string): Promise<void> {
 
 export async function forgotPassword(email: string): Promise<void> {
   await api.post(URI.FORGOT_PASSWORD, { email });
+}
+
+export async function resetPassword(
+  params: PasswordResetParams
+): Promise<void> {
+  await api.post(URI.RESET_PASSWORD, { params });
 }
 
 export async function updatePassword(
