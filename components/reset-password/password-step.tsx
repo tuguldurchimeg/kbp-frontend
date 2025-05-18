@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/form";
 
 type PasswordStepProps = {
-  onNext: () => void;
+  onNext: (newPassword: string, confirmPassword: string) => void;
 };
 
 export default function PasswordStep({ onNext }: PasswordStepProps) {
@@ -52,7 +52,7 @@ export default function PasswordStep({ onNext }: PasswordStepProps) {
 
   const onSubmit = (data: z.infer<typeof schema>) => {
     console.log("Password step values:", data);
-    onNext(); // Move to success step
+    onNext(data.password, data.confirmPassword);
   };
 
   return (

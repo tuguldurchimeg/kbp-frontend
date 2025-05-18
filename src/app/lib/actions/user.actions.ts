@@ -1,5 +1,6 @@
 import { URI } from "@/constants/uri.constants";
 import {
+  ConfirmCodeParams,
   EmployeeCreateParams,
   EmployeeUpdateParams,
   PasswordChangeParams,
@@ -44,6 +45,10 @@ export async function deleteUser(id: string): Promise<void> {
 
 export async function forgotPassword(email: string): Promise<void> {
   await api.post(URI.FORGOT_PASSWORD, { email });
+}
+
+export async function confirmCode(params: ConfirmCodeParams): Promise<void> {
+  await api.post(URI.FORGOT_PASSWORD, { params });
 }
 
 export async function resetPassword(

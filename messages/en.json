@@ -443,6 +443,10 @@
       "label": "Remember your password?",
       "link": "Sign in"
     },
+    "codeSent": "A code has been sent to your email.",
+    "notRegistered": "Email is not registered.",
+    "codeVerified": "Code verified successfully.",
+    "invalidCode": "Invalid or expired code.",
     "password": {
       "min": "Password must be at least 8 characters.",
       "upper": "Password must contain at least one uppercase letter.",

@@ -21,7 +21,7 @@ const schema = z.object({
   pin: z.string().length(6, "6 digits required"),
 });
 
-type Props = { onNext: () => void };
+type Props = { onNext: (code: string) => void };
 
 export default function OtpStep({ onNext }: Props) {
   const t = useTranslations("ResetPassword");
@@ -33,7 +33,7 @@ export default function OtpStep({ onNext }: Props) {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(() => onNext())}
+        onSubmit={form.handleSubmit((data) => onNext(data.pin))}
         className="space-y-6 flex flex-col items-center"
       >
         <FormField

@@ -19,11 +19,16 @@ import OtpStep from "@/components/reset-password/otp-step";
 import PasswordStep from "@/components/reset-password/password-step";
 import SuccessStep from "@/components/reset-password/success-step";
 import React from "react";
+import {
+  confirmCode,
+  forgotPassword,
+  resetPassword,
+} from "../../lib/actions/user.actions";
+import { toast } from "sonner";
 
 export default function ResetPasswordPage() {
   const t = useTranslations("ResetPassword");
   const [step, setStep] = useState(0);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [email, setEmail] = useState("");
   const [isSubmitted, setSubmitted] = useState(false);
 
@@ -42,6 +47,45 @@ export default function ResetPasswordPage() {
   ];
 
   const goNext = () => setStep((s) => Math.min(s + 1, steps.length - 1));
+
+  const handleForgot = async (email: string) => {
+    forgotPassword(email)
+      .then(() => {
+        toast.success(t("codeSent"));
+        setEmail(email);
+        goNext();
+      })
+      .catch(() => {
+        toast.error(t("notRegistered"));
+      });
+  };
+
+  const handleConfirmCode = (code: string) => {
+    confirmCode({ email, confirmation_code: code })
+      .then(() => {
+        toast.success(t("codeVerified"));
+        goNext();
+      })
+      .catch(() => {
+        toast.error(t("invalidCode"));
+      });
+  };
+
+  const handleReset = (newPassword: string, confirmPassword: string) => {
+    resetPassword({
+      email,
+      new_password: newPassword,
+      confirm_new_password: confirmPassword,
+    })
+      .then(() => {
+        toast.success(t("passwordReset"));
+        setSubmitted(true);
+        goNext();
+      })
+      .catch(() => {
+        toast.error(t("resetFailed"));
+      });
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
@@ -68,20 +112,12 @@ export default function ResetPasswordPage() {
           {step === 0 && (
             <EmailStep
               onNext={(email) => {
-                setEmail(email);
-                goNext();
+                handleForgot(email);
               }}
             />
           )}
-          {step === 1 && <OtpStep onNext={goNext} />}
-          {step === 2 && (
-            <PasswordStep
-              onNext={() => {
-                setSubmitted(true);
-                goNext();
-              }}
-            />
-          )}
+          {step === 1 && <OtpStep onNext={handleConfirmCode} />}
+          {step === 2 && <PasswordStep onNext={() => handleReset} />}
           {step === 3 && isSubmitted && <SuccessStep />}
         </CardContent>
 
