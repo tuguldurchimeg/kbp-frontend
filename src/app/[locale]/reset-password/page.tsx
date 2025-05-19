@@ -25,11 +25,14 @@ import {
   resetPassword,
 } from "../../lib/actions/user.actions";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function ResetPasswordPage() {
   const t = useTranslations("ResetPassword");
+  const { user, isAuthenticated } = useAuth();
+  const currentUserEmail = user?.email || "";
   const [step, setStep] = useState(0);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(currentUserEmail);
   const [isSubmitted, setSubmitted] = useState(false);
 
   const steps = [KeyRound, ShieldCheck, Lock, CheckCircle2];
@@ -48,43 +51,43 @@ export default function ResetPasswordPage() {
 
   const goNext = () => setStep((s) => Math.min(s + 1, steps.length - 1));
 
-  const handleForgot = async (email: string) => {
-    forgotPassword(email)
-      .then(() => {
-        toast.success(t("codeSent"));
-        setEmail(email);
-        goNext();
-      })
-      .catch(() => {
-        toast.error(t("notRegistered"));
-      });
+  const handleForgot = async (email: string): Promise<void> => {
+    try {
+      await forgotPassword(email);
+      toast.success(t("codeSent"));
+      setEmail(email);
+      goNext();
+    } catch {
+      toast.error(t("notRegistered"));
+    }
   };
 
-  const handleConfirmCode = (code: string) => {
-    confirmCode({ email, confirm_code: code })
-      .then(() => {
-        toast.success(t("codeVerified"));
-        goNext();
-      })
-      .catch(() => {
-        toast.error(t("invalidCode"));
-      });
+  const handleConfirmCode = async (code: string): Promise<void> => {
+    try {
+      await confirmCode({ email, confirm_code: code });
+      toast.success(t("codeVerified"));
+      goNext();
+    } catch {
+      toast.error(t("invalidCode"));
+    }
   };
 
-  const handleReset = (newPassword: string, confirmPassword: string) => {
-    resetPassword({
-      email,
-      new_password: newPassword,
-      confirm_new_password: confirmPassword,
-    })
-      .then(() => {
-        toast.success(t("passwordReset"));
-        setSubmitted(true);
-        goNext();
-      })
-      .catch(() => {
-        toast.error(t("resetFailed"));
+  const handleReset = async (
+    newPassword: string,
+    confirmPassword: string
+  ): Promise<void> => {
+    try {
+      await resetPassword({
+        email,
+        new_password: newPassword,
+        confirm_new_password: confirmPassword,
       });
+      toast.success(t("passwordReset"));
+      setSubmitted(true);
+      goNext();
+    } catch {
+      toast.error(t("resetFailed"));
+    }
   };
 
   return (
@@ -110,18 +113,14 @@ export default function ResetPasswordPage() {
 
         <CardContent className="space-y-6">
           {step === 0 && (
-            <EmailStep
-              onNext={(email) => {
-                handleForgot(email);
-              }}
-            />
+            <EmailStep onNext={handleForgot} initialEmail={email} />
           )}
           {step === 1 && <OtpStep onNext={handleConfirmCode} />}
           {step === 2 && <PasswordStep onNext={handleReset} />}
           {step === 3 && isSubmitted && <SuccessStep />}
         </CardContent>
 
-        {step !== 3 && (
+        {step !== 3 && !isAuthenticated && (
           <CardFooter className="flex justify-center text-sm text-muted-foreground">
             <span>
               {t("signin.label")}{" "}

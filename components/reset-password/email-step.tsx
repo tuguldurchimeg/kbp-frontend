@@ -20,13 +20,14 @@ const schema = z.object({
 
 type Props = {
   onNext: (email: string) => void;
+  initialEmail?: string;
 };
 
-export default function EmailStep({ onNext }: Props) {
+export default function EmailStep({ onNext, initialEmail }: Props) {
   const t = useTranslations("ResetPassword");
   const form = useForm({
     resolver: zodResolver(schema),
-    defaultValues: { email: "" },
+    defaultValues: { email: initialEmail || "" },
   });
 
   return (
