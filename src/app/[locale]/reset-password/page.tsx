@@ -61,7 +61,7 @@ export default function ResetPasswordPage() {
   };
 
   const handleConfirmCode = (code: string) => {
-    confirmCode({ email, confirmation_code: code })
+    confirmCode({ email, confirm_code: code })
       .then(() => {
         toast.success(t("codeVerified"));
         goNext();
@@ -117,7 +117,7 @@ export default function ResetPasswordPage() {
             />
           )}
           {step === 1 && <OtpStep onNext={handleConfirmCode} />}
-          {step === 2 && <PasswordStep onNext={() => handleReset} />}
+          {step === 2 && <PasswordStep onNext={handleReset} />}
           {step === 3 && isSubmitted && <SuccessStep />}
         </CardContent>
 

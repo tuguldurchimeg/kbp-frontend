@@ -70,7 +70,7 @@ export interface PasswordChangeParams {
 
 export interface ConfirmCodeParams {
   email: string;
-  confirmation_code: string;
+  confirm_code: string;
 }
 
 export interface PasswordResetParams {

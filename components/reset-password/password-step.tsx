@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -51,7 +51,6 @@ export default function PasswordStep({ onNext }: PasswordStepProps) {
   });
 
   const onSubmit = (data: z.infer<typeof schema>) => {
-    console.log("Password step values:", data);
     onNext(data.password, data.confirmPassword);
   };
 
@@ -127,8 +126,16 @@ export default function PasswordStep({ onNext }: PasswordStepProps) {
           )}
         />
 
-        <Button type="submit" className="w-full">
-          {t("form.submit")}
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={form.formState.isSubmitting || !form.formState.isValid}
+        >
+          {form.formState.isSubmitting ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            t("form.submit")
+          )}
         </Button>
       </form>
     </Form>

@@ -110,7 +110,7 @@ export default function Home() {
               <PopoverContent
                 align="center"
                 className={clsx(
-                  "w-550 max-w-4xl mt-2 p-2 rounded-xl border bg-background shadow-lg max-h-100 overflow-auto",
+                  "w-full max-w-xs md:max-w-4xl mt-2 p-2 rounded-xl border bg-background shadow-lg max-h-100 overflow-auto",
                   "transition-all duration-300 ease-in-out transform opacity-0 scale-95",
                   open && hasQuery ? "opacity-100 scale-100" : ""
                 )}

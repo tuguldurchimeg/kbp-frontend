@@ -48,13 +48,13 @@ export async function forgotPassword(email: string): Promise<void> {
 }
 
 export async function confirmCode(params: ConfirmCodeParams): Promise<void> {
-  await api.post(URI.FORGOT_PASSWORD, { params });
+  await api.post(URI.CONFIRM_CODE, params);
 }
 
 export async function resetPassword(
   params: PasswordResetParams
 ): Promise<void> {
-  await api.post(URI.RESET_PASSWORD, { params });
+  await api.post(URI.RESET_PASSWORD, params);
 }
 
 export async function updatePassword(

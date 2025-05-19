@@ -7,17 +7,17 @@ import { ROUTE } from "@/constants/route.constants";
 import { useTranslations } from "next-intl";
 
 const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
   const router = useRouter();
   const t = useTranslations();
 
   useEffect(() => {
-    if (!loading && user) {
+    if (!loading && isAuthenticated) {
       router.push(ROUTE.ROOT);
     }
-  }, [loading, user, router]);
+  }, [loading, isAuthenticated, router]);
 
-  if (loading || user) {
+  if (loading || isAuthenticated) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <p className="text-sm text-muted-foreground">

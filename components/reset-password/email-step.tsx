@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { Loader2 } from "lucide-react";
 
 const schema = z.object({
   email: z.string().email("Invalid email"),
@@ -46,8 +47,16 @@ export default function EmailStep({ onNext }: Props) {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
-          {t("send_code")}
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={form.formState.isSubmitting || !form.formState.isValid}
+        >
+          {form.formState.isSubmitting ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            t("send_code")
+          )}
         </Button>
       </form>
     </Form>

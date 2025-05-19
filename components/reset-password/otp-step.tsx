@@ -16,6 +16,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import { useTranslations } from "next-intl";
+import { Loader2 } from "lucide-react";
 
 const schema = z.object({
   pin: z.string().length(6, "6 digits required"),
@@ -58,8 +59,16 @@ export default function OtpStep({ onNext }: Props) {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
-          {t("verify")}
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={!form.formState.isValid || form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            t("verify")
+          )}
         </Button>
       </form>
     </Form>

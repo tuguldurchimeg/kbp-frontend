@@ -447,6 +447,8 @@
     "notRegistered": "Email is not registered.",
     "codeVerified": "Code verified successfully.",
     "invalidCode": "Invalid or expired code.",
+    "passwordReset": "Your password has been reset.",
+    "resetFailed": "Failed to reset password. Please try again.",
     "password": {
       "min": "Password must be at least 8 characters.",
       "upper": "Password must contain at least one uppercase letter.",
