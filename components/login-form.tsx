@@ -15,6 +15,7 @@ import { Loader } from "lucide-react";
 import Link from "next/link";
 import { useGoogleLogin } from "@react-oauth/google";
 import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
 
 export function LoginForm({
   className,
@@ -25,6 +26,7 @@ export function LoginForm({
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const t = useTranslations("LOGIN");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -77,17 +79,31 @@ export function LoginForm({
                 />
               </div>
               <div className="grid gap-3">
-                <div className="flex items-center">
-                  <Label htmlFor="password">{t("password")}</Label>
+                <Label htmlFor="password">{t("password")}</Label>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    required
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-2 top-1/2 -translate-y-1/2"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
+                  </Button>
                 </div>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="********"
-                  required
-                  onChange={(e) => setPassword(e.target.value)}
-                />
               </div>
+
               <Button type="submit" className="w-full" disabled={authLoading}>
                 {authLoading ? (
                   <Loader className="h-5 w-5 animate-spin text-white mx-auto" />

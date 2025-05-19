@@ -8,6 +8,7 @@ export const ROUTE = {
   HOME: "/home",
   PROFILE: "/profile",
   RESET_PASS: "/reset-password",
+  CHANGE_PASS: "/login/change-pass",
   WORKSPACES: {
     ROOT: "/workspaces",
     WORKSPACE: (id: string) => `${workspaceBase(id)}`,

@@ -14,12 +14,20 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({
   const t = useTranslations();
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (loading) return;
+
+    if (!user) {
       router.push(ROUTE.HOME);
+    } else if (user.password_change_required) {
+      router.push(ROUTE.CHANGE_PASS);
     }
   }, [loading, user, router]);
 
-  if (loading || (!user && typeof window !== "undefined")) {
+  if (
+    loading ||
+    (!user && typeof window !== "undefined") ||
+    user?.password_change_required
+  ) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <p className="text-sm text-muted-foreground">

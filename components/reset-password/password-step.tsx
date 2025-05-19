@@ -17,6 +17,7 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
+import { useState } from "react";
 
 type PasswordStepProps = {
   onNext: (newPassword: string, confirmPassword: string) => void;
@@ -24,8 +25,8 @@ type PasswordStepProps = {
 
 export default function PasswordStep({ onNext }: PasswordStepProps) {
   const t = useTranslations("ResetPassword");
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [showConfirm, setShowConfirm] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const schema = z
     .object({

@@ -180,7 +180,9 @@
       "E000001": "Login Failed"
     },
     "login_success": "Login success",
-    "login_failed": "Login Failed"
+    "login_failed": "Login Failed",
+    "password_change_required": "You must change your password before continuing.",
+    "reset_password_title": "Reset your password"
   },
   "SignUp": {
     "title": "Sign Up",

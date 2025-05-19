@@ -12,7 +12,7 @@ import { CurrentUser } from "@/types/user";
 type AuthContextType = {
   user: CurrentUser | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<CurrentUser>;
   googleLogin: (access_token: string) => Promise<void>;
   logout: () => void;
   refresh: () => Promise<void>;
@@ -34,6 +34,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (isClient) {
       localStorage.setItem("authUser", JSON.stringify(data));
     }
+    return data;
   };
 
   const googleLogin = async (access_token: string) => {
