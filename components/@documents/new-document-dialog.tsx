@@ -80,7 +80,7 @@ export default function NewDocumentDialog({
     } else {
       reset();
     }
-  }, [open]);
+  }, [open, reset, workspaceId]);
 
   const onSubmit = async (values: FormValues) => {
     try {

@@ -56,7 +56,7 @@ export default function Home() {
     }, 200);
 
     return () => clearTimeout(delayDebounce);
-  }, [query]);
+  }, [hasQuery, query]);
 
   return (
     <PrivateRoute>

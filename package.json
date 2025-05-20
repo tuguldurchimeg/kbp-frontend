@@ -6,8 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "vercel-build": "next build"
+    "lint": "next lint"
   },
   "dependencies": {
     "@dnd-kit/modifiers": "^9.0.0",

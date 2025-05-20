@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Loader2, UploadIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
@@ -32,18 +32,18 @@ export default function Page() {
   const [data, setData] = useState<FileItem[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchFiles = async () => {
+  const fetchFiles = useCallback(async () => {
     try {
       const files = await getFiles({ workspace_id: workspaceId });
       setData(files);
     } catch (error) {
       console.error("Error fetching files:", error);
     }
-  };
+  }, [workspaceId]);
 
   useEffect(() => {
     fetchFiles();
-  }, []);
+  }, [fetchFiles]);
 
   const handleFileUpload = async (files: FileList | null) => {
     if (!files) return;

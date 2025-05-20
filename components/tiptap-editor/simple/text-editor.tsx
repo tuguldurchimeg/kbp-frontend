@@ -475,7 +475,7 @@ export function MyTextEditor({ document, fetchDoc }: Props) {
   const [allTags, setAllTags] = useState<TagItem[]>();
   const locale = useLocale();
 
-  const fetchTags = async () => {
+  const fetchTags = useCallback(async () => {
     try {
       const tags = await getTags({
         workspace_id: document.attributes.workspace_id,
@@ -484,10 +484,11 @@ export function MyTextEditor({ document, fetchDoc }: Props) {
     } catch (error) {
       console.error("Failed to fetch tags", error);
     }
-  };
+  }, [document.attributes.workspace_id]);
+
   useEffect(() => {
     fetchTags();
-  }, [document.id]);
+  }, [fetchTags]);
 
   const handleSelectTag = async (tag: TagItem) => {
     try {

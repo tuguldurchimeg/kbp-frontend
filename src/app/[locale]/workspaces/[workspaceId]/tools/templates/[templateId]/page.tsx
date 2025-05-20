@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { MyTextEditor } from "@/components/tiptap-editor/simple/text-editor";
 import { DocumentItem } from "@/types/document";
@@ -12,7 +12,7 @@ export default function Page() {
 
   const [document, setDocument] = useState<DocumentItem | null>(null);
   const [loading, setLoading] = useState(true);
-  const fetchDocument = async () => {
+  const fetchDocument = useCallback(async () => {
     try {
       if (!id) return;
       const doc = await getDocument(id);
@@ -23,10 +23,11 @@ export default function Page() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
   useEffect(() => {
     fetchDocument();
-  }, [id]);
+  }, [fetchDocument]);
 
   if (loading) {
     return <div className="text-muted-foreground">Loading...</div>;

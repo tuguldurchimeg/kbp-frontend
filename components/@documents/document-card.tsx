@@ -32,7 +32,6 @@ export default function DocumentCard({ document }: DocumentCardProps) {
 
   const user = document.attributes.user?.data;
   const userFirstName = user?.attributes.firstname || "";
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const userAvatar = user?.attributes.avatar;
 
   return (
