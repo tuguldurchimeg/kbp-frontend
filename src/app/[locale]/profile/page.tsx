@@ -37,13 +37,13 @@ import { z } from "zod";
 import { PasswordUpdateForm } from "@/components/password-update-form";
 import { toast } from "sonner";
 
-export const schema = z.object({
+const schema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   avatarUrl: z.string().url().optional(),
 });
 
-export type FormData = z.infer<typeof schema>;
+type FormData = z.infer<typeof schema>;
 
 export default function ProfliePage() {
   const t = useTranslations("Account");
