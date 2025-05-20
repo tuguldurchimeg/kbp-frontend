@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { MyTextEditor } from "@/components/tiptap-editor/text-editor";
 import { DocumentItem } from "@/types/document";
@@ -11,17 +11,17 @@ export default function DocumentPage() {
   const id = params?.docId as string;
 
   const [document, setDocument] = useState<DocumentItem | null>(null);
-  const fetchDocument = async () => {
+  const fetchDocument = useCallback(async () => {
     try {
       const doc = await getDocument(id);
       setDocument(doc);
     } catch (error) {
       console.error("Failed to fetch document:", error);
     }
-  };
+  }, [id]);
   useEffect(() => {
     if (id) fetchDocument();
-  }, [id]);
+  }, [fetchDocument, id]);
 
   return (
     <div className="w-full max-w-3xl">

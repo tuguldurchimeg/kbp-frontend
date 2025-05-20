@@ -69,12 +69,13 @@ export default function TemplateTable() {
     role
   );
   const params = useParams();
+  const workspaceId = params.workspaceId as string;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const docs = await getTemplateDocuments({
-          workspace_id: params.workspaceId as string,
+          workspace_id: workspaceId,
         });
         setData(docs);
       } catch (err) {
@@ -85,7 +86,7 @@ export default function TemplateTable() {
     };
 
     fetchData();
-  }, []);
+  }, [workspaceId]);
 
   const handleCreateTemplate = async () => {
     try {

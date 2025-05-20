@@ -41,7 +41,7 @@ export function SearchDialog() {
     }, 200);
 
     return () => clearTimeout(delayDebounce);
-  }, [query, workspaceId]);
+  }, [hasQuery, query, workspaceId]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

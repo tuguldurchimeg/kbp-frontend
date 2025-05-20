@@ -41,7 +41,7 @@ export default function UserDropdown() {
     };
 
     loadUser();
-  }, []);
+  }, [setUser]);
 
   const handleLogout = async () => {
     try {

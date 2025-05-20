@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -42,14 +42,14 @@ export default function DocumentAttachDialog({
   const [creating, setCreating] = useState(false);
   const [newDocTitle, setNewDocTitle] = useState("");
 
-  const fetchDocuments = async () => {
+  const fetchDocuments = useCallback(async () => {
     try {
       const res = await getDocuments({ workspace_id: workspaceId });
       setDocuments(res);
     } catch {
       toast.error("Failed to fetch documents");
     }
-  };
+  }, [workspaceId]);
 
   const handleAttach = () => {
     if (selectedId) {
@@ -84,7 +84,7 @@ export default function DocumentAttachDialog({
 
   useEffect(() => {
     if (isOpen) fetchDocuments();
-  }, [isOpen]);
+  }, [fetchDocuments, isOpen]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

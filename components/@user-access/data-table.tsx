@@ -8,7 +8,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 
@@ -48,18 +48,18 @@ export default function WorkspaceUserTable() {
   const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState("");
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const result = await getWorkspaceUsers({ workspace_id: workspaceId });
       setData(result);
     } catch (err) {
       console.error("Failed to fetch workspace users", err);
     }
-  };
+  }, [workspaceId]);
 
   useEffect(() => {
     fetchData();
-  }, [workspaceId]);
+  }, [fetchData]);
 
   const handleUpdateRole = async (rowId: string, action: string) => {
     try {
