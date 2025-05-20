@@ -23,10 +23,8 @@ const TableBubbleMenu = ({ editor }: { editor: Editor }) => {
   if (!editor || !editor.isEditable || !editor.isActive("table")) return null;
   return (
     <Popover>
-      <PopoverTrigger>
-        <div className="bg-primary-light text-primary rounded-lg p-0.5">
-          <ChevronsDown />
-        </div>
+      <PopoverTrigger className="bg-primary-light text-primary rounded-lg p-0.5">
+        <ChevronsDown className="size-6" />
       </PopoverTrigger>
 
       <PopoverContent

@@ -30,7 +30,6 @@ import { TrailingNode } from "@/components/tiptap-extension/trailing-node-extens
 
 // --- UI Primitives ---
 import { Button } from "@/components/tiptap-ui-primitive/button";
-import { Spacer } from "@/components/tiptap-ui-primitive/spacer";
 import {
   Toolbar,
   ToolbarGroup,
@@ -69,9 +68,7 @@ import TableHeader from "@tiptap/extension-table-header";
 import TableCell from "@tiptap/extension-table-cell";
 
 // --- Icons ---
-import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon";
-import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon";
-import { LinkIcon } from "@/components/tiptap-icons/link-icon";
+import { ArrowLeftIcon, HighlighterIcon, LinkIcon } from "lucide-react";
 
 // --- Hooks ---
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -81,7 +78,7 @@ import { useWindowSize } from "@/hooks/use-window-size";
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
 
 // --- Styles ---
-import "@/components/tiptap-editor/simple/text-editor.scss";
+import "@/components/tiptap-editor/text-editor.scss";
 import {
   TextColorButton,
   TextColorContent,
@@ -166,8 +163,6 @@ const MainToolbarContent = ({
 }) => {
   return (
     <>
-      <Spacer />
-
       <ToolbarGroup>
         <UndoRedoButton action="undo" />
         <UndoRedoButton action="redo" />
@@ -228,8 +223,6 @@ const MainToolbarContent = ({
       <ToolbarGroup>
         <ExportButton editor={editor} title={title} />
       </ToolbarGroup>
-
-      <Spacer />
 
       {isMobile && <ToolbarSeparator />}
     </>

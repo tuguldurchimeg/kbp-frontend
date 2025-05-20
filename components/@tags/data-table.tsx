@@ -8,7 +8,7 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { getColumns } from "./table-columns";
 import {
@@ -66,7 +66,7 @@ export default function TagTable() {
   const [deleteItem, setDeleteItem] = useState<TagItem | null>(null);
   const [deleting, setDeleting] = useState(false);
 
-  const fetchTags = async () => {
+  const fetchTags = useCallback(async () => {
     try {
       const data = await getTags({ workspace_id: workspaceId });
       setTags(data);
@@ -75,11 +75,11 @@ export default function TagTable() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [workspaceId]);
 
   useEffect(() => {
     fetchTags();
-  }, []);
+  }, [fetchTags]);
 
   const handleTagCreate = async (data: {
     name: string;

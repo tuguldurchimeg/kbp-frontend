@@ -9,12 +9,11 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from "@/components/tiptap-ui-primitive/popover";
+} from "@/components/ui/popover";
 import { Separator } from "@/components/tiptap-ui-primitive/separator";
 
 // --- Icons ---
-import { BanIcon } from "@/components/tiptap-icons/ban-icon";
-import { Palette } from "lucide-react";
+import { BanIcon, Palette } from "lucide-react";
 
 // --- Hooks & Utils ---
 import { useMenuNavigation } from "@/hooks/use-menu-navigation";
@@ -198,7 +197,12 @@ export function TextColorPopover({
           {...props}
         />
       </PopoverTrigger>
-      <PopoverContent side="bottom" align="center" aria-label="Text colors">
+      <PopoverContent
+        side="bottom"
+        align="center"
+        aria-label="Text colors"
+        className="flex rounded-full px-3 py-1.5 w-full"
+      >
         <TextColorContent
           editor={editor}
           colors={colors}

@@ -3,8 +3,7 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Toggle } from "@/components/ui/toggle";
-import { MoonStarIcon } from "@/components/tiptap-icons/moon-star-icon";
-import { SunIcon } from "@/components/tiptap-icons/sun-icon";
+import { MoonStarIcon, SunIcon } from "lucide-react";
 
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();

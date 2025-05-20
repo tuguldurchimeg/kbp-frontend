@@ -3,7 +3,7 @@
 import * as React from "react";
 import type { NodeViewProps } from "@tiptap/react";
 import { NodeViewWrapper } from "@tiptap/react";
-import { CloseIcon } from "@/components/tiptap-icons/close-icon";
+import { XIcon } from "lucide-react";
 import "@/components/tiptap-node/image-upload-node/image-upload-node.scss";
 import { useTranslations } from "next-intl";
 
@@ -305,7 +305,7 @@ const ImageUploadPreview: React.FC<ImageUploadPreviewProps> = ({
               onRemove();
             }}
           >
-            <CloseIcon />
+            <XIcon />
           </button>
         </div>
       </div>

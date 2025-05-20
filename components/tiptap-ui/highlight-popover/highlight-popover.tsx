@@ -8,8 +8,7 @@ import { useMenuNavigation } from "@/hooks/use-menu-navigation";
 import { useTiptapEditor } from "@/hooks/use-tiptap-editor";
 
 // --- Icons ---
-import { BanIcon } from "@/components/tiptap-icons/ban-icon";
-import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon";
+import { BanIcon, HighlighterIcon } from "lucide-react";
 
 // --- Lib ---
 import { isMarkInSchema } from "@/lib/tiptap-utils";
@@ -20,7 +19,7 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from "@/components/tiptap-ui-primitive/popover";
+} from "@/components/ui/popover";
 import { Separator } from "@/components/tiptap-ui-primitive/separator";
 
 // --- Styles ---
@@ -195,13 +194,7 @@ export function HighlightContent({
 }
 
 export interface HighlightPopoverProps extends Omit<ButtonProps, "type"> {
-  /**
-   * The TipTap editor instance.
-   */
   editor?: Editor | null;
-  /**
-   * The highlight colors to display in the popover.
-   */
   colors?: HighlightColor[];
   /**
    * Whether to hide the highlight popover.
@@ -270,7 +263,11 @@ export function HighlightPopover({
         />
       </PopoverTrigger>
 
-      <PopoverContent aria-label="Highlight colors" side="bottom">
+      <PopoverContent
+        aria-label="Highlight colors"
+        side="bottom"
+        className="flex rounded-full px-3 py-1.5 w-full"
+      >
         <HighlightContent
           editor={editor}
           colors={colors}

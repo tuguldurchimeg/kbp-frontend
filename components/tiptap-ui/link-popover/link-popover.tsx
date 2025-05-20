@@ -7,10 +7,12 @@ import { isNodeSelection, type Editor } from "@tiptap/react";
 import { useTiptapEditor } from "@/hooks/use-tiptap-editor";
 
 // --- Icons ---
-import { CornerDownLeftIcon } from "@/components/tiptap-icons/corner-down-left-icon";
-import { ExternalLinkIcon } from "@/components/tiptap-icons/external-link-icon";
-import { LinkIcon } from "@/components/tiptap-icons/link-icon";
-import { TrashIcon } from "@/components/tiptap-icons/trash-icon";
+import {
+  CornerDownLeftIcon,
+  ExternalLinkIcon,
+  LinkIcon,
+  TrashIcon,
+} from "lucide-react";
 
 // --- Lib ---
 import { isMarkInSchema } from "@/lib/tiptap-utils";
@@ -21,7 +23,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/tiptap-ui-primitive/popover";
+} from "@/components/ui/popover";
 import { Separator } from "@/components/tiptap-ui-primitive/separator";
 
 // --- Styles ---
@@ -215,23 +217,17 @@ const LinkMain: React.FC<LinkMainProps> = ({
 };
 
 export interface LinkPopoverProps extends Omit<ButtonProps, "type"> {
-  /**
-   * The TipTap editor instance.
-   */
   editor?: Editor | null;
-  /**
-   * Whether to hide the link popover.
-   * @default false
-   */
-  hideWhenUnavailable?: boolean;
-  /**
-   * Callback for when the popover opens or closes.
-   */
   onOpenChange?: (isOpen: boolean) => void;
   /**
    * Whether to automatically open the popover when a link is active.
    * @default true
    */
+  /**
+   * Whether to hide the link popover.
+   * @default false
+   */
+  hideWhenUnavailable?: boolean;
   autoOpenOnLinkActive?: boolean;
 }
 
@@ -314,7 +310,7 @@ export function LinkPopover({
         />
       </PopoverTrigger>
 
-      <PopoverContent>
+      <PopoverContent className="flex rounded-full px-1 py-1.5 w-full">
         <LinkMain {...linkHandler} />
       </PopoverContent>
     </Popover>

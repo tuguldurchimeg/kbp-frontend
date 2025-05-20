@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { MyTextEditor } from "@/components/tiptap-editor/simple/text-editor";
+import { MyTextEditor } from "@/components/tiptap-editor/text-editor";
 import { DocumentItem } from "@/types/document";
 import { getDocument } from "@/src/app/lib/actions/document.actions";
 

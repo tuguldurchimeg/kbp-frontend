@@ -3,23 +3,6 @@
 import * as React from "react";
 import Link from "next/link";
 import {
-  DndContext,
-  useSensor,
-  useSensors,
-  MouseSensor,
-  TouchSensor,
-  KeyboardSensor,
-  DragEndEvent,
-  closestCenter,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  verticalListSortingStrategy,
-  useSortable,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
@@ -27,7 +10,6 @@ import {
   useReactTable,
   VisibilityState,
   SortingState,
-  Row,
   getPaginationRowModel,
 } from "@tanstack/react-table";
 import {
@@ -77,31 +59,8 @@ import {
 import { enUS, mn } from "date-fns/locale";
 import { Checkbox } from "@radix-ui/react-checkbox";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ConfirmDialog from "../confirm-dialog";
-
-function DraggableRow({ row }: { row: Row<IssueItem> }) {
-  const { setNodeRef, transform, transition } = useSortable({
-    id: row.original.id,
-  });
-
-  return (
-    <TableRow
-      ref={setNodeRef}
-      style={{
-        transform: CSS.Transform.toString(transform),
-        transition,
-      }}
-      data-state={row.getIsSelected() && "selected"}
-    >
-      {row.getVisibleCells().map((cell) => (
-        <TableCell key={cell.id}>
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </TableCell>
-      ))}
-    </TableRow>
-  );
-}
 
 export function DataTable() {
   const [rowSelection, setRowSelection] = React.useState({});
@@ -112,26 +71,19 @@ export function DataTable() {
   const params = useParams();
   const workspaceId = params.workspaceId as string;
   const [data, setData] = React.useState<IssueItem[]>([]);
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const res = await getIssues({ workspace_id: workspaceId });
       setData(res);
     } catch (error) {
       console.error("Failed to fetch issues:", error);
     }
-  };
+  }, [workspaceId]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
-  const sensors = useSensors(
-    useSensor(MouseSensor),
-    useSensor(TouchSensor),
-    useSensor(KeyboardSensor)
-  );
-
-  const dataIds = React.useMemo(() => data.map((d) => d.id.toString()), [data]);
   const { STATUS_MAP, PRIORITY_MAP, TYPE_MAP } = useStatusAndPriorityMaps();
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
@@ -152,16 +104,6 @@ export function DataTable() {
       await fetchData();
     } catch {
       toast.error(t("SYSCOMMON.create_failed"));
-    }
-  };
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    if (active && over && active.id !== over.id) {
-      const oldIndex = dataIds.indexOf(active.id.toString());
-      const newIndex = dataIds.indexOf(over.id.toString());
-      const newData = arrayMove(data, oldIndex, newIndex);
-      console.log("Reordered data:", newData);
     }
   };
 
@@ -424,86 +366,95 @@ export function DataTable() {
       />
 
       <div className="w-full overflow-x-auto rounded-md border">
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext
-            items={dataIds}
-            strategy={verticalListSortingStrategy}
-          >
-            <Table>
-              <TableHeader className="bg-muted">
-                {table.getHeaderGroups().map((group) => (
-                  <TableRow key={group.id}>
-                    {group.headers.map((header) => (
-                      <TableHead key={header.id}>
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                      </TableHead>
-                    ))}
-                  </TableRow>
+        <Table>
+          <TableHeader className="bg-muted">
+            {table.getHeaderGroups().map((group) => (
+              <TableRow key={group.id}>
+                {group.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </TableHead>
                 ))}
-              </TableHeader>
-              <TableBody className="**:data-[slot=table-cell]:first:w-8">
-                {table.getRowModel().rows.map((row) => (
-                  <DraggableRow key={row.id} row={row} />
-                ))}
-              </TableBody>
-            </Table>
-          </SortableContext>
-          {/* pagination */}
-          <div className="flex items-center justify-end pt-4">
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-muted-foreground">
-                {t("Main.page")} {table.getState().pagination.pageIndex + 1}{" "}
-                {" / "}
-                {table.getPageCount()}
-              </span>
-              <div className="flex gap-1">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => table.setPageIndex(0)}
-                  disabled={!table.getCanPreviousPage()}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody className="**:data-[slot=table-cell]:first:w-8">
+            {table.getRowModel().rows.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() ? "selected" : undefined}
                 >
-                  <ChevronsLeftIcon className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  <ChevronLeftIcon className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                >
-                  <ChevronRightIcon className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                  disabled={!table.getCanNextPage()}
-                >
-                  <ChevronsRightIcon className="w-4 h-4" />
-                </Button>
-              </div>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="text-center">
+                  {t("SYSCOMMON.empty")}
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+        {/* pagination */}
+        <div className="flex items-center justify-end pt-4">
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-muted-foreground">
+              {t("Main.page")} {table.getState().pagination.pageIndex + 1}{" "}
+              {" / "}
+              {table.getPageCount()}
+            </span>
+            <div className="flex gap-1">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => table.setPageIndex(0)}
+                disabled={!table.getCanPreviousPage()}
+              >
+                <ChevronsLeftIcon className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                <ChevronLeftIcon className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                <ChevronRightIcon className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                disabled={!table.getCanNextPage()}
+              >
+                <ChevronsRightIcon className="w-4 h-4" />
+              </Button>
             </div>
           </div>
-        </DndContext>
+        </div>
       </div>
       <div className="flex items-center justify-end">
         <DropdownMenu>

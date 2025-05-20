@@ -7,8 +7,7 @@ import { isNodeSelection, type Editor } from "@tiptap/react";
 import { useTiptapEditor } from "@/hooks/use-tiptap-editor";
 
 // --- Icons ---
-import { BlockQuoteIcon } from "@/components/tiptap-icons/block-quote-icon";
-import { CodeBlockIcon } from "@/components/tiptap-icons/code-block-icon";
+import { TextQuoteIcon, CodeXmlIcon } from "lucide-react";
 
 // --- Lib ---
 import { isNodeInSchema } from "@/lib/tiptap-utils";
@@ -39,8 +38,8 @@ export interface NodeButtonProps extends Omit<ButtonProps, "type"> {
 }
 
 export const nodeIcons = {
-  codeBlock: CodeBlockIcon,
-  blockquote: BlockQuoteIcon,
+  codeBlock: CodeXmlIcon,
+  blockquote: TextQuoteIcon,
 };
 
 export const nodeShortcutKeys: Partial<Record<NodeType, string>> = {

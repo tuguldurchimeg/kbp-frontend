@@ -5,7 +5,7 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from "@/components/tiptap-ui-primitive/popover";
+} from "@/components/ui/popover";
 import { Button } from "@/components/tiptap-ui-primitive/button";
 import { TextAlignButton } from "@/components/tiptap-ui/text-align-button";
 import { Editor } from "@tiptap/react";
@@ -39,7 +39,7 @@ export function TextAlignPopover({ editor }: TextAlignPopoverProps) {
       <PopoverContent
         align="end"
         side="bottom"
-        className="tiptap-bubble-popover"
+        className="flex rounded-2xl px-4 py-1.5 w-full"
         aria-label="Text alignment options"
       >
         <div className="tiptap-button-group" data-orientation="horizontal">
