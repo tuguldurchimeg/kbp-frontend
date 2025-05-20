@@ -29,7 +29,7 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-} from "@/components/tiptap-ui-primitive/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
 export interface ListDropdownMenuProps extends Omit<ButtonProps, "type"> {
   /**
