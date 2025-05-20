@@ -1,5 +1,4 @@
 import {
-  AccessItem,
   CategoryItem,
   DocumentItem,
   GlossaryItem,
@@ -200,6 +199,16 @@ export const CURRENT_USER: UserItem = {
     lastname: "R",
     email: "tgldrchmg@gmail.com",
     avatar: "/avatar.jpg",
+    company: {
+      data: {
+        id: "comp123",
+        type: "company",
+        attributes: {
+          name: "placeholder company",
+          uid: "ghjk123",
+        },
+      },
+    },
   },
 };
 
@@ -356,6 +365,16 @@ export const ISSUEDATA: IssueItem[] = [
             firstname: "System",
             lastname: "Bot",
             avatar: "https://example.com/avatar.png",
+            company: {
+              data: {
+                id: "comp123",
+                type: "company",
+                attributes: {
+                  name: "placeholder company",
+                  uid: "ghjk123",
+                },
+              },
+            },
           },
         },
       },
@@ -390,6 +409,16 @@ export const ISSUEDATA: IssueItem[] = [
             firstname: "System",
             lastname: "Bot",
             avatar: "https://example.com/avatar.png",
+            company: {
+              data: {
+                id: "",
+                type: "company",
+                attributes: {
+                  name: "placeholder company",
+                  uid: "ghjk123",
+                },
+              },
+            },
           },
         },
       },
@@ -425,6 +454,16 @@ export const ISSUEDATA: IssueItem[] = [
             firstname: "Alice",
             lastname: "Wong",
             avatar: "https://example.com/avatar/alice.png",
+            company: {
+              data: {
+                id: "",
+                type: "company",
+                attributes: {
+                  name: "placeholder company",
+                  uid: "ghjk123",
+                },
+              },
+            },
           },
         },
       },
@@ -439,6 +478,16 @@ export const ISSUEDATA: IssueItem[] = [
               firstname: "John",
               lastname: "Doe",
               avatar: "https://example.com/avatar/john.png",
+              company: {
+                data: {
+                  id: "",
+                  type: "company",
+                  attributes: {
+                    name: "placeholder company",
+                    uid: "ghjk123",
+                  },
+                },
+              },
             },
           },
           {
@@ -450,6 +499,16 @@ export const ISSUEDATA: IssueItem[] = [
               firstname: "Jane",
               lastname: "Smith",
               avatar: "https://example.com/avatar/jane.png",
+              company: {
+                data: {
+                  id: "comp123",
+                  type: "company",
+                  attributes: {
+                    name: "placeholder company",
+                    uid: "ghjk123",
+                  },
+                },
+              },
             },
           },
         ],
@@ -474,6 +533,16 @@ export const ISSUEDATA: IssueItem[] = [
                     firstname: "John",
                     lastname: "Doe",
                     avatar: "https://example.com/avatar/john.png",
+                    company: {
+                      data: {
+                        id: "comp123",
+                        type: "company",
+                        attributes: {
+                          name: "placeholder company",
+                          uid: "ghjk123",
+                        },
+                      },
+                    },
                   },
                 },
               },
@@ -546,14 +615,29 @@ export const ACCESS_PLACEHOLDERS: WorkspaceRoleItem[] = [
             avatar: "https://example.com/avatar1.png",
             company: {
               data: {
-                id: "",
+                id: "comp123",
                 type: "company",
                 attributes: {
-                  name: "",
-                  uid: "",
+                  name: "placeholder company",
+                  uid: "ghjk123",
                 },
               },
             },
+          },
+        },
+      },
+      workspace: {
+        data: {
+          id: "wroks345",
+          type: "workspace",
+          attributes: {
+            name: "Workspace Name",
+            description: "",
+            image_url: undefined,
+            categories: undefined,
+            documents: undefined,
+            issues: undefined,
+            tags: undefined,
           },
         },
       },
@@ -698,6 +782,16 @@ export const topics: DocumentItem[] = [
             firstname: "Төгөлдөрчимэг",
             lastname: "Рэнчинчимэ",
             avatar: "/avatars/tuguldur.png",
+            company: {
+              data: {
+                id: "comp123",
+                type: "company",
+                attributes: {
+                  name: "placeholder company",
+                  uid: "ghjk123",
+                },
+              },
+            },
           },
         },
       },
@@ -720,6 +814,16 @@ export const topics: DocumentItem[] = [
             firstname: "Төгөлдөрчимэг",
             lastname: "Рэнчинчимэ",
             avatar: "/avatars/tuguldur.png",
+            company: {
+              data: {
+                id: "comp123",
+                type: "company",
+                attributes: {
+                  name: "placeholder company",
+                  uid: "ghjk123",
+                },
+              },
+            },
           },
         },
       },
@@ -742,6 +846,16 @@ export const topics: DocumentItem[] = [
             firstname: "Тест",
             lastname: "Хэрэглэгч",
             avatar: "/avatars/kkk.png",
+            company: {
+              data: {
+                id: "comp123",
+                type: "company",
+                attributes: {
+                  name: "placeholder company",
+                  uid: "ghjk123",
+                },
+              },
+            },
           },
         },
       },
@@ -764,6 +878,16 @@ export const topics: DocumentItem[] = [
             firstname: "Тест",
             lastname: "Хэрэглэгч",
             avatar: "/avatars/kkk.png",
+            company: {
+              data: {
+                id: "comp123",
+                type: "company",
+                attributes: {
+                  name: "placeholder company",
+                  uid: "ghjk123",
+                },
+              },
+            },
           },
         },
       },
@@ -786,6 +910,16 @@ export const topics: DocumentItem[] = [
             firstname: "Тест",
             lastname: "Хэрэглэгч",
             avatar: "/avatars/kkk.png",
+            company: {
+              data: {
+                id: "comp123",
+                type: "company",
+                attributes: {
+                  name: "placeholder company",
+                  uid: "ghjk123",
+                },
+              },
+            },
           },
         },
       },
@@ -808,6 +942,16 @@ export const topics: DocumentItem[] = [
             firstname: "Төгөлдөрчимэг",
             lastname: "Рэнчинчимэ",
             avatar: "/avatars/tuguldur.png",
+            company: {
+              data: {
+                id: "comp123",
+                type: "company",
+                attributes: {
+                  name: "placeholder company",
+                  uid: "ghjk123",
+                },
+              },
+            },
           },
         },
       },
